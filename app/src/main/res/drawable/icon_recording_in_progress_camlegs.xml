@@ -1,0 +1,34 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:name="camera_legs"
+    android:width="512dp"
+    android:height="512dp"
+    android:viewportWidth="135.47"
+    android:viewportHeight="135.47">
+  <group
+      android:name="legs">
+      <path
+          android:name="camleg1"
+          android:pathData="M49.97,94.93 L34.66,121.44"
+          android:strokeLineJoin="round"
+          android:strokeWidth="7"
+          android:fillColor="#00000000"
+          android:strokeColor="#381f1f"
+          android:strokeLineCap="round"/>
+      <path
+          android:name="camleg2"
+          android:pathData="M87.49,121.44 L72.18,94.93"
+          android:strokeLineJoin="round"
+          android:strokeWidth="7"
+          android:fillColor="#00000000"
+          android:strokeColor="#381f1f"
+          android:strokeLineCap="round"/>
+      <path
+          android:name="camleg3"
+          android:pathData="M59.56,121.44V94.93"
+          android:strokeLineJoin="round"
+          android:strokeWidth="7"
+          android:fillColor="#00000000"
+          android:strokeColor="#381f1f"
+          android:strokeLineCap="round"/>
+  </group>
+</vector>

@@ -1,0 +1,9 @@
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/icon_recording_in_progress_cambody_dark" >
+    <target
+        android:name="cambody"
+        android:animation="@animator/top_disappear" />
+    <target
+        android:name="camera_body"
+        android:animation="@animator/fade_out" />
+</animated-vector>

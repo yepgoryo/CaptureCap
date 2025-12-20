@@ -1,0 +1,7 @@
+ * Added audio recording support for Android 10 and later.
+
+ * Added recording quick start tile.
+
+ * Fix crash on recording start for Android 8 or lower.
+
+ * Added Portuguese translation.

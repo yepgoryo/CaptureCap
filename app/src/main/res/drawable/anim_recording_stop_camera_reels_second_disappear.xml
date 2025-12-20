@@ -1,0 +1,9 @@
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/icon_recording_video_finished_button_second_reel" >
+    <target
+        android:name="secondreel"
+        android:animation="@animator/top_disappear" />
+    <target
+        android:name="second_reel"
+        android:animation="@animator/fade_out" />
+</animated-vector>

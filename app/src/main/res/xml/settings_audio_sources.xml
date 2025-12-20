@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <CheckBoxPreference
+        android:key="audsourcemedia"
+        android:title="@string/audio_source_media"
+        android:defaultValue="true" />
+
+    <CheckBoxPreference
+        android:key="audsourcegame"
+        android:title="@string/audio_source_game"
+        android:defaultValue="false" />
+
+    <CheckBoxPreference
+        android:key="audsourceunknown"
+        android:title="@string/audio_source_unknown"
+        android:defaultValue="false" />
+
+</PreferenceScreen>

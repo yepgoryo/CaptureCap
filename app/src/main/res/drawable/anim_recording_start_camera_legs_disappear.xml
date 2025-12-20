@@ -1,0 +1,9 @@
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/icon_recording_in_progress_camlegs" >
+    <target
+        android:name="legs"
+        android:animation="@animator/bottom_disappear" />
+    <target
+        android:name="camera_legs"
+        android:animation="@animator/fade_out" />
+</animated-vector>

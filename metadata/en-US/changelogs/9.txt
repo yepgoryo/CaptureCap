@@ -1,0 +1,11 @@
+ * Disabled notification sound for Android 7 or lower.
+
+ * Fixed screen orientation detection.
+
+ * Simplified Chinese translation by sr093906.
+
+ * Native framerate support.
+
+ * Added settings panel with recording parameters.
+
+ * Added floating controls panel for Android 8+.

@@ -1,0 +1,5 @@
+ * Record screen and microphone
+
+ * Pause and resume recording
+
+ * Save recording to directory

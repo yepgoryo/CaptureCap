@@ -1,0 +1,1 @@
+ * Fixed recording write error on Android 10+.

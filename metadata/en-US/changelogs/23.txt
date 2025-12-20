@@ -1,0 +1,13 @@
+ * Fix audio playback not recording in some cases.
+
+ * Fix codec settings not being applied.
+
+ * Add audio codec settings.
+
+ * Add audio playback source settings.
+
+ * Add stop recording on shake settings.
+
+ * Add minimize recording on start settings.
+
+ * Add recording end notification settings.

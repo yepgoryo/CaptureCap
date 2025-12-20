@@ -1,0 +1,9 @@
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/icon_recording_audio_in_progress_tape" >
+    <target
+        android:name="leftreel"
+        android:animation="@animator/rotation_left_reel" />
+    <target
+        android:name="rightreel"
+        android:animation="@animator/rotation_right_reel" />
+</animated-vector>

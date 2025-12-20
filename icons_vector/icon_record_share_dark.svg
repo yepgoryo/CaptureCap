@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="512"
+   height="512"
+   viewBox="0 0 135.46667 135.46667"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.3 (0e150ed6c4, 2023-07-21)"
+   sodipodi:docname="icon_record_share_dark.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <title
+     id="title1">CaptureCap record share dark icon</title>
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#303030"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="mm"
+     showgrid="false"
+     units="px"
+     width="2048px"
+     inkscape:zoom="0.35355339"
+     inkscape:cx="-248.90159"
+     inkscape:cy="284.25693"
+     inkscape:window-width="1920"
+     inkscape:window-height="1007"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg5"
+     inkscape:showpageshadow="2"
+     inkscape:deskcolor="#d1d1d1" />
+  <defs
+     id="defs2" />
+  <g
+     id="g3"
+     inkscape:label="arrow"
+     transform="matrix(0.99999764,0,0,1.000001,0.00453,7.7133052)">
+    <path
+       id="path3"
+       style="display:inline;fill:#e6e6e6;fill-opacity:1;stroke-width:2.63272;stroke-linecap:round;stroke-linejoin:round"
+       d="m 37.464,89.353 -12.382,10.77557 85.294,5.2e-4 L 97.994,89.353 Z"
+       sodipodi:nodetypes="ccccc"
+       inkscape:label="arrow_down" />
+    <path
+       id="path1"
+       style="display:inline;fill:#e6e6e6;fill-opacity:1;stroke-width:2.63272;stroke-linecap:round;stroke-linejoin:round"
+       d="M 31.273,73.189 18.891,83.964569 116.567,83.965086 104.185,73.189 Z"
+       sodipodi:nodetypes="ccccc"
+       inkscape:label="arrow_middle" />
+    <path
+       style="display:inline;fill:#e6e6e6;fill-opacity:1;stroke-width:2.63272;stroke-linecap:round;stroke-linejoin:round"
+       d="M 67.729129,19.911174 122.75826,67.801133 12.7,67.800675 Z"
+       id="path2"
+       sodipodi:nodetypes="cccc"
+       inkscape:label="arrow_top" />
+  </g>
+  <metadata
+     id="metadata1">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:title>CaptureCap record share dark icon</dc:title>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Egor Olegovich Yakovlev</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <cc:license
+           rdf:resource="http://creativecommons.org/publicdomain/zero/1.0/" />
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/publicdomain/zero/1.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+</svg>

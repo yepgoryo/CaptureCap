@@ -1,0 +1,5 @@
+ * Added options for audio channels and sample rate.
+
+ * Fixed notification open and share for Android < 10.
+
+ * Fixed Hebrew wrong language code.

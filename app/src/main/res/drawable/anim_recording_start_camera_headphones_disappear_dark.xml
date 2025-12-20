@@ -1,0 +1,9 @@
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/icon_recording_in_progress_with_headphones_dark" >
+    <target
+        android:name="headphones"
+        android:animation="@animator/top_disappear" />
+    <target
+        android:name="camera_headphones"
+        android:animation="@animator/fade_out" />
+</animated-vector>

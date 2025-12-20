@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="512"
+   height="511.99997"
+   viewBox="0 0 135.46667 135.46666"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.3 (0e150ed6c4, 2023-07-21)"
+   sodipodi:docname="icon_recording_video_finished_button_dark.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <title
+     id="title1">CaptureCap screen recording finished dark button</title>
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#303030"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="mm"
+     showgrid="false"
+     units="px"
+     width="2048px"
+     inkscape:zoom="1"
+     inkscape:cx="147"
+     inkscape:cy="231.5"
+     inkscape:window-width="1920"
+     inkscape:window-height="1007"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg5"
+     inkscape:showpageshadow="2"
+     inkscape:deskcolor="#d1d1d1" />
+  <defs
+     id="defs2" />
+  <circle
+     id="circle16010"
+     cx="67.73333"
+     cy="67.73333"
+     r="48.995216"
+     style="display:inline;fill:#555555;fill-opacity:1;stroke-width:0.204504;stroke-dasharray:none"
+     inkscape:label="reels_background" />
+  <g
+     id="g24412"
+     inkscape:label="reel_bottom">
+    <ellipse
+       style="fill:#bf8e89;fill-opacity:1;stroke:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+       id="ellipse24133"
+       cx="60.805637"
+       cy="73.80352"
+       rx="26"
+       ry="6"
+       inkscape:label="outer_circle_bottom" />
+    <path
+       id="ellipse24226"
+       style="fill:#ffffff;fill-opacity:1;stroke-width:1.46482;stroke-linecap:round;stroke-linejoin:round"
+       d="M 60.805499,59.762803 C 49.1206,59.762816 39.647919,61.948677 39.6471,64.645192 v 8.040853 c 8.19e-4,2.696515 9.4735,4.882376 21.158399,4.882389 11.684898,-1.3e-5 21.157579,-2.185874 21.158398,-4.882389 v -8.040853 c -8.19e-4,-2.696515 -9.4735,-4.882376 -21.158398,-4.882389 z"
+       sodipodi:nodetypes="ccccccc"
+       inkscape:label="tape_on_reel" />
+    <ellipse
+       style="fill:#bf8e89;fill-opacity:1;stroke:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+       id="path23503"
+       cx="60.805637"
+       cy="64.37989"
+       rx="26.541777"
+       ry="6.2247815"
+       inkscape:label="outer_circle_top" />
+    <circle
+       style="stroke-width:0.9996;fill:#f2d2cf;fill-opacity:1;stroke-linecap:square;stroke-linejoin:round"
+       id="circle15937"
+       r="15.405549"
+       cy="20.905548"
+       cx="39.681858"
+       transform="matrix(-0.21234014,-0.18586026,0.79246669,-0.04980127,52.579834,72.830896)"
+       inkscape:label="inner_circle" />
+  </g>
+  <g
+     id="g36212"
+     transform="rotate(30,84.742418,103.42167)"
+     style="display:inline"
+     inkscape:label="reel_top">
+    <ellipse
+       style="fill:#bf8e89;fill-opacity:1;stroke:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+       id="ellipse36196"
+       cx="60.805637"
+       cy="73.80352"
+       rx="26"
+       ry="6"
+       inkscape:label="outer_circle_bottom" />
+    <path
+       id="path36198"
+       style="fill:#ffffff;fill-opacity:1;stroke-width:1.46482;stroke-linecap:round;stroke-linejoin:round"
+       d="M 60.805499,59.762803 C 49.1206,59.762816 39.647919,61.948677 39.6471,64.645192 v 8.040853 c 8.19e-4,2.696515 9.4735,4.882376 21.158399,4.882389 11.684898,-1.3e-5 21.157579,-2.185874 21.158398,-4.882389 v -8.040853 c -8.19e-4,-2.696515 -9.4735,-4.882376 -21.158398,-4.882389 z"
+       sodipodi:nodetypes="ccccccc"
+       inkscape:label="tape_on_reel" />
+    <path
+       id="path24434"
+       style="display:inline;fill:#eecbcb;fill-opacity:1;stroke-width:1.46482;stroke-linecap:round;stroke-linejoin:round"
+       d="m 39.647079,64.645243 -9.2e-5,8.040693 c 8.19e-4,2.696513 9.473661,4.882166 21.158549,4.882179 l 0.998764,-2.17e-4 9.6e-5,-0.02154 c 1.883695,-0.293756 2.790766,1.01095 1.566021,4.058082 -0.499685,1.243202 -2.205216,3.450472 -3.378543,4.872085 -1.322075,1.955526 -3.315269,3.15479 -5.411955,4.155108 -2.063509,0.954804 -3.44478,1.466421 -6.034463,2.875357 -2.589684,1.408933 -5.072481,2.96476 -6.812664,4.891607 -0.870092,0.963424 -1.583481,2.052143 -1.864371,3.360593 -0.280889,1.30845 -0.0034,2.80204 0.801156,4.01694 0.753971,1.13854 2.076412,1.97089 3.390286,2.01192 1.313875,0.041 2.408666,-0.47801 3.415328,-1.13108 l -2.17753,-3.35714 c -0.631981,0.40999 -1.061903,0.49094 -1.113179,0.48934 -0.05127,-0.002 0.0653,0.14588 -0.178152,-0.22176 -0.298494,-0.45073 -0.301212,-0.62615 -0.22763,-0.9689 0.07358,-0.34275 0.350969,-0.88825 0.921873,-1.52039 1.141807,-1.264288 3.343034,-2.745573 5.755564,-4.058129 2.412532,-1.312556 4.338575,-1.826864 6.429663,-2.79443 1.588927,-0.95962 2.827825,-1.88515 4.175319,-2.91842 1.214971,-0.93165 2.598797,-1.728669 3.518038,-2.953055 2.146516,-2.859057 2.890262,-5.461671 4.329413,-9.812841 0.975552,-2.949511 -3.599884,-7.568461 -6.198852,-7.99071 l -1.912325,-0.986737 z"
+       transform="translate(2.554834e-4,-4.2063685e-5)"
+       sodipodi:nodetypes="cccccsccssssccccsssscaasccc"
+       inkscape:label="tape_1" />
+    <path
+       style="color:#000000;display:inline;fill:#d4b5b5;fill-opacity:1;stroke-linejoin:round;-inkscape-stroke:none"
+       d="m 71.282176,77.965135 c -0.525872,-0.01801 -1.049158,0.03552 -1.58789,0.109375 -2.154927,0.295429 -4.648575,1.137435 -7.296875,2.066406 -2.6483,0.928972 -5.412036,1.955504 -7.78125,2.642578 -0.414496,0.120204 -0.483826,0.03954 -0.873047,0.13086 -0.659497,-0.03504 -1.468047,-0.186857 -2.074219,-0.173829 -1.317087,0.02831 -2.517752,0.12874 -3.685547,0.783204 -1.167794,0.654463 -2.023536,2.347537 -1.80664,3.78125 0.276862,1.830104 1.712583,3.483224 3.414062,3.953124 l 1.046875,-3.791015 c 1.176808,-0.01532 2.410102,-0.167039 3.691406,-0.505859 1.842174,0.13395 3.653096,0.270064 5.925782,0.513671 3.259947,0.349432 6.583374,0.647753 9.433593,0.07617 1.42511,-0.285792 2.802619,-0.806098 3.867188,-1.886718 1.064569,-1.08062 1.606519,-2.706376 1.5,-4.390625 -0.07879,-1.245786 -1.076772,-2.569172 -2.171875,-2.990235 -0.547552,-0.210531 -1.07569,-0.300355 -1.601563,-0.318359 z m -0.353515,4.060547 c -0.05368,0.294171 -0.05939,0.666301 -0.222656,0.832031 -0.26143,0.265371 -0.844235,0.579266 -1.802735,0.771484 -1.167783,0.234188 -2.836855,0.223159 -4.640625,0.13086 2.350568,-0.810256 4.605805,-1.535001 5.97461,-1.722657 0.426167,-0.05842 0.480722,-0.02468 0.691406,-0.01172 z"
+       id="path29781"
+       transform="rotate(-30,84.74242,103.42167)"
+       inkscape:label="tape_2" />
+    <path
+       style="color:#000000;display:inline;fill:#ba9f9f;fill-opacity:1;stroke-linejoin:round;-inkscape-stroke:none"
+       d="m 82.961864,82.306932 c 0,0 -4.958957,4.54357 -11.728516,7.755861 0.915024,-0.40083 1.844055,-0.7784 2.603516,-1.46875 0.288628,-0.26237 0.570037,-0.52291 0.820312,-1.054689 0.250276,-0.531782 0.296497,-1.673068 -0.226562,-2.359375 -0.523059,-0.686308 -1.071819,-0.811787 -1.458984,-0.904297 -0.387166,-0.09251 -0.713173,-0.112964 -1.054688,-0.119141 -1.366058,-0.02471 -3.056301,0.243381 -5.105469,0.609375 -4.047486,0.722906 -9.203814,1.896565 -12.591797,2.492188 -1.389826,-0.01936 -2.71722,0.01898 -3.919921,0.222656 -1.096578,0.1857 -2.158339,0.489161 -3.083985,1.257813 -0.925646,0.76865 -1.501292,2.11866 -1.439453,3.38672 0.04786,0.98141 0.57109,1.79671 1.140625,2.33984 0.569536,0.54313 1.216933,0.91252 1.935547,1.22852 1.437227,0.63199 3.194949,1.03401 5.193359,1.27539 3.99682,0.48276 8.922254,0.28081 13.367188,-1.0293 10.478538,-3.08847 18.326172,-10.755858 18.326172,-10.755858 z m -13.349609,8.423831 c -1.111938,0.46686 -2.146444,1.02222 -3.330079,1.37109 -3.760904,1.1085 -8.303563,1.31371 -11.757812,0.89649 -1.727124,-0.20862 -3.190849,-0.58437 -4.060547,-0.9668 -0.268765,-0.11819 -0.348714,-0.19318 -0.486328,-0.28516 0.152437,-0.0854 0.39259,-0.22139 0.988281,-0.32226 1.439137,-0.24372 3.909279,-0.1726 6.625,-0.0469 2.715721,0.12572 5.711626,0.28045 8.550781,0.0176 1.192136,-0.11038 2.347527,-0.35429 3.470704,-0.66406 z"
+       id="path29785"
+       transform="rotate(-30,84.74242,103.42167)"
+       inkscape:label="tape_3" />
+    <ellipse
+       style="fill:#bf8e89;fill-opacity:1;stroke:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+       id="ellipse36200"
+       cx="60.805637"
+       cy="64.37989"
+       rx="26.541777"
+       ry="6.2247815"
+       inkscape:label="outer_circle_top" />
+    <circle
+       style="display:inline;stroke-width:0.9996;fill:#f2d2cf;fill-opacity:1;stroke-linecap:square;stroke-linejoin:round"
+       id="circle36206"
+       r="15.405549"
+       cy="20.905548"
+       cx="39.681858"
+       transform="matrix(-0.21234015,-0.18586027,0.7924667,-0.04980127,52.579835,72.830896)"
+       inkscape:label="inner_circle" />
+  </g>
+  <metadata
+     id="metadata1">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:title>CaptureCap screen recording finished dark button</dc:title>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Egor Olegovich Yakovlev</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <cc:license
+           rdf:resource="http://creativecommons.org/publicdomain/zero/1.0/" />
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/publicdomain/zero/1.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+</svg>

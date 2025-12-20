@@ -1,0 +1,7 @@
+ * Fixed fps and bitrate settings.
+
+ * Fixed panel touch response.
+
+ * Added panel position option.
+
+ * Added panel scale option.

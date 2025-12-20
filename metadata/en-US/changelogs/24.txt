@@ -1,0 +1,11 @@
+ * Add different paths for audio and video recordings.
+
+ * Add video resolution scaling.
+
+ * Polish translation (SpacingBat3)
+
+ * Spanish translation (Cuzi)
+
+ * Norwegian translation (Cuzi)
+
+ * German translation (Cuzi)

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="512"
+   height="512"
+   viewBox="0 0 135.46667 135.46667"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.3 (0e150ed6c4, 2023-07-21)"
+   sodipodi:docname="icon_record_screen_disabled.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <title
+     id="title1">CaptureCap record screen property disabled icon</title>
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="mm"
+     showgrid="false"
+     units="px"
+     width="2048px"
+     inkscape:zoom="0.5"
+     inkscape:cx="152"
+     inkscape:cy="445"
+     inkscape:window-width="1920"
+     inkscape:window-height="1007"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg5"
+     inkscape:showpageshadow="2"
+     inkscape:deskcolor="#d1d1d1" />
+  <defs
+     id="defs2" />
+  <path
+     id="path14395"
+     style="fill:#949494;fill-opacity:1;stroke:none;stroke-width:0.679997;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+     inkscape:label="camera"
+     d="M 110.66678,14.7 94.12442,31.242308 A 22.007611,22.007861 82.671079 0 0 92.891566,28.417831 22.007611,22.007861 82.671079 0 0 62.828435,20.362241 22.007611,22.007861 82.671079 0 0 51.963098,39.007034 H 51.811759 A 22.007611,22.007861 82.671079 0 0 48.876538,28.417831 22.007611,22.007861 82.671079 0 0 30.864349,17.439579 22.007611,22.007861 82.671079 0 0 18.813405,20.362241 22.007611,22.007861 82.671079 0 0 10.757788,50.42601 22.007611,22.007861 82.671079 0 0 21.097503,59.567539 c -3.853218,0.116914 -6.922426,3.249526 -6.922426,7.132061 v 43.26779 c 0,3.89132 3.08575,7.01972 6.951218,7.12321 l 3.676408,3.6764 3.657215,-3.6572 h 0.0015 L 85.81116,59.760956 c -7e-4,-1.64e-4 -0.002,1.64e-4 -0.002,0 L 120.76901,24.801231 Z M 127.658,51.676574 91.31765,75.252021 v -0.7936 L 48.665403,117.1098 h 35.509832 c 3.957114,0 7.142415,-3.18531 7.142415,-7.14241 V 94.47707 l 36.34035,23.57544 z" />
+  <g
+     id="g7"
+     inkscape:label="arrows"
+     style="display:none"
+     transform="matrix(1.4285872,0,0,1.4285768,-23.221504,-18.169419)">
+    <path
+       id="path6"
+       style="display:inline;fill:#949494;fill-opacity:1;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"
+       d="M 33.616782,97.256082 100.79193,30.08093 107.863,37.152 40.68785,104.32714 Z"
+       inkscape:label="arrow2" />
+    <path
+       id="path7"
+       style="display:inline;fill:#949494;fill-opacity:1;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"
+       d="M 26.54476,90.183736 93.719784,23.008857 100.79084,30.079899 33.615815,97.254778 Z"
+       inkscape:label="arrow1" />
+  </g>
+  <metadata
+     id="metadata1">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Egor Olegovich Yakovlev</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:title>CaptureCap record screen property disabled icon</dc:title>
+        <cc:license
+           rdf:resource="http://creativecommons.org/publicdomain/zero/1.0/" />
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/publicdomain/zero/1.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+</svg>

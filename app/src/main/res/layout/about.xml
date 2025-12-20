@@ -1,0 +1,178 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:layout_centerHorizontal="true">
+
+    <LinearLayout
+        android:id="@+id/statusbar"
+        android:background="@color/statusbar_light"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:gravity="center_horizontal"
+        android:layout_centerHorizontal="true" />
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/mainscroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="vertical|horizontal"
+        android:fillViewport="true"
+        android:gravity="center">
+    
+        <LinearLayout
+            android:id="@+id/mainlayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:layout_centerHorizontal="true">
+    
+            <LinearLayout
+                android:id="@+id/appdesc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="20dp"
+                android:orientation="horizontal"
+                android:gravity="center">
+    
+                <ImageView
+                    android:id="@+id/appicon"
+                    android:layout_width="128dp"
+                    android:layout_height="128dp"
+                    android:contentDescription="@string/record_start"
+                    android:background="@drawable/ic_launcher" />
+    
+                <LinearLayout
+                    android:id="@+id/appinfo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="20dp"
+                    android:orientation="vertical">
+    
+                    <TextView
+                        android:id="@+id/appname"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:textSize="32sp"
+                        android:text="@string/app_name" />
+    
+                    <LinearLayout
+                        android:id="@+id/appversionline"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+    
+                        <TextView
+                            android:id="@+id/appversion"
+                            android:layout_height="wrap_content"
+                            android:layout_width="wrap_content"
+                            android:textSize="18sp"
+                            android:text="@string/info_version"
+                            android:textStyle="bold" />
+    
+                        <TextView
+                            android:id="@+id/appversionnum"
+                            android:layout_height="wrap_content"
+                            android:layout_width="wrap_content"
+                            android:paddingLeft="5dp"
+                            android:textSize="18sp" />
+    
+                    </LinearLayout>
+    
+                </LinearLayout>
+    
+            </LinearLayout>
+    
+            <LinearLayout
+                android:id="@+id/repoboard"
+                android:background="@drawable/contributorspanel_shape"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
+                android:orientation="vertical"
+                android:gravity="center_horizontal"
+                android:layout_centerHorizontal="true">
+
+                <LinearLayout
+                    android:id="@+id/apprepo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:orientation="vertical"
+                    android:gravity="center_horizontal"
+                    android:layout_centerHorizontal="true">
+        
+                    <TextView
+                        android:id="@+id/reposources"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:textSize="18sp"
+                        android:text="@string/info_sources"
+                        android:textStyle="bold" />
+        
+                    <TextView
+                        android:id="@+id/repogithublink"
+                        android:autoLink="web"
+                        android:textColorLink="@color/link_color_light"
+                        android:textIsSelectable="true"
+                        android:gravity="center"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:padding="10dp"
+                        android:textSize="12sp"
+                        android:text="@string/repo_github_link" />
+        
+                </LinearLayout>
+        
+                <Button
+                    android:id="@+id/showlicense"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="20dp"
+                    android:text="@string/info_license"
+                    android:contentDescription="@string/info_license"
+                    android:background="@drawable/button_show_license_background"
+                    android:textColor="@color/button_color_light"
+                    android:textSize="16sp"
+                    android:layout_centerHorizontal="true" />
+    
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/contributorstitle"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:textSize="32sp"
+                android:paddingTop="40dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="10dp"
+                android:text="@string/info_contributors"
+                android:textStyle="bold"
+                android:layout_centerHorizontal="true" />
+    
+            <LinearLayout
+                android:id="@+id/contributorsboard"
+                android:background="@drawable/contributorspanel_shape"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:orientation="vertical"
+                android:gravity="center_horizontal"
+                android:layout_centerHorizontal="true">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/contributorslist"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+    
+            </LinearLayout>
+
+        </LinearLayout>
+    
+    </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>

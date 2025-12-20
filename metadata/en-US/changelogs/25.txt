@@ -1,0 +1,3 @@
+ * Redesign of the interface.
+
+ * Add about section.

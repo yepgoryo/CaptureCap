@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="dark_theme_option_preferences_values">
+        <item name="dark_theme_option_dark">Dark</item>
+        <item name="dark_theme_option_light">Light</item>
+        <item name="dark_theme_option_auto_item">Automatic</item>
+    </array>
+    <string name="on_shake_default">Do nothing</string>
+    <array name="on_shake_preferences_values">
+        <item name="on_shake_option_nothing">Do nothing</item>
+        <item name="on_shake_option_pause">Pause</item>
+        <item name="on_shake_option_stop">Stop</item>
+    </array>
+    <string name="dark_theme_option_auto">Automatic</string>
+    <string name="codec_option_auto_value">Default</string>
+    <string name="audio_codec_option_auto_value">Default</string>
+    <array name="floating_controls_size_preferences_values">
+        <item name="floating_controls_size_option_large">Large</item>
+        <item name="floating_controls_size_option_normal">Normal</item>
+        <item name="floating_controls_size_option_small">Small</item>
+        <item name="floating_controls_size_option_tiny">Tiny</item>
+    </array>
+    <string name="floating_controls_size_option_auto_value">Normal</string>
+    <array name="audio_channels_preferences_values">
+        <item name="audio_channels_preferences_option_mono_value">Mono</item>
+        <item name="audio_channels_preferences_option_stereo_value">Stereo</item>
+    </array>
+    <string name="audio_channels_preferences_option_default_value">Stereo</string>
+    <string name="resolution_option_auto_value">Native</string>
+    <string name="repo_github_link">https://github.com/yepgoryo/CaptureCap</string>
+</resources>

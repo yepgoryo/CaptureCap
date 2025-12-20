@@ -1,0 +1,9 @@
+ * Fixed media scanning.
+
+ * Fixed FPS and bitrate max values.
+
+ * Added panel opacity option.
+
+ * Added little panel size.
+
+ * Fixed text scaling.

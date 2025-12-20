@@ -1,0 +1,10 @@
+<set xmlns:android="http://schemas.android.com/apk/res/android">
+    <objectAnimator
+        android:duration="500"
+        android:propertyName="fillAlpha"
+        android:valueFrom="0.0"
+        android:valueTo="1.0"
+        android:interpolator="@android:anim/accelerate_decelerate_interpolator"
+        android:repeatCount="-1"
+        android:repeatMode="reverse" />
+</set>

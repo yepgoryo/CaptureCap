@@ -1,0 +1,1 @@
+ * Fixed pause offset on recording.

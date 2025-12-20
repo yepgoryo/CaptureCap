@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="ic_launcher_background">#d5e5ff</color>
+    <color name="link_color_light">#000080</color>
+    <color name="link_color_dark">#ffffff</color>
+    <color name="button_color_light">#003380</color>
+    <color name="button_color_background">#ffffff</color>
+    <color name="button_color_dark">#ffffff</color>
+    <color name="button_color_dark_background">#ffffff</color>
+    <color name="statusbar_light">#000080</color>
+    <color name="statusbar_dark">#000080</color>
+    <color name="panel_button_dark">#453d51</color>
+    <color name="panel_chronometer">#ffffff</color>
+    <color name="contributorspanel_dark">#2c5aa0</color>
+</resources>

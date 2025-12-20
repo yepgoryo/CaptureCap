@@ -1,0 +1,7 @@
+ * Added quick start tile states.
+
+ * Centered application view.
+
+ * Added dark theme.
+
+ * Added adaptive icon.

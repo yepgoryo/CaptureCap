@@ -1,0 +1,1 @@
+ * Fix audio sample rate and channels settings.

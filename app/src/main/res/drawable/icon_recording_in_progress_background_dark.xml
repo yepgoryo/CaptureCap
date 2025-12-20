@@ -1,0 +1,11 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="512dp"
+    android:height="512dp"
+    android:viewportWidth="135.47"
+    android:viewportHeight="135.47">
+  <path
+      android:name="recording_background"
+      android:pathData="M67.73,67.73m-49,0a49,49 0,1 1,97.99 0a49,49 0,1 1,-97.99 0"
+      android:strokeWidth="0.204504"
+      android:fillColor="#555555"/>
+</vector>

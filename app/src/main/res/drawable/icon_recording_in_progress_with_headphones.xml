@@ -1,0 +1,38 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:name="camera_headphones"
+    android:width="512dp"
+    android:height="512dp"
+    android:viewportWidth="135.47"
+    android:viewportHeight="135.47">
+  <group
+      android:name="headphones">
+      <path
+          android:pathData="M97.69,71.46L97.69,57.4"
+          android:strokeLineJoin="round"
+          android:strokeWidth="1.8"
+          android:fillColor="#00000000"
+          android:strokeColor="#7b7b7b"
+          android:strokeLineCap="round"/>
+      <path
+          android:pathData="m84.77,82.95c0,0 4.64,-17.66 17.9,-10 13.26,7.65 0.29,20.5 0.29,20.5"
+          android:strokeLineJoin="round"
+          android:strokeWidth="2.8"
+          android:fillColor="#00000000"
+          android:strokeColor="#484848"
+          android:strokeLineCap="round"/>
+      <path
+          android:pathData="M81.13,80.86a5.6,4.2 120,1 0,7.27 4.2a5.6,4.2 120,1 0,-7.27 -4.2z"
+          android:strokeLineJoin="round"
+          android:strokeWidth="7"
+          android:fillColor="#121212"
+          android:strokeColor="#00000000"
+          android:strokeLineCap="round"/>
+      <path
+          android:pathData="M99.32,91.36a5.6,4.2 120,1 0,7.27 4.2a5.6,4.2 120,1 0,-7.27 -4.2z"
+          android:strokeLineJoin="round"
+          android:strokeWidth="7"
+          android:fillColor="#121212"
+          android:strokeColor="#00000000"
+          android:strokeLineCap="round"/>
+  </group>
+</vector>

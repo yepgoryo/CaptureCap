@@ -1,0 +1,5 @@
+ * Fixed orientation detection and panel position.
+
+ * Added audio only recording option.
+
+ * Fixed notification, added delete and share buttons.

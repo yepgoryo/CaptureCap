@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="512"
+   height="512"
+   viewBox="0 0 135.46667 135.46667"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.3 (0e150ed6c4, 2023-07-21)"
+   sodipodi:docname="icon_record_audio_disabled_dark.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <title
+     id="title1">CaptureCap record audio property dark disabled icon</title>
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#303030"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="mm"
+     showgrid="false"
+     units="px"
+     width="2048px"
+     inkscape:zoom="0.70710678"
+     inkscape:cx="127.27922"
+     inkscape:cy="239.7092"
+     inkscape:window-width="1920"
+     inkscape:window-height="1007"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg5"
+     inkscape:showpageshadow="2"
+     inkscape:deskcolor="#d1d1d1" />
+  <defs
+     id="defs2" />
+  <path
+     id="path1-3"
+     style="display:inline;fill:#999999;fill-opacity:1;stroke-width:1.42859;stroke-linecap:round;stroke-linejoin:round"
+     inkscape:label="headphones"
+     d="m 67.827257,14.143 c -15.106672,-5.3e-5 -27.004855,5.728717 -34.019624,14.574247 -7.014772,8.845533 -9.280495,19.59311 -9.794245,29.505803 -0.264977,5.112505 -0.04982,10.12848 0.408985,14.769879 -4.404122,5.242133 -6.929458,12.73327 -6.946111,20.604894 0.04284,4.197156 0.799867,8.326557 2.213985,12.076797 l -4.991247,4.99122 10.102091,10.10201 3.201752,-3.20173 7.39e-4,7.4e-4 30.415532,-30.415306 v -0.001 l 33.276219,-33.27645 c 1.1e-4,7.27e-4 -1.2e-4,0.0014 0,0.0023 L 107.40289,38.168879 c -2.1e-4,-5.04e-4 -5.2e-4,-9.72e-4 -7.4e-4,-0.0014 L 120.768,24.801722 110.66591,14.700444 99.391494,25.974779 C 96.236201,22.782397 92.369955,20.106569 87.868287,18.116212 82.129143,15.578684 75.380568,14.142991 67.827257,14.143 Z m -7.38e-4,19.408215 c 9.781206,2.5e-5 14.543811,2.494945 17.854359,6.134 L 52.172117,73.192992 c -2.474927,-3.055677 -5.470205,-5.262721 -8.727486,-6.430771 -0.14013,-2.495727 -0.180733,-5.032073 -0.05094,-7.53591 0.389997,-7.524782 2.260734,-14.215241 5.617276,-18.447769 3.356548,-4.232592 8.072851,-7.227359 18.81555,-7.227327 z M 111.35026,54.425566 76.729707,89.045128 c -0.203109,1.502935 -0.312743,3.02568 -0.327779,4.552695 1.3e-4,15.312307 9.309921,27.725277 20.794037,27.725177 11.484115,1e-4 20.793915,-12.41286 20.794045,-27.725177 -0.0152,-7.772684 -2.47657,-15.179964 -6.78445,-20.416644 0.47218,-4.695241 0.69901,-9.777533 0.4304,-14.961082 -0.065,-1.253284 -0.1586,-2.520124 -0.2857,-3.794531 z"
+     sodipodi:nodetypes="cssccccccccccccccccscscccccsccccccsc" />
+  <g
+     id="g7-6"
+     inkscape:label="arrows"
+     style="display:none"
+     transform="matrix(1.4285872,0,0,1.4285768,-23.221504,-18.169919)">
+    <path
+       id="path6-7"
+       style="display:inline;fill:#999999;fill-opacity:1;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"
+       d="M 33.616782,97.256082 100.79193,30.08093 107.863,37.152 40.68785,104.32714 Z"
+       inkscape:label="arrow2" />
+    <path
+       id="path7-5"
+       style="display:inline;fill:#999999;fill-opacity:1;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"
+       d="M 26.54476,90.183736 93.719784,23.008857 100.79084,30.079899 33.615815,97.254778 Z"
+       inkscape:label="arrow1" />
+  </g>
+  <metadata
+     id="metadata1">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Egor Olegovich Yakovlev</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:title>CaptureCap record audio property dark disabled icon</dc:title>
+        <cc:license
+           rdf:resource="http://creativecommons.org/publicdomain/zero/1.0/" />
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/publicdomain/zero/1.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+</svg>

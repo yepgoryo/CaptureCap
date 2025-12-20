@@ -1,0 +1,38 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:name="audio_headphones"
+    android:width="135.47dp"
+    android:height="135.47dp"
+    android:viewportWidth="135.47"
+    android:viewportHeight="135.47">
+  <group
+      android:name="headphones">
+      <path
+          android:pathData="m45.91,90.7c0,0 -0.41,1.4 0,1.88 3.69,4.29 16.48,-3.12 16.8,2.53 0.11,2 -5.8,-0.45 -5.8,1.55 0,3.24 9.39,-0.72 9.39,2.52 0,1.84 -5.32,1.43 -5.32,1.43"
+          android:strokeLineJoin="round"
+          android:strokeWidth="1.8"
+          android:fillColor="#00000000"
+          android:strokeColor="#573c3c"
+          android:strokeLineCap="round"/>
+      <path
+          android:pathData="m51.49,111.97c0,0 -25.16,2.62 -25.16,-6 0,-8.62 25.16,-6 25.16,-6"
+          android:strokeLineJoin="round"
+          android:strokeWidth="7"
+          android:fillColor="#00000000"
+          android:strokeColor="#484848"
+          android:strokeLineCap="round"/>
+      <path
+          android:pathData="M51.49,107.51a10,7.5 0,1 0,0 -15a10,7.5 0,1 0,-0 15z"
+          android:strokeLineJoin="round"
+          android:strokeWidth="7"
+          android:fillColor="#191919"
+          android:strokeColor="#00000000"
+          android:strokeLineCap="round"/>
+      <path
+          android:pathData="M51.49,119.5a10,7.5 0,1 0,0 -15a10,7.5 0,1 0,-0 15z"
+          android:strokeLineJoin="round"
+          android:strokeWidth="7"
+          android:fillColor="#242424"
+          android:strokeColor="#00000000"
+          android:strokeLineCap="round"/>
+  </group>
+</vector>

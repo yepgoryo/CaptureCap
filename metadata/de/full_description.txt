@@ -1,0 +1,3 @@
+Aufnahme der Audiowiedergabe benötigt Android 10 oder neuer. Kein Root nötig.
+
+(ACHTUNG: Einige Gerätehersteller erlauben das Aufnehmen bestimmter oder aller Audiowiedergabequellen nicht)

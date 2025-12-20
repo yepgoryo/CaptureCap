@@ -1,0 +1,25 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:layout_centerHorizontal="true">
+
+    <LinearLayout
+        android:id="@+id/statusbar"
+        android:background="@color/statusbar_light"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:gravity="center_horizontal"
+        android:layout_centerHorizontal="true" />
+    
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textSize="22sp"
+        android:orientation="vertical"
+        android:id="@+id/mainposition"
+        android:gravity="center"
+        android:text="@string/floating_controls_position_notice" />
+
+</LinearLayout>

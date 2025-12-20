@@ -1,0 +1,45 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="512dp"
+    android:height="512dp"
+    android:viewportWidth="135.47"
+    android:viewportHeight="135.47">
+  <group
+    android:name="capturecap"
+    android:pivotX="36.23"
+    android:pivotY="74.74"
+    android:rotation="0.0">
+    <path
+        android:name="cap"
+        android:pathData="M36.23,74.74C31.65,62.62 43.38,21.07 81.97,26.07c30.92,3.72 35.84,31.85 30.85,58.06 -0.3,1.49 -2.33,-1.47 -3.95,-0.88C95.39,88.08 42.7,69.05 36.23,74.74Z"
+        android:strokeWidth="1.44"
+        android:fillColor="#003380"
+        android:strokeColor="#00000000"/>
+    <path
+        android:name="top"
+        android:pathData="M78.96,26.23a2.33,4.58 95.52,1 0,9.12 0.88a2.33,4.58 95.52,1 0,-9.12 -0.88z"
+        android:strokeWidth="0.23"
+        android:fillColor="#002b69"/>
+    <path
+        android:name="blinder"
+        android:pathData="m36.36,73.12 l-18.79,22.42 1.99,1.92c21.77,-10.42 45.21,4.47 69.36,9.79C105.95,104.97 105.35,92.34 111.91,83.92 93.71,77.85 53.4,60.81 36.36,73.12Z"
+        android:strokeWidth="0.23">
+      <aapt:attr name="android:fillColor">
+        <gradient
+            android:startX="62.3"
+            android:startY="86.11"
+            android:endX="54.26"
+            android:endY="106.05"
+            android:type="linear">
+          <item android:offset="0" android:color="#FF002A6C"/>
+          <item android:offset="1" android:color="#FF217CFF"/>
+        </gradient>
+      </aapt:attr>
+    </path>
+    <path
+        android:name="record_indicator"
+        android:pathData="M75.35,51.2m-15.15,0a15.15,15.15 0,1 1,30.3 0a15.15,15.15 45,1 1,-30.3 0"
+        android:strokeWidth="0.1"
+        android:fillColor="#9d93ac"/>
+  </group>
+</vector>

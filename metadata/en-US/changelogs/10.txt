@@ -1,0 +1,9 @@
+ * Fixed screen rotation crashes.
+
+ * Fixed settings parameters.
+
+ * Fixed dark theme.
+
+ * Fixed floating panel position.
+
+ * Added vertical floating panel.

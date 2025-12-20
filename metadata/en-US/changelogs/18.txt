@@ -1,0 +1,3 @@
+ * Fix recording pausing for Android 10+.
+
+ * Restore automatic FPS detection.

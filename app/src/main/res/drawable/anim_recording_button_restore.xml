@@ -1,0 +1,6 @@
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/icon_recording_stopped">
+    <target
+        android:name="capturecap"
+        android:animation="@animator/icon_recording_restore_transform" />
+</animated-vector>

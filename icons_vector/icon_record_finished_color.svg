@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="512"
+   height="512"
+   viewBox="0 0 135.46666 135.46667"
+   version="1.1"
+   id="svg5"
+   sodipodi:docname="icon_record_finished_color.svg"
+   inkscape:version="1.4.2 (f4327f4, 2025-05-13)"
+   inkscape:export-filename="..\..\icon_record_finished_color_action_normal.png"
+   inkscape:export-xdpi="13.5"
+   inkscape:export-ydpi="13.5"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <title
+     id="title1">CaptureCap notification finished color icon</title>
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="px"
+     showgrid="false"
+     units="px"
+     width="512px"
+     inkscape:zoom="0.3312267"
+     inkscape:cx="-667.21674"
+     inkscape:cy="318.51297"
+     inkscape:window-width="1920"
+     inkscape:window-height="1001"
+     inkscape:window-x="-9"
+     inkscape:window-y="-9"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg5"
+     inkscape:lockguides="false"
+     showguides="true"
+     inkscape:showpageshadow="2"
+     inkscape:deskcolor="#d1d1d1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid2352"
+       originx="0"
+       originy="0"
+       spacingy="1"
+       spacingx="1"
+       units="px"
+       visible="false" />
+  </sodipodi:namedview>
+  <defs
+     id="defs2" />
+  <path
+     id="path2482"
+     style="fill:#003380;fill-opacity:1;stroke:none;stroke-width:28.0785;stroke-linecap:round"
+     d="M 256 64 A 191.99998 191.99998 0 0 0 64 256 A 191.99998 191.99998 0 0 0 256 448 A 191.99998 191.99998 0 0 0 448 256 A 191.99998 191.99998 0 0 0 256 64 z M 384.35742 207.6875 A 16.666667 16.666667 0 0 1 396.14258 212.56836 A 16.666667 16.666667 0 0 1 396.14258 236.13867 L 268.14062 364.14062 A 16.668334 16.668334 0 0 1 244.57031 364.14062 L 116.56836 236.13867 A 16.666667 16.666667 0 0 1 116.56836 212.56836 A 16.666667 16.666667 0 0 1 128.35547 207.68945 A 16.666667 16.666667 0 0 1 140.13867 212.56836 L 256.35156 328.78125 L 372.57227 212.56836 A 16.666667 16.666667 0 0 1 384.35742 207.6875 z "
+     transform="scale(0.26458333)"
+     inkscape:label="icon" />
+  <metadata
+     id="metadata1">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:title>CaptureCap notification finished color icon</dc:title>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Egor Olegovich Yakovlev</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <cc:license
+           rdf:resource="http://creativecommons.org/publicdomain/zero/1.0/" />
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/publicdomain/zero/1.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+</svg>

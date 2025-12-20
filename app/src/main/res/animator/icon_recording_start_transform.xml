@@ -1,0 +1,25 @@
+<set xmlns:android="http://schemas.android.com/apk/res/android">
+    <objectAnimator
+        android:duration="200"
+        android:propertyName="rotation"
+        android:valueFrom="0"
+        android:valueTo="30"
+        android:interpolator="@android:anim/linear_interpolator"
+        android:repeatCount="0" />
+
+    <objectAnimator
+        android:duration="200"
+        android:propertyName="alpha"
+        android:valueFrom="1.0"
+        android:valueTo="0.0"
+        android:interpolator="@android:anim/linear_interpolator"
+        android:repeatCount="0" />
+
+    <objectAnimator
+        android:duration="200"
+        android:propertyName="translateY"
+        android:valueFrom="0"
+        android:valueTo="-30"
+        android:interpolator="@android:anim/linear_interpolator"
+        android:repeatCount="0" />
+</set>

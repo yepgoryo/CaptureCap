@@ -1,0 +1,194 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:layout_centerHorizontal="true">
+
+    <LinearLayout
+        android:id="@+id/statusbar"
+        android:background="@color/statusbar_light"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:gravity="center_horizontal"
+        android:layout_centerHorizontal="true" />
+
+    <ScrollView
+        android:id="@+id/mainscroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:fillViewport="true"
+        android:gravity="center">
+    
+        <RelativeLayout
+            android:id="@+id/mainlayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+    
+            <ImageButton
+                android:id="@+id/recordingmainbutton"
+                android:layout_width="250dp"
+                android:layout_height="250dp"
+                android:contentDescription="@string/record_start"
+                android:background="@drawable/icon_recording_stopped"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true" />
+    
+            <LinearLayout
+                android:id="@+id/recordpanel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                android:gravity="center_horizontal">
+    
+                <LinearLayout
+                    android:id="@+id/recordtimerpanel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    android:gravity="center">
+    
+                    <Chronometer
+                        android:id="@+id/timerrecord"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:textSize="32sp"
+                        android:layout_centerHorizontal="true" />
+    
+                    <ImageButton
+                        android:id="@+id/recordstop"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="12dp"
+                        android:contentDescription="@string/record_stop"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:visibility="gone"
+                        android:layout_centerHorizontal="true" />
+    
+                </LinearLayout>
+    
+                <LinearLayout
+                    android:id="@+id/recordmodepanel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_horizontal">
+    
+                    <ImageButton
+                        android:id="@+id/recordscreen"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="12dp"
+                        android:contentDescription="@string/setting_record_screen"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:layout_centerHorizontal="true" />
+    
+                    <ImageButton
+                        android:id="@+id/recordmicrohone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="12dp"
+                        android:contentDescription="@string/setting_audio_record_microphone_sound"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:layout_centerHorizontal="true" />
+    
+                    <ImageButton
+                        android:id="@+id/recordaudio"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="12dp"
+                        android:contentDescription="@string/setting_audio_record_playback_sound"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:layout_centerHorizontal="true" />
+    
+                </LinearLayout>
+    
+                <TextView
+                    android:id="@+id/audioplaybackunavailable"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:textSize="12sp"
+                    android:gravity="center"
+                    android:visibility="gone"
+                    android:text="@string/audio_playback_unavailable"
+                    android:layout_centerHorizontal="true" />
+    
+                <LinearLayout
+                    android:id="@+id/recordfinishedpanel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    android:gravity="center_horizontal">
+    
+                    <ImageButton
+                        android:id="@+id/sharerecord"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="12dp"
+                        android:contentDescription="@string/record_share"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:layout_centerHorizontal="true" />
+    
+                    <ImageButton
+                        android:id="@+id/deleterecord"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="12dp"
+                        android:contentDescription="@string/record_delete"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:layout_centerHorizontal="true" />
+    
+                    <ImageButton
+                        android:id="@+id/openrecord"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="12dp"
+                        android:contentDescription="@string/record_open"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:layout_centerHorizontal="true" />
+    
+                </LinearLayout>
+    
+                <LinearLayout
+                    android:id="@+id/optionspanel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_horizontal">
+    
+                    <ImageButton
+                        android:id="@+id/openinfo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="7dp"
+                        android:contentDescription="@string/info_title"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:layout_centerHorizontal="true" />
+    
+                    <ImageButton
+                        android:id="@+id/opensettings"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="7dp"
+                        android:contentDescription="@string/settings_title"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:layout_centerHorizontal="true" />
+    
+                </LinearLayout>
+    
+            </LinearLayout>
+    
+        </RelativeLayout>
+    
+    </ScrollView>
+
+</LinearLayout>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="512"
+   height="512"
+   viewBox="0 0 135.46667 135.46667"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.3 (0e150ed6c4, 2023-07-21)"
+   sodipodi:docname="icon_record_mic_disabled.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <title
+     id="title1">CaptureCap record microphone property disabled icon</title>
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="mm"
+     showgrid="false"
+     units="px"
+     width="2048px"
+     inkscape:zoom="0.5"
+     inkscape:cx="-118"
+     inkscape:cy="381"
+     inkscape:window-width="1920"
+     inkscape:window-height="1007"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg5"
+     inkscape:showpageshadow="2"
+     inkscape:deskcolor="#d1d1d1" />
+  <defs
+     id="defs2" />
+  <path
+     id="path9734"
+     style="fill:#949494;fill-opacity:1;stroke-width:5.97388;stroke-linecap:round;stroke-linejoin:round"
+     inkscape:label="microphone"
+     d="M 67.733501,12.498 A 16.594127,16.59407 0 0 0 51.139319,29.092168 v 38.95104 a 16.594127,16.59407 0 0 0 0.984074,5.198691 l -4.097976,4.097234 C 47.967357,77.212812 47.902735,77.089507 47.846025,76.96263 44.844086,70.246538 44.754271,63.304444 44.754271,63.304444 a 4.9782379,4.978221 0 0 0 -4.991249,-4.965406 4.9782379,4.978221 0 0 0 -4.965408,4.991245 c 0,0 -0.05181,8.734478 3.954018,17.69636 0.543648,1.216279 1.187666,2.444923 1.925334,3.660937 L 14.699,110.66552 24.801091,120.76761 35.272302,110.2964 v 10e-4 l 7.135839,-7.13583 c -7.49e-4,2.3e-4 -0.0015,5e-4 -0.0022,7.4e-4 l 8.224004,-8.224008 c 2.95e-4,1.9e-4 4.46e-4,5.6e-4 7.39e-4,7.4e-4 l 7.126241,-7.126232 c -3.11e-4,-1.4e-4 -4.25e-4,-6e-4 -7.38e-4,-7.4e-4 l 4.289181,-4.289174 a 16.594127,16.59407 0 0 0 0.0015,7.3e-4 L 84.326943,61.244015 v -0.0022 L 120.768,24.800776 110.66591,14.699433 84.326943,41.038374 V 29.092168 A 16.594127,16.59407 0 0 0 67.733501,12.498 Z M 100.58523,65.18991 86.473012,79.302114 c -1.833778,3.386803 -4.346829,6.403229 -8.303734,8.302985 L 66.184672,99.590437 c 0.515129,0.0213 1.018823,0.0591 1.548829,0.0591 15.80823,0 24.975386,-9.660981 28.981132,-18.622854 2.901672,-6.491724 3.665067,-12.817066 3.870597,-15.836733 z m -32.850252,34.90918 c -0.708246,0 -1.395938,0.0195 -2.091437,0.0317 l -20.535652,20.53563 c 5.848019,1.42283 13.821879,2.30258 22.627089,2.30258 17.92846,0 32.462642,-3.63341 32.462682,-8.11548 v -6.639 c 0,-0.0129 -0.004,-0.026 -0.004,-0.0391 a 32.462427,8.115579 0 0 0 -0.034,-0.33811 c -0.0106,-0.0574 -0.029,-0.1148 -0.0443,-0.17201 a 32.462427,8.115579 0 0 0 -0.0583,-0.19268 c -0.0263,-0.0723 -0.0585,-0.14456 -0.0923,-0.2163 a 32.462427,8.115579 0 0 0 -0.0701,-0.13806 c -0.0448,-0.0828 -0.0929,-0.166 -0.147651,-0.24804 a 32.462427,8.115579 0 0 0 -0.0591,-0.082 c -0.556662,-0.78461 -1.562266,-1.5298 -2.951482,-2.21915 a 32.462427,8.115579 0 0 0 -0.0443,-0.0221 c -0.173611,-0.0856 -0.354402,-0.16947 -0.539652,-0.25321 a 32.462427,8.115579 0 0 0 -1.401176,-0.57657 c -0.0605,-0.0227 -0.11948,-0.0453 -0.180871,-0.0679 a 32.462427,8.115579 0 0 0 -1.691317,-0.56549 c -0.0847,-0.0258 -0.17242,-0.0518 -0.258381,-0.0775 a 32.462427,8.115579 0 0 0 -1.799097,-0.49462 c -0.0923,-0.0233 -0.184921,-0.0463 -0.278311,-0.0694 a 32.462427,8.115579 0 0 0 -1.989558,-0.45256 c -0.0966,-0.0201 -0.191041,-0.0407 -0.288651,-0.0605 a 32.462427,8.115579 0 0 0 -2.261243,-0.42227 c -0.0947,-0.0161 -0.190311,-0.0314 -0.285701,-0.0472 a 32.462427,8.115579 0 0 0 -2.291498,-0.34845 c -0.182635,-0.0253 -0.368148,-0.0487 -0.552941,-0.0731 a 32.462427,8.115579 0 0 0 -2.182242,-0.26282 c -0.204236,-0.0223 -0.407819,-0.0444 -0.614215,-0.0657 a 32.462427,8.115579 0 0 0 -2.285595,-0.20892 c -0.230062,-0.0187 -0.458707,-0.0379 -0.690993,-0.0554 a 32.462427,8.115579 0 0 0 -2.600086,-0.16684 c -0.188449,-0.01 -0.378103,-0.0188 -0.567707,-0.0281 a 32.462427,8.115579 0 0 0 -2.607468,-0.0989 c -0.165102,-0.004 -0.329515,-0.009 -0.49536,-0.0133 a 32.462427,8.115579 0 0 0 -3.003165,-0.0376 c -0.03084,-1e-5 -0.0607,-0.001 -0.09154,-0.001 z" />
+  <g
+     id="g7"
+     inkscape:label="arrows"
+     style="display:none"
+     transform="matrix(1.4285872,0,0,1.4285768,-23.221504,-18.169419)">
+    <path
+       id="path6"
+       style="display:inline;fill:#949494;fill-opacity:1;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"
+       d="M 33.616782,97.256082 100.79193,30.08093 107.863,37.152 40.68785,104.32714 Z"
+       inkscape:label="arrow2" />
+    <path
+       id="path7"
+       style="display:inline;fill:#949494;fill-opacity:1;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"
+       d="M 26.54476,90.183736 93.719784,23.008857 100.79084,30.079899 33.615815,97.254778 Z"
+       inkscape:label="arrow1" />
+  </g>
+  <metadata
+     id="metadata1">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:title>CaptureCap record microphone property disabled icon</dc:title>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Egor Olegovich Yakovlev</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <cc:license
+           rdf:resource="http://creativecommons.org/publicdomain/zero/1.0/" />
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/publicdomain/zero/1.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+</svg>

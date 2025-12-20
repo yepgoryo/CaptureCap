@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="512"
+   height="511.99997"
+   viewBox="0 0 135.46667 135.46666"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.3 (0e150ed6c4, 2023-07-21)"
+   sodipodi:docname="icon_record_audio_dark.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <title
+     id="title1">CaptureCap record audio property dark icon</title>
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#303030"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="mm"
+     showgrid="false"
+     units="px"
+     width="2048px"
+     inkscape:zoom="0.70710678"
+     inkscape:cx="159.80613"
+     inkscape:cy="238.29499"
+     inkscape:window-width="1920"
+     inkscape:window-height="1007"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg5"
+     inkscape:showpageshadow="2"
+     inkscape:deskcolor="#d1d1d1" />
+  <defs
+     id="defs2" />
+  <path
+     d="m 67.827626,14.143 c -15.106598,-5.3e-5 -27.004642,5.728833 -34.019376,14.574401 -7.014737,8.845571 -9.280427,19.592642 -9.794174,29.505378 -0.26498,5.11253 -0.04981,10.128615 0.408982,14.770037 A 20.793752,27.725553 4.3106297e-7 0 0 17.477,93.59793 20.793752,27.725553 4.3106297e-7 0 0 38.270885,121.32339 20.793752,27.725553 4.3106297e-7 0 0 59.064029,93.59793 20.793752,27.725553 4.3106297e-7 0 0 43.445177,66.762041 c -0.14013,-2.495736 -0.180736,-5.032141 -0.05094,-7.535989 0.389993,-7.524818 2.260708,-14.215419 5.617234,-18.447966 3.356529,-4.232609 8.072765,-7.226696 18.815413,-7.226664 10.742646,2.8e-5 15.450802,2.993365 18.807286,7.225926 3.3565,4.232599 5.22726,10.925386 5.61724,18.450182 0.12888,2.487324 0.0898,5.006833 -0.048,7.486525 A 20.793752,27.725553 4.3106297e-7 0 0 76.402231,93.59793 20.793752,27.725553 4.3106297e-7 0 0 97.19611,121.32339 20.793752,27.725553 4.3106297e-7 0 0 117.99,93.59793 20.793752,27.725553 4.3106297e-7 0 0 111.20562,73.181069 c 0.47218,-4.695264 0.69901,-9.777668 0.43039,-14.961243 -0.51372,-9.912722 -2.78245,-20.659058 -9.79713,-29.504639 C 98.33154,24.292378 93.6076,20.653722 87.86851,18.116226 82.129391,15.578715 75.380893,14.142991 67.827626,14.143 Z"
+     style="display:inline;fill:#e6e6e6;stroke-width:1.42858;stroke-linecap:round;stroke-linejoin:round"
+     id="path1"
+     inkscape:label="icon" />
+  <metadata
+     id="metadata1">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Egor Olegovich Yakovlev</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:title>CaptureCap record audio property dark icon</dc:title>
+        <cc:license
+           rdf:resource="http://creativecommons.org/publicdomain/zero/1.0/" />
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/publicdomain/zero/1.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+</svg>

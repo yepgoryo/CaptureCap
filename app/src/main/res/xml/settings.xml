@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        android:title="@string/capture_settings"
+        android:key="capturesettings">
+
+        <Preference
+            android:key="folderpathpref"
+            android:title="@string/setting_video_recordings_folder" />
+
+        <Preference
+            android:key="folderaudiopathpref"
+            android:title="@string/setting_audio_recordings_folder" />
+
+        <SwitchPreferenceCompat
+            android:key="customquality"
+            android:summary="@string/quality_indicator_custom_description"
+            android:title="@string/quality_indicator_custom"
+            android:defaultValue="false" />
+
+        <com.yepgoryo.CaptureCap.ParameterDialog
+            android:key="qualityscale"
+            android:dependency="customquality"
+            android:summary="@string/quality_indicator_description"
+            android:title="@string/quality_indicator"
+            android:dialogLayout="@layout/dialog_quality" />
+
+        <SwitchPreferenceCompat
+            android:key="customfps"
+            android:summary="@string/fps_indicator_custom_description"
+            android:title="@string/fps_indicator_custom"
+            android:defaultValue="false" />
+
+        <com.yepgoryo.CaptureCap.NonNullText
+            android:key="fpsvalue"
+            android:dependency="customfps"
+            android:summary="@string/fps_indicator_description"
+            android:title="@string/fps_indicator"
+            android:gravity="center"
+            android:inputType="number"
+            android:defaultValue="30" />
+
+        <SwitchPreferenceCompat
+            android:key="custombitrate"
+            android:summary="@string/bitrate_indicator_custom_description"
+            android:title="@string/bitrate_indicator_custom"
+            android:defaultValue="false" />
+
+        <com.yepgoryo.CaptureCap.NonNullText
+            android:key="bitratevalue"
+            android:dependency="custombitrate"
+            android:summary="@string/bitrate_indicator_description"
+            android:title="@string/bitrate_indicator"
+            android:gravity="center"
+            android:inputType="number"
+            android:defaultValue="1" />
+
+        <com.yepgoryo.CaptureCap.ResolutionList
+            android:key="resolutionvalue"
+            android:summary="@string/resolution_option_description"
+            android:title="@string/resolution_option"
+            android:dialogTitle="@string/resolution_option"
+            android:defaultValue="@string/resolution_option_auto_value" />
+
+        <com.yepgoryo.CaptureCap.CodecList
+            android:key="codecvalue"
+            android:summary="@string/codec_option_description"
+            android:title="@string/codec_option"
+            android:dialogTitle="@string/codec_option"
+            android:defaultValue="@string/codec_option_auto_value" />
+
+        <Preference
+            android:key="selectaudiosources"
+            android:title="@string/audio_sources_list"
+            app:fragment="com.yepgoryo.CaptureCap.AudioSourcesSettingsFragment" />
+
+        <com.yepgoryo.CaptureCap.CodecList
+            android:key="audiocodecvalue"
+            android:summary="@string/audio_codec_option_description"
+            android:title="@string/audio_codec_option"
+            android:dialogTitle="@string/audio_codec_option"
+            android:defaultValue="@string/audio_codec_option_auto_value" />
+
+        <SwitchPreferenceCompat
+            android:key="customsamplerate"
+            android:summary="@string/samplerate_indicator_custom_description"
+            android:title="@string/samplerate_indicator_custom"
+            android:defaultValue="false" />
+
+        <com.yepgoryo.CaptureCap.NonNullText
+            android:key="sampleratevalue"
+            android:dependency="customsamplerate"
+            android:summary="@string/samplerate_indicator_description"
+            android:title="@string/samplerate_indicator"
+            android:gravity="center"
+            android:inputType="number"
+            android:defaultValue="44100" />
+
+        <ListPreference
+            android:key="audiochannels"
+            android:summary="@string/audio_channels_description"
+            android:title="@string/audio_channels"
+            android:dialogTitle="@string/audio_channels"
+            android:entries="@array/audio_channels_preferences"
+            android:entryValues="@array/audio_channels_preferences_values"
+            android:defaultValue="@string/audio_channels_preferences_option_default_value" />
+
+        <CheckBoxPreference
+            android:key="dontnotifyonfinish"
+            android:summary="@string/dontnotifyonfinish_option_description"
+            android:title="@string/dontnotifyonfinish_option"
+            android:defaultValue="false" />
+
+        <CheckBoxPreference
+            android:key="minimizeonstart"
+            android:summary="@string/minimizeonstart_option_description"
+            android:title="@string/minimizeonstart_option"
+            android:defaultValue="false" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/controls_settings"
+        android:key="controlssettings">
+
+        <SwitchPreferenceCompat
+            android:key="floatingcontrols"
+            android:summary="@string/floating_controls_option_description"
+            android:title="@string/floating_controls_option"
+            android:defaultValue="false" />
+
+        <Preference
+            android:key="floatingcontrolsposition"
+            android:title="@string/floating_controls_position"
+            android:summary="@string/floating_controls_position_description"
+            android:dependency="floatingcontrols">
+            <intent android:targetPackage="com.yepgoryo.CaptureCap"
+                android:targetClass="com.yepgoryo.CaptureCap.PanelPositionScreen" />
+        </Preference>
+
+        <ListPreference
+            android:key="floatingcontrolssize"
+            android:summary="@string/floating_controls_size_description"
+            android:title="@string/floating_controls_size"
+            android:dependency="floatingcontrols"
+            android:dialogTitle="@string/floating_controls_size"
+            android:entries="@array/floating_controls_size_preferences"
+            android:entryValues="@array/floating_controls_size_preferences_values"
+            android:defaultValue="@string/floating_controls_size_option_auto_value" />
+
+        <com.yepgoryo.CaptureCap.ParameterDialog
+            android:key="floatingcontrolsopacity"
+            android:dependency="floatingcontrols"
+            android:summary="@string/floating_controls_opacity_description"
+            android:title="@string/floating_controls_opacity"
+            android:dialogLayout="@layout/dialog_opacity" />
+
+        <ListPreference
+            android:key="darktheme"
+            android:summary="@string/dark_theme_option_description"
+            android:title="@string/dark_theme_option"
+            android:dialogTitle="@string/dark_theme_option"
+            android:entries="@array/dark_theme_option_preferences"
+            android:entryValues="@array/dark_theme_option_preferences_values"
+            android:defaultValue="@string/dark_theme_option_auto" />
+
+        <ListPreference
+            android:key="onshake"
+            android:summary="@string/on_shake_option_summary"
+            android:title="@string/on_shake_option_title"
+            android:dialogTitle="@string/on_shake_dialog"
+            android:entries="@array/on_shake_option_preferences"
+            android:entryValues="@array/on_shake_preferences_values"
+            android:defaultValue="@string/on_shake_default"/>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

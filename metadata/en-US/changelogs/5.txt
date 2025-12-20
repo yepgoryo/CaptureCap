@@ -1,0 +1,1 @@
+ * Added an option for audio recording.

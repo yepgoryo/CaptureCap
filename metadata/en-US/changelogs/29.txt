@@ -1,0 +1,3 @@
+ * Update to latest Android 15 SDK, abandon Android Lollipop support.
+
+ * Remove recording restart function, cannot reuse intent.

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="512"
+   height="512"
+   viewBox="0 0 135.46667 135.46667"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.3 (0e150ed6c4, 2023-07-21)"
+   sodipodi:docname="icon_recording_stopped.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <title
+     id="title1">CaptureCap record stopped icon</title>
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="mm"
+     showgrid="false"
+     units="px"
+     width="2048px"
+     inkscape:zoom="0.76508705"
+     inkscape:cx="112.40551"
+     inkscape:cy="442.43332"
+     inkscape:window-width="1920"
+     inkscape:window-height="1007"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1"
+     inkscape:showpageshadow="2"
+     inkscape:deskcolor="#d1d1d1" />
+  <defs
+     id="defs2" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <circle
+       id="path155"
+       cx="67.73333"
+       cy="67.73333"
+       r="54.863998"
+       style="fill:#af4e4e;fill-opacity:1;stroke-width:0.229079" />
+    <circle
+       id="path155-6"
+       cx="67.73333"
+       cy="67.73333"
+       style="fill:#afafaf;fill-opacity:1;stroke-width:0.11454"
+       r="27.431999" />
+    <circle
+       id="path155-6-5"
+       cx="79.544525"
+       cy="55.922134"
+       style="fill:#d4d4d4;fill-opacity:1;stroke-width:0.0293264"
+       r="7.0236354" />
+    <path
+       id="circle1752"
+       style="fill:#000000;fill-opacity:0.41869903;stroke-width:0.214312"
+       sodipodi:type="arc"
+       sodipodi:cx="67.73333"
+       sodipodi:cy="67.73333"
+       sodipodi:rx="54.863998"
+       sodipodi:ry="54.863998"
+       sodipodi:start="0.52359878"
+       sodipodi:end="3.6651914"
+       sodipodi:arc-type="slice"
+       d="M 115.24695,95.165329 A 54.863998,54.863998 0 0 1 40.301331,115.24695 54.863998,54.863998 0 0 1 20.219713,40.301332 L 67.73333,67.73333 Z" />
+  </g>
+  <metadata
+     id="metadata1">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:title>CaptureCap record stopped icon</dc:title>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Egor Olegovich Yakovlev</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <cc:license
+           rdf:resource="http://creativecommons.org/publicdomain/zero/1.0/" />
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/publicdomain/zero/1.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+</svg>
