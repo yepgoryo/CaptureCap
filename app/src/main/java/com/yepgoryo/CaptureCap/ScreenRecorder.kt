@@ -54,6 +54,7 @@ class ScreenRecorder : Service() {
     companion object {
         const val ACTION_START: String = MainActivity.appName + ".START_RECORDING"
         const val ACTION_START_NOVIDEO: String = MainActivity.appName + ".START_RECORDING_NOVIDEO"
+        const val ACTION_START_BACKGROUND: String = MainActivity.appName + ".START_BACKGROUND_RECORDING"
         const val ACTION_PAUSE: String = MainActivity.appName + ".PAUSE_RECORDING"
         const val ACTION_CONTINUE: String = MainActivity.appName + ".CONTINUE_RECORDING"
         const val ACTION_STOP: String = MainActivity.appName + ".STOP_RECORDING"
@@ -122,6 +123,10 @@ class ScreenRecorder : Service() {
     private var activityBinder: MainActivity.ActivityBinder? = null
     private var tileBinder: QuickTile.TileBinder? = null
     private var panelBinder: FloatingControls.PanelBinder? = null
+    
+    private var backgroundRecordingActive: Boolean = false
+    private var partialWakeLock: android.os.PowerManager.WakeLock? = null
+    private var overlayBlackView: android.view.View? = null
 
     private var sensorListener: SensorEventListener = object: SensorEventListener {
         override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {}
@@ -295,9 +300,15 @@ class ScreenRecorder : Service() {
         if (intent != null) {
             if (intent.action == ACTION_START) {
                 this.recordOnlyAudio = false
+                this.backgroundRecordingActive = false
                 actionStart()
             } else if (intent.action == ACTION_START_NOVIDEO) {
                 this.recordOnlyAudio = true
+                this.backgroundRecordingActive = false
+                actionStart()
+            } else if (intent.action == ACTION_START_BACKGROUND) {
+                this.recordOnlyAudio = false
+                this.backgroundRecordingActive = true
                 actionStart()
             } else if (intent.action == ACTION_STOP) {
                 screenRecordingStop()
@@ -475,8 +486,39 @@ class ScreenRecorder : Service() {
             floatingControlsIntent.setAction(FloatingControls.ACTION_RECORD_PANEL)
             startService(floatingControlsIntent)
         }
-        this.recordMicrophone = this.appSettings!!.getBooleanProperty(GlobalProperties.PropertiesBoolean.CHECK_SOUND_MIC, false)
-        this.recordPlayback = this.appSettings!!.getBooleanProperty(GlobalProperties.PropertiesBoolean.CHECK_SOUND_PLAYBACK, false)
+        if (this.backgroundRecordingActive) {
+            this.recordMicrophone = false
+            this.recordPlayback = true
+            
+            // Acquire partial wakelock
+            val powerManager = getSystemService(Context.POWER_SERVICE) as android.os.PowerManager
+            this.partialWakeLock = powerManager.newWakeLock(android.os.PowerManager.PARTIAL_WAKE_LOCK, "CaptureCap:BgRecordingWakelock")
+            this.partialWakeLock?.acquire()
+
+            // Dim screen fully using overlay
+            val wManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
+            val params = WindowManager.LayoutParams(
+                WindowManager.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.MATCH_PARENT,
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY else WindowManager.LayoutParams.TYPE_PHONE,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
+                WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or
+                WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN or
+                WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON or
+                WindowManager.LayoutParams.FLAG_DIM_BEHIND,
+                android.graphics.PixelFormat.TRANSLUCENT
+            )
+            params.dimAmount = 1.0f
+            params.screenBrightness = 0.0f
+            
+            this.overlayBlackView = android.view.View(this).apply {
+                setBackgroundColor(android.graphics.Color.BLACK)
+            }
+            wManager.addView(this.overlayBlackView, params)
+        } else {
+            this.recordMicrophone = this.appSettings!!.getBooleanProperty(GlobalProperties.PropertiesBoolean.CHECK_SOUND_MIC, false)
+            this.recordPlayback = this.appSettings!!.getBooleanProperty(GlobalProperties.PropertiesBoolean.CHECK_SOUND_PLAYBACK, false)
+        }
 
         val recordingDate: String = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Calendar.getInstance().getTime())
         var recordingFileName: String = "ScreenRecording_$recordingDate"
@@ -747,6 +789,18 @@ class ScreenRecorder : Service() {
         if (this.panelBinder != null && this.showFloatingControls) {
             this.panelBinder?.setStop()
         }
+        
+        if (this.partialWakeLock != null && this.partialWakeLock!!.isHeld) {
+            this.partialWakeLock!!.release()
+            this.partialWakeLock = null
+        }
+        if (this.overlayBlackView != null) {
+            val wManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
+            wManager.removeView(this.overlayBlackView)
+            this.overlayBlackView = null
+        }
+        this.backgroundRecordingActive = false
+
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
             if (this.recordingMediaRecorder != null) {
                 try {

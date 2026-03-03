@@ -76,38 +76,64 @@
     
                 <LinearLayout
                     android:id="@+id/recordmodepanel"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
+                    android:weightSum="5"
                     android:gravity="center_horizontal">
-    
+
                     <ImageButton
                         android:id="@+id/recordscreen"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:layout_margin="12dp"
                         android:contentDescription="@string/setting_record_screen"
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:layout_centerHorizontal="true" />
-    
+
                     <ImageButton
                         android:id="@+id/recordmicrohone"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:layout_margin="12dp"
                         android:contentDescription="@string/setting_audio_record_microphone_sound"
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:layout_centerHorizontal="true" />
-    
+
+                    <ImageButton
+                        android:id="@+id/recordbackground"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="12dp"
+                        android:contentDescription="Background Record"
+                        android:src="@drawable/ic_bg_record"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:layout_centerHorizontal="true" />
+
                     <ImageButton
                         android:id="@+id/recordaudio"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:layout_margin="12dp"
                         android:contentDescription="@string/setting_audio_record_playback_sound"
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:layout_centerHorizontal="true" />
-    
+                    
+                    <!-- We merge the items from optionspanel here -->
+                    <ImageButton
+                        android:id="@+id/opensettings"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="12dp"
+                        android:contentDescription="@string/settings_title"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:layout_centerHorizontal="true" />
+
                 </LinearLayout>
     
                 <TextView
@@ -163,6 +189,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:orientation="horizontal"
+                    android:visibility="gone"
                     android:gravity="center_horizontal">
     
                     <ImageButton
@@ -171,15 +198,6 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="7dp"
                         android:contentDescription="@string/info_title"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:layout_centerHorizontal="true" />
-    
-                    <ImageButton
-                        android:id="@+id/opensettings"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="7dp"
-                        android:contentDescription="@string/settings_title"
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:layout_centerHorizontal="true" />
     

@@ -72,6 +72,9 @@ class MainActivity : AppCompatActivity() {
     private var recordPlaybackState: VectorDrawableCompat? = null
     private var recordPlaybackStateDisabled: VectorDrawableCompat? = null
     var recordScreenSetting: ImageButton? = null
+    var recordBackgroundSetting: ImageButton? = null
+    private var recordBackgroundState: VectorDrawableCompat? = null
+    private var recordBackgroundStopState: VectorDrawableCompat? = null
     private var recordScreenState: VectorDrawableCompat? = null
     private var recordScreenStateDisabled: VectorDrawableCompat? = null
     var recordSettings: ImageButton? = null
@@ -305,10 +308,12 @@ class MainActivity : AppCompatActivity() {
         }
         updateRecordModeData()
         updateRecordButtonConditions()
-        if (!this.appSettings!!.getBooleanProperty(GlobalProperties.PropertiesBoolean.RECORD_MODE, false)) {
-            this.serviceIntent!!.setAction(ScreenRecorder.ACTION_START)
-        } else {
-            this.serviceIntent!!.setAction(ScreenRecorder.ACTION_START_NOVIDEO)
+        if (this.serviceIntent != null && this.serviceIntent!!.action != ScreenRecorder.ACTION_START_BACKGROUND) {
+            if (!this.appSettings!!.getBooleanProperty(GlobalProperties.PropertiesBoolean.RECORD_MODE, false)) {
+                this.serviceIntent!!.setAction(ScreenRecorder.ACTION_START)
+            } else {
+                this.serviceIntent!!.setAction(ScreenRecorder.ACTION_START_NOVIDEO)
+            }
         }
         startService(this.serviceIntent)
     }
@@ -414,6 +419,8 @@ class MainActivity : AppCompatActivity() {
         if (((getResources().configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES && darkTheme == GlobalProperties.DarkThemeProperty.AUTOMATIC) || darkTheme2 == GlobalProperties.DarkThemeProperty.DARK) {
             this.recordScreenState = VectorDrawableCompat.create(getResources(), R.drawable.icon_record_screen_dark, null)
             this.recordScreenStateDisabled = VectorDrawableCompat.create(getResources(), R.drawable.icon_record_screen_disabled_dark, null)
+            this.recordBackgroundState = VectorDrawableCompat.create(getResources(), R.drawable.ic_bg_record_dark, null)
+            this.recordBackgroundStopState = VectorDrawableCompat.create(getResources(), R.drawable.ic_bg_stop_dark, null)
             this.recordMicrophoneState = VectorDrawableCompat.create(getResources(), R.drawable.icon_record_mic_dark, null)
             this.recordMicrophoneStateDisabled = VectorDrawableCompat.create(getResources(), R.drawable.icon_record_mic_disabled_dark, null)
             this.recordPlaybackState = VectorDrawableCompat.create(getResources(), R.drawable.icon_record_audio_dark, null)
@@ -427,6 +434,8 @@ class MainActivity : AppCompatActivity() {
         } else {
             this.recordScreenState = VectorDrawableCompat.create(getResources(), R.drawable.icon_record_screen, null)
             this.recordScreenStateDisabled = VectorDrawableCompat.create(getResources(), R.drawable.icon_record_screen_disabled, null)
+            this.recordBackgroundState = VectorDrawableCompat.create(getResources(), R.drawable.ic_bg_record, null)
+            this.recordBackgroundStopState = VectorDrawableCompat.create(getResources(), R.drawable.ic_bg_stop, null)
             this.recordMicrophoneState = VectorDrawableCompat.create(getResources(), R.drawable.icon_record_mic, null)
             this.recordMicrophoneStateDisabled = VectorDrawableCompat.create(getResources(), R.drawable.icon_record_mic_disabled, null)
             this.recordPlaybackState = VectorDrawableCompat.create(getResources(), R.drawable.icon_record_audio, null)
@@ -465,6 +474,7 @@ class MainActivity : AppCompatActivity() {
         })
         findViewById<RelativeLayout>(R.id.mainlayout).setOnClickListener { this@MainActivity.mainRecordingButton!!.releaseFocus() }
         this.recordScreenSetting = findViewById<ImageButton>(R.id.recordscreen)!!
+        this.recordBackgroundSetting = findViewById<ImageButton>(R.id.recordbackground)!!
         this.recordMicrophoneSetting = findViewById<ImageButton>(R.id.recordmicrohone)!!
         this.recordAudioSetting = findViewById<ImageButton>(R.id.recordaudio)!!
         this.recordInfo = findViewById<ImageButton>(R.id.openinfo)!!
@@ -474,6 +484,7 @@ class MainActivity : AppCompatActivity() {
         this.recordOpen = findViewById<ImageButton>(R.id.openrecord)!!
         this.recordStop = findViewById<ImageButton>(R.id.recordstop)!!
         this.recordScreenSetting!!.setImageDrawable(this.recordScreenStateDisabled)
+        this.recordBackgroundSetting!!.setImageDrawable(this.recordBackgroundState)
         this.recordMicrophoneSetting!!.setImageDrawable(this.recordMicrophoneStateDisabled)
         this.recordAudioSetting!!.setImageDrawable(this.recordPlaybackStateDisabled)
         this.recordInfo!!.setImageDrawable(this.recordInfoIcon)
@@ -521,6 +532,29 @@ class MainActivity : AppCompatActivity() {
         }
         setRecordMode(this.appSettings!!.getBooleanProperty(GlobalProperties.PropertiesBoolean.RECORD_MODE, false))
         this.activityProjectionManager = getSystemService("media_projection") as MediaProjectionManager
+
+        this.recordBackgroundSetting!!.setOnClickListener {
+            this@MainActivity.mainRecordingButton!!.releaseFocus()
+            if (this@MainActivity.recordingState != ActionState.RECORDING_STOPPED) {
+                 this@MainActivity.recordingBinder!!.stopService()
+                 this@MainActivity.recordBackgroundSetting!!.setImageDrawable(this@MainActivity.recordBackgroundState)
+            } else {
+                 if (this@MainActivity.recordingBinder == null) {
+                      this@MainActivity.serviceToRecording = true
+                      val intent = Intent(this@MainActivity, ScreenRecorder::class.java)
+                      intent.setAction(ScreenRecorder.ACTION_START_BACKGROUND)
+                      this@MainActivity.serviceIntent = intent
+                      this@MainActivity.doBindService()
+                 } else {
+                      if (this@MainActivity.serviceIntent == null) {
+                          this@MainActivity.serviceIntent = Intent(this@MainActivity, ScreenRecorder::class.java)
+                      }
+                      this@MainActivity.serviceIntent!!.setAction(ScreenRecorder.ACTION_START_BACKGROUND)
+                      this@MainActivity.recordingStart()
+                 }
+                 this@MainActivity.recordBackgroundSetting!!.setImageDrawable(this@MainActivity.recordBackgroundStopState)
+            }
+        }
 
         this.recordScreenSetting!!.setOnClickListener {
             this@MainActivity.mainRecordingButton!!.releaseFocus()
