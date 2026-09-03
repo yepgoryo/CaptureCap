@@ -7,7 +7,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
 }
 
-abstract class DownloadAndCheckSha265Task : DefaultTask() {
+abstract class DownloadAndCheckSha256Task : DefaultTask() {
     @get:Input
     abstract val url: Property<String>
 
@@ -57,7 +57,7 @@ abstract class DownloadAndCheckSha265Task : DefaultTask() {
         val actualHash = calculateSha256(targetFile)
         if (!actualHash.equals(sha256.get(), true)) {
             targetFile.delete()
-            throw GradleException("Wrong SHA265 hash: $actualHash. Expected: ${sha256.get()}")
+            throw GradleException("Wrong SHA256 hash: $actualHash. Expected: ${sha256.get()}")
         }
     }
 }
@@ -68,7 +68,7 @@ val scrcpyServerSha256 = "deacb991ed2509715160ffdc7907e47b4160eb30d1566217e9047f
 val scrcpyServerAssetName = "scrcpy-server"
 val scrcpyServerDownloadDir = layout.buildDirectory.dir("generated/scrcpy-server/assets")
 
-val downloadScrcpyServer = tasks.register<DownloadAndCheckSha265Task>("downloadScrcpyServer") {
+val downloadScrcpyServer = tasks.register<DownloadAndCheckSha256Task>("downloadScrcpyServer") {
     url.set(scrcpyServerUrl)
     sha256.set(scrcpyServerSha256)
     assetName.set(scrcpyServerAssetName)
@@ -143,7 +143,7 @@ androidComponents {
     onVariants { variant ->
         variant.sources.assets?.addGeneratedSourceDirectory(
             downloadScrcpyServer,
-            DownloadAndCheckSha265Task::outputDir
+            DownloadAndCheckSha256Task::outputDir
         )
     }
 }

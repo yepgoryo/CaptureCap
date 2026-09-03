@@ -73,7 +73,7 @@ class ScrcpyHelper {
                 val matches = actualHash.equals(BuildConfig.SCRCPY_SERVER_SHA256, true)
 
                 if (!matches) {
-                    Log.e(TAG, "Wrong SHA265 hash: $actualHash. Expected: ${BuildConfig.SCRCPY_SERVER_SHA256}")
+                    Log.e(TAG, "Wrong SHA256 hash: $actualHash. Expected: ${BuildConfig.SCRCPY_SERVER_SHA256}")
                 } else {
                     Log.d(TAG, "Scrcpy verification success!")
                 }
