@@ -124,6 +124,16 @@
                 android:value="com.yepgoryo.CaptureCap.MainActivity"/>
         </activity>
         <activity
+            android:label="@string/crop_screen_title"
+            android:name="com.yepgoryo.CaptureCap.SelectScreenCropAreaActivity"
+            android:exported="true"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:parentActivityName="com.yepgoryo.CaptureCap.SettingsPanel">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.yepgoryo.CaptureCap.SettingsPanel"/>
+        </activity>
+        <activity
             android:label="@string/draw_overlay_title"
             android:name="com.yepgoryo.CaptureCap.VideoOverlaySettings"
             android:exported="true"

@@ -213,6 +213,28 @@
             android:defaultValue="false" />
 
         <SwitchPreferenceCompat
+            android:key="cropscreen"
+            android:summary="@string/crop_screen_option_description"
+            android:title="@string/crop_screen_option"
+            android:defaultValue="false" />
+
+        <Preference
+            android:key="cropscreencontents"
+            android:title="@string/crop_screen_contents"
+            android:summary="@string/crop_screen_contents_description"
+            android:dependency="cropscreen">
+            <intent android:targetPackage="com.yepgoryo.CaptureCap"
+                android:targetClass="com.yepgoryo.CaptureCap.SelectScreenCropAreaActivity" />
+        </Preference>
+
+        <CheckBoxPreference
+            android:key="smoothcrop"
+            android:summary="@string/crop_screen_smooth_crop_description"
+            android:title="@string/crop_screen_smooth_crop"
+            android:dependency="cropscreen"
+            android:defaultValue="false" />
+
+        <SwitchPreferenceCompat
             android:key="drawoverlay"
             android:summary="@string/draw_overlay_option_description"
             android:title="@string/draw_overlay_option"

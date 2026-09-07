@@ -41,6 +41,9 @@ class SettingsFragment : PreferenceFragmentCompat() {
             val preferenceFindPreference19: Preference = findPreference("audioformatvalue")!!
             val preferenceFindPreference20: Preference = findPreference("selectedmicrophone")!!
             val preferenceFindPreference21: Preference = findPreference("audiovolumeoption")!!
+            val preferenceFindPreference22: Preference = findPreference("cropscreen")!!
+            val preferenceFindPreference23: Preference = findPreference("cropscreencontents")!!
+            val preferenceFindPreference24: Preference = findPreference("cropscreensmoothcrop")!!
 
             val preferenceCategory2: PreferenceCategory = findPreference("capturesettings")!!
             preferenceCategory2.removePreference(preferenceFindPreference5)
@@ -60,6 +63,9 @@ class SettingsFragment : PreferenceFragmentCompat() {
             preferenceCategory2.removePreference(preferenceFindPreference19)
             preferenceCategory2.removePreference(preferenceFindPreference20)
             preferenceCategory2.removePreference(preferenceFindPreference21)
+            preferenceCategory2.removePreference(preferenceFindPreference22)
+            preferenceCategory2.removePreference(preferenceFindPreference23)
+            preferenceCategory2.removePreference(preferenceFindPreference24)
         }
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
             val preferenceFindPreference21: PreferenceCategory = findPreference("shizukusettings")!!

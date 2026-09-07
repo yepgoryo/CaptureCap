@@ -159,4 +159,10 @@
 
     <color name="grid_background">#111418</color>
     <color name="grid_stroke">#4e5765</color>
+
+    <color name="screen_crop_outer_rectangle">#4e5765</color>
+    <color name="screen_crop_inner_rectangle">#D2E4FF</color>
+    <color name="screen_crop_resizing_handle">#21252b</color>
+    <color name="screen_crop_resizing_handle_active">#525c6b</color>
+    <color name="screen_crop_outer_layer_paint">#b7bec8</color>
 </resources>

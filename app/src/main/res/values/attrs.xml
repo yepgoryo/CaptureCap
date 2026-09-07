@@ -16,6 +16,12 @@
         <attr name="gridBackground" format="color" />
         <attr name="gridStroke" format="color" />
 
+        <attr name="screenCropOuterRectangle" format="color" />
+        <attr name="screenCropInnerRectangle" format="color" />
+        <attr name="screenCropResizingHandle" format="color" />
+        <attr name="screenCropResizingHandleActive" format="color" />
+        <attr name="screenCropOuterLayer" format="color" />
+
         <attr name="statusBar" format="color" />
     </declare-styleable>
 </resources>

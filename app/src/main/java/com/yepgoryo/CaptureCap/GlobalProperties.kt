@@ -77,6 +77,8 @@ class GlobalProperties(context: Context) {
         SHIZUKU_ENABLE,
         SHIZUKU_RECORD_PHONECALL,
         SHIZUKU_AUTO_MANAGE,
+        CROP_SCREEN,
+        SMOOTH_CROP,
     }
 
     enum class PropertiesInt {
@@ -106,6 +108,14 @@ class GlobalProperties(context: Context) {
         AUDIO_VOLUME,
         MICROPHONE_VOLUME,
         SHIZUKU_PHONE_CALL_VOLUME,
+        CROP_AREA_WIDTH_HORIZONTAL,
+        CROP_AREA_HEIGHT_HORIZONTAL,
+        CROP_AREA_X_HORIZONTAL,
+        CROP_AREA_Y_HORIZONTAL,
+        CROP_AREA_WIDTH_VERTICAL,
+        CROP_AREA_HEIGHT_VERTICAL,
+        CROP_AREA_X_VERTICAL,
+        CROP_AREA_Y_VERTICAL,
     }
 
     enum class PropertiesSpecial {

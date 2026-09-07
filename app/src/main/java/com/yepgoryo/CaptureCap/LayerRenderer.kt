@@ -16,6 +16,7 @@ import android.view.Surface
 
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
+import java.nio.IntBuffer
 
 class LayerRenderer(
     private val eglContext: EGLContext,
@@ -31,7 +32,14 @@ class LayerRenderer(
     private val displayRotation: Int,
     private val displayRatio: Float,
     private val cameraRotation: Int,
-    private val camera: VideoOverlay.CameraItem?
+    private val camera: VideoOverlay.CameraItem?,
+    private val useOverlay: Boolean,
+    private val useCropArea: Boolean,
+    private val smoothCrop: Boolean,
+    private val cropAreaWidth: Int,
+    private val cropAreaHeight: Int,
+    private val cropAreaX: Int,
+    private val cropAreaY: Int,
 ) {
 
     private var uCenterNDCLoc: Int = 0
@@ -113,6 +121,30 @@ class LayerRenderer(
         }
     """.trimIndent()
 
+    private val CROPPED_VERTEX_SHADER = """
+        attribute vec4 aPosition;
+        attribute vec4 aTexCoord;
+        uniform float scaleX;
+        uniform float scaleY;
+        uniform vec2 uCenterPos;
+        varying vec2 vTexCoord;
+
+        void main() {
+            gl_Position = vec4(aPosition.xy, 0.0, 1.0);
+            vTexCoord = vec2((aTexCoord.x * scaleX) + uCenterPos.x, ((1.0 - aTexCoord.y) * scaleY) + uCenterPos.y);
+        }
+    """.trimIndent()
+
+    private val CROPPED_FRAGMENT_SHADER = """
+        precision mediump float;
+        uniform sampler2D uTexture;
+        varying vec2 vTexCoord;
+
+        void main() {
+            gl_FragColor = texture2D(uTexture, vTexCoord);
+        }
+    """.trimIndent()
+
     private lateinit var eglCore: EglCore
 
     private lateinit var outputEglSurface: EGLSurface
@@ -121,6 +153,7 @@ class LayerRenderer(
     private var programOverlay1: Int
     private var programOesFrontCamera: Int
     private var programOverlay2: Int
+    private var programOverlayBuffer: Int
 
     private var oesTexBackground = -1
     private var texOverlay1 = -1
@@ -130,6 +163,13 @@ class LayerRenderer(
     private var uLocsOesBg = 0
     private var uLocsOverlay1 = 0
     private var uLocsOverlay2 = 0
+    private var uLocsOverlayBuffer = 0
+    private var uPosOverlayBuffer = 0
+    private var uScaleXOverlayBuffer = 0
+    private var uScaleYOverlayBuffer = 0
+    private var uCenterPosOverlayBuffer = 0
+    private lateinit var fullFrameBuffer: IntBuffer
+    private lateinit var renderedTexture: IntBuffer
 
     private var aPositionLoc: Int = 0
     private var opacityUniformLocation: Int = 0
@@ -143,6 +183,7 @@ class LayerRenderer(
         programOverlay1 = GlUtil.createProgram(TEXTURE_VERTEX_SHADER, TEXTURE_FRAGMENT_SHADER)
         programOesFrontCamera = GlUtil.createProgram(CAMERA_VERTEX_SHADER, CAMERA_FRAGMENT_SHADER)
         programOverlay2 = GlUtil.createProgram(TEXTURE_VERTEX_SHADER, TEXTURE_FRAGMENT_SHADER)
+        programOverlayBuffer = GlUtil.createProgram(CROPPED_VERTEX_SHADER, CROPPED_FRAGMENT_SHADER)
 
         QuadBuffers.create()
 
@@ -183,6 +224,47 @@ class LayerRenderer(
         if (overlayBitmap2 != null) {
             uLocsOverlay2 = GLES20.glGetUniformLocation(programOverlay2, "uTexture")
         }
+
+        if (useCropArea) {
+            uLocsOverlayBuffer = GLES20.glGetUniformLocation(programOverlayBuffer, "uTexture")
+            uPosOverlayBuffer = GLES20.glGetUniformLocation(programOverlayBuffer, "aPosition")
+            uScaleXOverlayBuffer = GLES20.glGetUniformLocation(programOverlayBuffer, "scaleX")
+            uScaleYOverlayBuffer = GLES20.glGetUniformLocation(programOverlayBuffer, "scaleY")
+            uCenterPosOverlayBuffer = GLES20.glGetUniformLocation(programOverlayBuffer, "uCenterPos")
+
+            fullFrameBuffer = IntBuffer.allocate(1)
+
+            GLES20.glGenFramebuffers(1, fullFrameBuffer)
+            GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, fullFrameBuffer[0])
+
+            if (!GLES20.glIsFramebuffer(fullFrameBuffer[0])) {
+                throw RuntimeException("Not a frame buffer!")
+            }
+
+            renderedTexture = IntBuffer.allocate(1)
+
+            GLES20.glGenTextures(1, renderedTexture)
+            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, renderedTexture[0])
+            GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 0, GLES20.GL_RGBA, (width*displayRatio).toInt(), (height*displayRatio).toInt(), 0,GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, null)
+
+            if (smoothCrop) {
+                GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR)
+                GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR)
+                GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE)
+                GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE)
+            } else {
+                GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST)
+                GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST)
+            }
+
+            GLES20.glFramebufferTexture2D(GLES20.GL_FRAMEBUFFER, GLES20.GL_COLOR_ATTACHMENT0, GLES20.GL_TEXTURE_2D, renderedTexture[0], 0)
+
+            if (GLES20.glCheckFramebufferStatus(GLES20.GL_FRAMEBUFFER) != GLES20.GL_FRAMEBUFFER_COMPLETE) {
+                throw RuntimeException("Error, framebuffer wasn't set up!")
+            }
+
+            GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0)
+        }
     }
 
     private fun initSurface() {
@@ -214,6 +296,9 @@ class LayerRenderer(
     }
 
     fun draw() {
+        if (useCropArea) {
+            GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, fullFrameBuffer[0])
+        }
         GLES20.glViewport(0, 0, (width*displayRatio).toInt(), (height*displayRatio).toInt())
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT)
 
@@ -227,97 +312,136 @@ class LayerRenderer(
         GLES20.glUniform1i(uLocsOesBg, 0)
         QuadBuffers.drawIndexed()
 
-        if (overlayBitmap1 != null) {
-            GLES20.glUseProgram(programOverlay1)
+        if (useOverlay) {
+            if (overlayBitmap1 != null) {
+                GLES20.glUseProgram(programOverlay1)
 
-            setCoordsFullScreen()
+                setCoordsFullScreen()
 
-            GLES20.glActiveTexture(GLES20.GL_TEXTURE1)
-            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texOverlay1)
-            GLES20.glUniform1i(uLocsOverlay1, 1)
+                GLES20.glActiveTexture(GLES20.GL_TEXTURE1)
+                GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texOverlay1)
+                GLES20.glUniform1i(uLocsOverlay1, 1)
 
-            GLES20.glEnable(GLES20.GL_BLEND)
-            GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA)
+                GLES20.glEnable(GLES20.GL_BLEND)
+                GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA)
 
-            QuadBuffers.drawIndexed()
-        }
-
-        if (frontCameraSurfaceTexture != null) {
-            GLES20.glUseProgram(programOesFrontCamera)
-
-            val displayDeg = when (displayRotation) {
-                Surface.ROTATION_0 -> 0
-                Surface.ROTATION_90 -> 90
-                Surface.ROTATION_180 -> 180
-                Surface.ROTATION_270 -> 270
-                else -> 0
+                QuadBuffers.drawIndexed()
             }
 
-            val rotationDegrees = (cameraRotation - displayDeg + 360) % 360
+            if (frontCameraSurfaceTexture != null) {
+                GLES20.glUseProgram(programOesFrontCamera)
 
-            val rotationDeg = -camera!!.rotation-rotationDegrees
-            val destWidthPx = (camera!!.width*camera.scale)*displayRatio
-            val destHeightPx = (camera!!.height*camera.scale)*displayRatio
-            val widthPx = (width*displayRatio).toInt()
-            val heightPx = (height*displayRatio).toInt()
-            val xPx = (camera.x)*displayRatio
-            val yPx = (camera.y)*displayRatio
+                val displayDeg = when (displayRotation) {
+                    Surface.ROTATION_0 -> 0
+                    Surface.ROTATION_90 -> 90
+                    Surface.ROTATION_180 -> 180
+                    Surface.ROTATION_270 -> 270
+                    else -> 0
+                }
 
-            GLES20.glUniform1f(opacityUniformLocation, camera!!.opacity)
+                val rotationDegrees = (cameraRotation - displayDeg + 360) % 360
 
-            val unitQuadBuffer = ByteBuffer.allocateDirect(4 * 2 * 4)
-                .order(ByteOrder.nativeOrder())
-                .asFloatBuffer()
+                val rotationDeg = -camera!!.rotation - rotationDegrees
+                val destWidthPx = (camera!!.width * camera.scale) * displayRatio
+                val destHeightPx = (camera!!.height * camera.scale) * displayRatio
+                val widthPx = (width * displayRatio).toInt()
+                val heightPx = (height * displayRatio).toInt()
+                val xPx = (camera.x) * displayRatio
+                val yPx = (camera.y) * displayRatio
 
-            unitQuadBuffer.put(floatArrayOf(
-                0f, 0f,
-                1f, 0f,
-                0f, 1f,
-                1f, 1f
-            ))
+                GLES20.glUniform1f(opacityUniformLocation, camera!!.opacity)
 
-            unitQuadBuffer.flip()
+                val unitQuadBuffer = ByteBuffer.allocateDirect(4 * 2 * 4)
+                    .order(ByteOrder.nativeOrder())
+                    .asFloatBuffer()
 
-            val rotationRad = Math.toRadians(rotationDeg.toDouble())
+                unitQuadBuffer.put(
+                    floatArrayOf(
+                        0f, 0f,
+                        1f, 0f,
+                        0f, 1f,
+                        1f, 1f
+                    )
+                )
 
-            val centerXNdc = 2.0f * xPx / widthPx - 1.0f
-            val centerYNdc = 1.0f - 2.0f * yPx / heightPx
+                unitQuadBuffer.flip()
+
+                val rotationRad = Math.toRadians(rotationDeg.toDouble())
+
+                val centerXNdc = 2.0f * xPx / widthPx - 1.0f
+                val centerYNdc = 1.0f - 2.0f * yPx / heightPx
+
+                val scaleXNdc = 2.0f * destWidthPx / widthPx / 2.0f
+                val scaleYNdc = 2.0f * destHeightPx / heightPx / 2.0f
+
+                GLES20.glUniform2f(uCenterNDCLoc, centerXNdc, centerYNdc)
+                GLES20.glUniform1f(uScaleXLoc, scaleXNdc)
+                GLES20.glUniform1f(uScaleYLoc, scaleYNdc)
+                GLES20.glUniform1f(uRotationRadLoc, rotationRad.toFloat())
+
+                GLES20.glEnableVertexAttribArray(aPositionLoc)
+                GLES20.glVertexAttribPointer(
+                    aPositionLoc,
+                    2,
+                    GLES20.GL_FLOAT,
+                    false,
+                    0,
+                    unitQuadBuffer
+                )
+
+                GLES20.glActiveTexture(GLES20.GL_TEXTURE0)
+                GLES20.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, oesTexFrontCamera)
+
+                GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4)
+
+                GLES20.glDisableVertexAttribArray(aPositionLoc)
+                GLES20.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, 0)
+            }
+
+            if (overlayBitmap2 != null) {
+                GLES20.glUseProgram(programOverlay2)
+
+                setCoordsFullScreen()
+
+                GLES20.glActiveTexture(GLES20.GL_TEXTURE3)
+                GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texOverlay2)
+                GLES20.glUniform1i(uLocsOverlay2, 3)
+
+                QuadBuffers.drawIndexed()
+            }
+        }
+
+        if (useCropArea) {
+            val widthPx = (width * displayRatio).toInt()
+            val heightPx = (height * displayRatio).toInt()
+
+            val xPx = (cropAreaX) * displayRatio
+            val yPx = (heightPx-cropAreaHeight-cropAreaY) * displayRatio
+
+            val centerXNdc = xPx / widthPx
+            val centerYNdc = yPx / heightPx
+
+            val destWidthPx = (cropAreaWidth * 1.0f) * displayRatio
+            val destHeightPx = (cropAreaHeight * 1.0f) * displayRatio
 
             val scaleXNdc = 2.0f * destWidthPx / widthPx / 2.0f
             val scaleYNdc = 2.0f * destHeightPx / heightPx / 2.0f
 
-            GLES20.glUniform2f(uCenterNDCLoc, centerXNdc, centerYNdc)
-            GLES20.glUniform1f(uScaleXLoc, scaleXNdc)
-            GLES20.glUniform1f(uScaleYLoc, scaleYNdc)
-            GLES20.glUniform1f(uRotationRadLoc, rotationRad.toFloat())
+            GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0)
 
-            GLES20.glEnableVertexAttribArray(aPositionLoc)
-            GLES20.glVertexAttribPointer(
-                aPositionLoc,
-                2,
-                GLES20.GL_FLOAT,
-                false,
-                0,
-                unitQuadBuffer
-            )
+            GLES20.glViewport(0, 0, cropAreaWidth, cropAreaHeight)
+            GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT)
 
-            GLES20.glActiveTexture(GLES20.GL_TEXTURE0)
-            GLES20.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, oesTexFrontCamera)
-
-            GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4)
-
-            GLES20.glDisableVertexAttribArray(aPositionLoc)
-            GLES20.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, 0)
-        }
-
-        if (overlayBitmap2 != null) {
-            GLES20.glUseProgram(programOverlay2)
+            GLES20.glUseProgram(programOverlayBuffer)
 
             setCoordsFullScreen()
 
-            GLES20.glActiveTexture(GLES20.GL_TEXTURE3)
-            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texOverlay2)
-            GLES20.glUniform1i(uLocsOverlay2, 3)
+            GLES20.glActiveTexture(GLES20.GL_TEXTURE4)
+            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, renderedTexture[0])
+            GLES20.glUniform1f(uScaleXOverlayBuffer, scaleXNdc)
+            GLES20.glUniform1f(uScaleYOverlayBuffer, scaleYNdc)
+            GLES20.glUniform2f(uCenterPosOverlayBuffer, centerXNdc, centerYNdc)
+            GLES20.glUniform1i(uLocsOverlayBuffer, 4)
 
             QuadBuffers.drawIndexed()
         }

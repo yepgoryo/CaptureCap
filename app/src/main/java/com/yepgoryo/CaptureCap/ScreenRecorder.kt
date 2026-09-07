@@ -1354,14 +1354,23 @@ class ScreenRecorder : Service() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 var serviceStartFlag = ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PROJECTION
                 if ((recordMicrophone || recordPlayback) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                    serviceStartFlag = serviceStartFlag or ServiceInfo.FOREGROUND_SERVICE_TYPE_MICROPHONE
+                    serviceStartFlag =
+                        serviceStartFlag or ServiceInfo.FOREGROUND_SERVICE_TYPE_MICROPHONE
                 }
                 if (drawOverlay && hasCamera && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                    serviceStartFlag = serviceStartFlag or ServiceInfo.FOREGROUND_SERVICE_TYPE_CAMERA
+                    serviceStartFlag =
+                        serviceStartFlag or ServiceInfo.FOREGROUND_SERVICE_TYPE_CAMERA
                 }
-                startForeground(NotificationID.NOTIFICATION_RECORDING_ID.ordinal, recordingStartedBuilder.build(), serviceStartFlag)
+                startForeground(
+                    NotificationID.NOTIFICATION_RECORDING_ID.ordinal,
+                    recordingStartedBuilder.build(),
+                    serviceStartFlag
+                )
             } else {
-                startForeground(NotificationID.NOTIFICATION_RECORDING_ID.ordinal, recordingStartedBuilder.build())
+                startForeground(
+                    NotificationID.NOTIFICATION_RECORDING_ID.ordinal,
+                    recordingStartedBuilder.build()
+                )
             }
 
             if (enableSoundControlsNotification && (recordMicrophone || recordPlayback || (useShizukuPhoneCallRecording && useShizuku))) {
@@ -1413,7 +1422,11 @@ class ScreenRecorder : Service() {
             if (resolution == GlobalProperties.ResolutionProperty.NATIVE) {
                 scaleRatio = 1.0f
             } else {
-                val screenHeight: Int = if (height > width) {width} else {height}
+                val screenHeight: Int = if (height > width) {
+                    width
+                } else {
+                    height
+                }
                 var screenScale = 0.0f
                 if (resolution == GlobalProperties.ResolutionProperty._2160P_ && screenHeight >= 2160) {
                     screenScale = 2160.0f
@@ -1432,8 +1445,9 @@ class ScreenRecorder : Service() {
                 scaleRatio = screenScale / screenHeight
             }
 
-            val mediaProjectionManager: MediaProjectionManager = getSystemService(MediaProjectionManager::class.java)
-            val callback: MediaProjection.Callback = object: MediaProjection.Callback() {
+            val mediaProjectionManager: MediaProjectionManager =
+                getSystemService(MediaProjectionManager::class.java)
+            val callback: MediaProjection.Callback = object : MediaProjection.Callback() {
                 override fun onStop() {
                     if (this@ScreenRecorder.isActive && !this@ScreenRecorder.isRestarting) {
                         this@ScreenRecorder.recordingError()
@@ -1456,19 +1470,96 @@ class ScreenRecorder : Service() {
             }
 
             if (!this.recordOnlyAudio && !isRestarting) {
-                this.recordingVirtualDisplay = this.recordingMediaProjection!!.createVirtualDisplay("CaptureCap", width, height, screenDensity.toInt(), DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR, null, null, null)
+                this.recordingVirtualDisplay = this.recordingMediaProjection!!.createVirtualDisplay(
+                    "CaptureCap",
+                    width,
+                    height,
+                    screenDensity.toInt(),
+                    DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR,
+                    null,
+                    null,
+                    null
+                )
             }
 
             isRestarting = false
 
             var refreshRate: Int = this.display!!.refreshRate.toInt()
-            val customQuality: Boolean = this.appSettings!!.getBooleanProperty(GlobalProperties.PropertiesBoolean.CUSTOM_QUALITY, false)
-            val qualityScale: Float = (this.appSettings!!.getIntProperty(GlobalProperties.PropertiesInt.QUALITY_SCALE, 9) + 1) * 0.1f
-            val customFps: Boolean = this.appSettings!!.getBooleanProperty(GlobalProperties.PropertiesBoolean.CUSTOM_FPS, false)
-            val fpsValue: Int = Integer.parseInt(this.appSettings!!.getStringProperty(GlobalProperties.PropertiesString.FPS_VALUE, "30"))
-            val customBitrate: Boolean = this.appSettings!!.getBooleanProperty(GlobalProperties.PropertiesBoolean.CUSTOM_BITRATE, false)
-            val bitrateValue: Int = Integer.parseInt(this.appSettings!!.getStringProperty(GlobalProperties.PropertiesString.BITRATE_VALUE, "0"))
+            val customQuality: Boolean = this.appSettings!!.getBooleanProperty(
+                GlobalProperties.PropertiesBoolean.CUSTOM_QUALITY,
+                false
+            )
+            val qualityScale: Float = (this.appSettings!!.getIntProperty(
+                GlobalProperties.PropertiesInt.QUALITY_SCALE,
+                9
+            ) + 1) * 0.1f
+            val customFps: Boolean = this.appSettings!!.getBooleanProperty(
+                GlobalProperties.PropertiesBoolean.CUSTOM_FPS,
+                false
+            )
+            val fpsValue: Int = Integer.parseInt(
+                this.appSettings!!.getStringProperty(
+                    GlobalProperties.PropertiesString.FPS_VALUE,
+                    "30"
+                )
+            )
+            val customBitrate: Boolean = this.appSettings!!.getBooleanProperty(
+                GlobalProperties.PropertiesBoolean.CUSTOM_BITRATE,
+                false
+            )
+            val bitrateValue: Int = Integer.parseInt(
+                this.appSettings!!.getStringProperty(
+                    GlobalProperties.PropertiesString.BITRATE_VALUE,
+                    "0"
+                )
+            )
+            val useCropArea: Boolean = this.appSettings!!.getBooleanProperty(
+                GlobalProperties.PropertiesBoolean.CROP_SCREEN,
+                false
+            )
+            val smoothCrop: Boolean = this.appSettings!!.getBooleanProperty(
+                GlobalProperties.PropertiesBoolean.SMOOTH_CROP,
+                false
+            )
 
+            var cropAreaWidth: Int = 0
+            var cropAreaHeight: Int = 0
+            var cropAreaX: Int = 0
+            var cropAreaY: Int = 0
+
+            if (horizontal) {
+                cropAreaWidth = this.appSettings!!.getIntProperty(
+                    GlobalProperties.PropertiesInt.CROP_AREA_WIDTH_HORIZONTAL,
+                    width
+                )
+                cropAreaHeight = this.appSettings!!.getIntProperty(
+                    GlobalProperties.PropertiesInt.CROP_AREA_HEIGHT_HORIZONTAL,
+                    height
+                )
+                cropAreaX =
+                    this.appSettings!!.getIntProperty(GlobalProperties.PropertiesInt.CROP_AREA_X_HORIZONTAL, 0)
+                cropAreaY =
+                    this.appSettings!!.getIntProperty(GlobalProperties.PropertiesInt.CROP_AREA_Y_HORIZONTAL, 0)
+            } else {
+                cropAreaWidth = this.appSettings!!.getIntProperty(
+                    GlobalProperties.PropertiesInt.CROP_AREA_WIDTH_VERTICAL,
+                    width
+                )
+                cropAreaHeight = this.appSettings!!.getIntProperty(
+                    GlobalProperties.PropertiesInt.CROP_AREA_HEIGHT_VERTICAL,
+                    height
+                )
+                cropAreaX =
+                    this.appSettings!!.getIntProperty(
+                        GlobalProperties.PropertiesInt.CROP_AREA_X_VERTICAL,
+                        0
+                    )
+                cropAreaY =
+                    this.appSettings!!.getIntProperty(
+                        GlobalProperties.PropertiesInt.CROP_AREA_Y_VERTICAL,
+                        0
+                    )
+            }
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
                 val mediaRecorder = MediaRecorder()
                 this.recordingMediaRecorder = mediaRecorder
@@ -1574,6 +1665,12 @@ class ScreenRecorder : Service() {
                     audioCodec,
                     this.customSampleRate,
                     this.customChannelsCount,
+                    useCropArea,
+                    smoothCrop,
+                    cropAreaWidth,
+                    cropAreaHeight,
+                    cropAreaX,
+                    cropAreaY,
                     this.mediaAudioSource,
                     this.gameAudioSource,
                     this.unknownAudioSource

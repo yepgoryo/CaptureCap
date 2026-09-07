@@ -61,6 +61,12 @@ class PlaybackRecorder(private var context: Context,
         audioCodecName: String,
         private var customSampleRate: Int,
         private var customChannelsCount: Int,
+        private val useCropArea: Boolean,
+        private val smoothCrop: Boolean,
+        private val cropAreaWidth: Int,
+        private val cropAreaHeight: Int,
+        private val cropAreaX: Int,
+        private val cropAreaY: Int,
         private var mediaAudioSource: Boolean,
         private var gameAudioSource: Boolean,
         private var unknownAudioSource: Boolean) {
@@ -342,7 +348,7 @@ class PlaybackRecorder(private var context: Context,
             val bitmapBeforeCamera = VideoOverlay.BitmapSerializer.loadBitmapFromFile(context, bitmapBeforeCameraName)
             val bitmapAfterCamera = VideoOverlay.BitmapSerializer.loadBitmapFromFile(context, bitmapAfterCameraName)
 
-            this.mVideoEncoder = VideoEncoder(context, customWidth, customHeight, scaleRatio, rotation, this.nativeFramerate, this.recordQualityScale, drawOverlay, customBitrate, this.recordCustomBitrate, codec, this.currentProfileLevel!!, bitmapBeforeCamera, bitmapAfterCamera, cameraItem, virtualDisplay!!, useCustomFormat, customFormat)
+            this.mVideoEncoder = VideoEncoder(context, customWidth, customHeight, scaleRatio, rotation, this.nativeFramerate, this.recordQualityScale, drawOverlay, customBitrate, this.recordCustomBitrate, codec, this.currentProfileLevel!!, bitmapBeforeCamera, bitmapAfterCamera, cameraItem, virtualDisplay!!, useCustomFormat, customFormat, useCropArea, smoothCrop, cropAreaWidth, cropAreaHeight, cropAreaX, cropAreaY)
         } else {
             this.mVideoEncoder = null
         }

@@ -156,6 +156,15 @@
         <item name="screen_rotation_option_force_270_deg">270 degrees</item>
         <item name="screen_rotation_option_default">Default</item>
     </array>
+    <string name="crop_screen_title">Crop screen portion</string>
+    <string name="crop_screen_option">Crop screen</string>
+    <string name="crop_screen_option_description">Record only selected screen portion</string>
+    <string name="crop_screen_contents">Select crop screen</string>
+    <string name="crop_screen_contents_description">Select contents to crop</string>
+    <string name="crop_screen_smooth_crop">Smooth screen crop</string>
+    <string name="crop_screen_smooth_crop_description">Apply smoothing crop filter</string>
+    <string name="crop_screen_width">Width</string>
+    <string name="crop_screen_height">Height</string>
     <string name="draw_overlay_title">Edit overlay</string>
     <string name="draw_overlay_option">Draw overlay</string>
     <string name="draw_overlay_option_description">Draw overlay over recording</string>

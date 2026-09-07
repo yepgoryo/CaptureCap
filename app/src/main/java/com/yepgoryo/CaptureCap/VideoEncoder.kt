@@ -16,7 +16,7 @@ import android.view.Surface
 
 import java.nio.ByteBuffer
 
-class VideoEncoder(private val context: Context, customWidth: Int, customHeight: Int, scaleRatio: Float, private val rotation: Int, nativeFramerate: Int, recordQualityScale: Float, private val drawOverlay: Boolean, customBitrate: Boolean, recordCustomBitrate: Int, codec: String, codecProfileLevel: MediaCodecInfo.CodecProfileLevel, val bitmapBeforeCamera: Bitmap?, val bitmapAfterCamera: Bitmap?, var camera: VideoOverlay.CameraItem?, val vDisplay: VirtualDisplay, val useCustomFormat: Boolean, val customFormat: String) : Encoder {
+class VideoEncoder(private val context: Context, customWidth: Int, customHeight: Int, scaleRatio: Float, private val rotation: Int, nativeFramerate: Int, recordQualityScale: Float, private val drawOverlay: Boolean, customBitrate: Boolean, recordCustomBitrate: Int, codec: String, codecProfileLevel: MediaCodecInfo.CodecProfileLevel, val bitmapBeforeCamera: Bitmap?, val bitmapAfterCamera: Bitmap?, var camera: VideoOverlay.CameraItem?, val vDisplay: VirtualDisplay, val useCustomFormat: Boolean, val customFormat: String, val useCropArea: Boolean, val smoothCrop: Boolean, val cropAreaWidth: Int, val cropAreaHeight: Int, val cropAreaX: Int, val cropAreaY: Int) : Encoder {
     private val BPP: Float = 0.25f
     private var height: Int = 1920
     private var scaleRatio: Float = 1.0f
@@ -124,13 +124,13 @@ class VideoEncoder(private val context: Context, customWidth: Int, customHeight:
         this.mSurface = mediaCodec.createInputSurface()
     }
 
-    private fun createMediaFormat(): MediaFormat {
+    private fun createMediaFormat(displayWidth: Int = width, displayHeight: Int = height): MediaFormat {
         val useFormat = if (useCustomFormat) {
             customFormat
         } else {
             MediaFormat.MIMETYPE_VIDEO_AVC
         }
-        val mediaFormatCreateVideoFormat: MediaFormat = MediaFormat.createVideoFormat(useFormat, (width.toFloat() * this@VideoEncoder.scaleRatio).toInt(), (height * this@VideoEncoder.scaleRatio).toInt())
+        val mediaFormatCreateVideoFormat: MediaFormat = MediaFormat.createVideoFormat(useFormat, (displayWidth.toFloat() * this@VideoEncoder.scaleRatio).toInt(), (displayHeight * this@VideoEncoder.scaleRatio).toInt())
         mediaFormatCreateVideoFormat.setInteger(MediaFormat.KEY_COLOR_FORMAT, MediaCodecInfo.CodecCapabilities.COLOR_FormatSurface)
         mediaFormatCreateVideoFormat.setInteger(MediaFormat.KEY_BIT_RATE, this.usedBitrate)
         mediaFormatCreateVideoFormat.setInteger(MediaFormat.KEY_FRAME_RATE, this.screenFramerate)
@@ -207,7 +207,7 @@ class VideoEncoder(private val context: Context, customWidth: Int, customHeight:
             var mediaCodecSurface: MediaCodec? = null
             var mediaCodecDecoder: MediaCodec? = null
 
-            if (drawOverlay) {
+            if (drawOverlay || useCropArea) {
                 mediaCodecSurface = MediaCodec.createByCodecName(this.codecName)
                 mediaCodecDecoder =
                     MediaCodec.createDecoderByType(MediaFormat.MIMETYPE_VIDEO_AVC)
@@ -215,12 +215,12 @@ class VideoEncoder(private val context: Context, customWidth: Int, customHeight:
 
             if (this.mCallback != null) {
                 mediaCodecMain.setCallback(this.mCodecCallback)
-                if (drawOverlay) {
+                if (drawOverlay || useCropArea) {
                     mediaCodecSurface!!.setCallback(mCodecCallbackEncoderVirtualDisplay)
                 }
             }
 
-            if (drawOverlay) {
+            if (drawOverlay || useCropArea) {
                 coreGl = EglCore.create()
                 coreGl!!.makeCurrent()
 
@@ -237,7 +237,7 @@ class VideoEncoder(private val context: Context, customWidth: Int, customHeight:
                     SurfaceTexture.OnFrameAvailableListener {
                         if (!isStopped) {
                             renderHandler?.post {
-                                if (camera != null) {
+                                if (camera != null && drawOverlay) {
                                     if (cameraManager == null) {
                                         cameraManager = FrontCameraManager(context)
                                         cameraManager?.openCamera(
@@ -266,7 +266,14 @@ class VideoEncoder(private val context: Context, customWidth: Int, customHeight:
                                         rotation,
                                         scaleRatio,
                                         cameraRotation,
-                                        camera
+                                        camera,
+                                        drawOverlay,
+                                        useCropArea,
+                                        smoothCrop,
+                                        cropAreaWidth,
+                                        cropAreaHeight,
+                                        cropAreaX,
+                                        cropAreaY,
                                     )
                                 }
 
@@ -286,7 +293,7 @@ class VideoEncoder(private val context: Context, customWidth: Int, customHeight:
                 surfaceTexture!!.updateTexImage()
             }
 
-            if (drawOverlay) {
+            if (drawOverlay || useCropArea) {
                 val surf = Surface(surfaceTexture!!)
                 mediaCodecSurface!!.configure(
                     mediaFormatCreateMediaFormat,
@@ -301,15 +308,22 @@ class VideoEncoder(private val context: Context, customWidth: Int, customHeight:
                     0
                 )
             }
+            val mediaFormatCreateOutputMediaFormatCustom: MediaFormat =
+                if (useCropArea) {
+                    createMediaFormat(cropAreaWidth, cropAreaHeight)
+                } else {
+                    createMediaFormat()
+                }
+
             mediaCodecMain.configure(
-                mediaFormatCreateMediaFormat,
+                mediaFormatCreateOutputMediaFormatCustom,
                 null,
                 null,
                 MediaCodec.CONFIGURE_FLAG_ENCODE
             )
             finalInputSurface = mediaCodecMain.createInputSurface()
 
-            if (drawOverlay) {
+            if (drawOverlay || useCropArea) {
                 encoderVirtualDisplay = mediaCodecSurface
                 encoderVirtualDisplaySurface = mediaCodecSurface!!.createInputSurface()
 
@@ -319,7 +333,7 @@ class VideoEncoder(private val context: Context, customWidth: Int, customHeight:
             mediaCodecMain.start()
             this.mEncoder = mediaCodecMain
 
-            if (drawOverlay) {
+            if (drawOverlay || useCropArea) {
                 vDisplay.surface = encoderVirtualDisplaySurface
                 surfaceDecoder = mediaCodecDecoder
                 buffersHandler?.post { drainBuffersDecoder() }

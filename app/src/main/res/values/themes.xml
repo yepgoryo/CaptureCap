@@ -62,6 +62,12 @@
         <item name="gridBackground">@color/grid_background</item>
         <item name="gridStroke">@color/grid_stroke</item>
 
+        <item name="screenCropOuterRectangle">@color/screen_crop_outer_rectangle</item>
+        <item name="screenCropInnerRectangle">@color/screen_crop_inner_rectangle</item>
+        <item name="screenCropResizingHandle">@color/screen_crop_resizing_handle</item>
+        <item name="screenCropResizingHandleActive">@color/screen_crop_resizing_handle_active</item>
+        <item name="screenCropOuterLayer">@color/screen_crop_outer_layer_paint</item>
+
         <item name="statusBar">@color/md_theme_primary</item>
         <item name="android:navigationBarColor">@color/md_theme_background</item>
         <item name="android:windowLightStatusBar">false</item>
@@ -130,6 +136,12 @@
 
         <item name="gridBackground">@color/grid_background</item>
         <item name="gridStroke">@color/grid_stroke</item>
+
+        <item name="screenCropOuterRectangle">@color/screen_crop_outer_rectangle</item>
+        <item name="screenCropInnerRectangle">@color/screen_crop_inner_rectangle</item>
+        <item name="screenCropResizingHandle">@color/screen_crop_resizing_handle</item>
+        <item name="screenCropResizingHandleActive">@color/screen_crop_resizing_handle_active</item>
+        <item name="screenCropOuterLayer">@color/screen_crop_outer_layer_paint</item>
 
         <item name="statusBar">@color/md_theme_background</item>
         <item name="android:navigationBarColor">@color/md_theme_background</item>
