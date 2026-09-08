@@ -249,7 +249,7 @@ class SelectScreenCropAreaActivity : AppCompatActivity() {
         editHeight!!.setText("$cropAreaHeight")
         editHeight!!.tag = ""
         indicatorX!!.setText("X:")
-        indicatorX!!.tag = "editing"
+        editX!!.tag = "editing"
         editX!!.setText("$cropAreaX")
         editX!!.tag = ""
         indicatorY!!.setText("Y:")
@@ -358,7 +358,7 @@ class SelectScreenCropAreaActivity : AppCompatActivity() {
         editHeight!!.setText("$cropAreaHeight")
         editHeight!!.tag = ""
         indicatorX!!.setText("X:")
-        indicatorX!!.tag = "editing"
+        editX!!.tag = "editing"
         editX!!.setText("$cropAreaX")
         editX!!.tag = ""
         indicatorY!!.setText("Y:")
