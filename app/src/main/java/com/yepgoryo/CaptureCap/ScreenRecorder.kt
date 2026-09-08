@@ -293,13 +293,19 @@ class ScreenRecorder : Service() {
 
     @RequiresApi(Build.VERSION_CODES.R)
     fun shizukuConnect() {
-        if (!ShizukuConnectionHelper.waitForShizuku()) {
-            Log.e(TAG, "Timed out while waiting for Shizuku server")
+        useShizuku = this.appSettings!!.getBooleanProperty(GlobalProperties.PropertiesBoolean.SHIZUKU_ENABLE, false)
+
+        if (!useShizuku) {
             return
         }
 
         if (mShizukuRecordServiceConnection != null && shizukuRecordService != null) {
             Log.e(TAG, "Shizuku connection already established")
+            return
+        }
+
+        if (!ShizukuConnectionHelper.waitForShizuku()) {
+            Log.e(TAG, "Timed out while waiting for Shizuku server")
             return
         }
 
@@ -349,12 +355,10 @@ class ScreenRecorder : Service() {
 
     @RequiresApi(Build.VERSION_CODES.R)
     fun shizukuDisconnect() {
-        if (!ShizukuConnectionHelper.waitForShizuku()) {
-            Log.e(TAG, "Timed out while waiting for Shizuku server")
-            return
-        }
-
         if (mShizukuRecordServiceConnection != null) {
+            if (!ShizukuConnectionHelper.waitForShizuku()) {
+                Log.e(TAG, "Timed out while waiting for Shizuku server")
+            }
             try {
                 if (ShizukuConnectionHelper.shizukuAvailable()) {
                     Shizuku.unbindUserService(shizukuServiceArgs(), mShizukuRecordServiceConnection, false)
