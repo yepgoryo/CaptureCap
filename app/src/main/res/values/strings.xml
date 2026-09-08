@@ -25,6 +25,7 @@
     <string name="info_ainotice">AI Notice</string>
     <string name="info_changelog">Changelog</string>
     <string name="info_contributors">Contributors</string>
+    <string name="info_contributed_to_text">Contributed to</string>
     <string name="donate_title">Donate</string>
     <string name="donate_copy_wallet">Copy Wallet</string>
     <string name="capture_settings">Capture settings</string>

@@ -34,11 +34,40 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="18dp"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/contributed_to"
+                android:textSize="12sp"
+                android:textColor="?attr/colorOnPrimaryContainer"
+                android:textStyle="italic"
+                android:text="@string/info_contributed_to_text"
+                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/contributed_to_apps"
+                android:textSize="12sp"
+                android:paddingLeft="4dp"
+                android:textColor="?attr/colorOnPrimaryContainer"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
         <com.google.android.flexbox.FlexboxLayout
             android:id="@+id/contributor_links"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="24dp"
             app:alignItems="center"
             app:alignContent="center"
             app:justifyContent="center"

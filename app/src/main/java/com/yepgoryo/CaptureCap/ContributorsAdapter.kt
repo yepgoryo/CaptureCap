@@ -16,11 +16,13 @@ abstract class ContributorsAdapter(context: Context) : RecyclerView.Adapter<Recy
     private val contributorsEmails: Array<String> = context.resources.getStringArray(R.array.contributors_emails)
     private val contributorsNames: Array<String> = context.resources.getStringArray(R.array.contributors_names)
     private val contributorsRoles: Array<String> = context.resources.getStringArray(R.array.contributors_roles)
+    private val contributorsContributedTo: Array<String> = context.resources.getStringArray(R.array.contributors_contributed_to)
     private val mainContext: Context = context
 
     open inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val nameText: TextView = view.findViewById(R.id.contributor_name)
         private val roleText: TextView = view.findViewById(R.id.contributor_role)
+        private val contributedToText: TextView = view.findViewById(R.id.contributed_to_apps)
 
         private val githubButton: TextView = view.findViewById(R.id.contributor_github)
         private val mastodonButton: TextView = view.findViewById(R.id.contributor_mastodon)
@@ -98,6 +100,10 @@ abstract class ContributorsAdapter(context: Context) : RecyclerView.Adapter<Recy
         fun getRoleText(): TextView {
             return this.roleText
         }
+
+        fun getContributedToText(): TextView {
+            return this.contributedToText
+        }
     }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, position: Int): ViewHolder {
@@ -107,6 +113,7 @@ abstract class ContributorsAdapter(context: Context) : RecyclerView.Adapter<Recy
     override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder, position: Int) {
         (viewHolder as ViewHolder).getNameText().text = this.contributorsNames[position]
         viewHolder.getRoleText().text = this.contributorsRoles[position]
+        viewHolder.getContributedToText().text = this.contributorsContributedTo[position]
         viewHolder.showGithubLink()
         viewHolder.showMastodonLink()
         viewHolder.showTelegramLink()
