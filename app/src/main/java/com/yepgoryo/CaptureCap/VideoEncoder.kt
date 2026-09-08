@@ -16,7 +16,7 @@ import android.view.Surface
 
 import java.nio.ByteBuffer
 
-class VideoEncoder(private val context: Context, customWidth: Int, customHeight: Int, scaleRatio: Float, private val rotation: Int, nativeFramerate: Int, recordQualityScale: Float, private val drawOverlay: Boolean, customBitrate: Boolean, recordCustomBitrate: Int, codec: String, codecProfileLevel: MediaCodecInfo.CodecProfileLevel, val bitmapBeforeCamera: Bitmap?, val bitmapAfterCamera: Bitmap?, var camera: VideoOverlay.CameraItem?, val vDisplay: VirtualDisplay, val useCustomFormat: Boolean, val customFormat: String, val useCropArea: Boolean, val smoothCrop: Boolean, val cropAreaWidth: Int, val cropAreaHeight: Int, val cropAreaX: Int, val cropAreaY: Int) : Encoder {
+class VideoEncoder(private val context: Context, customWidth: Int, customHeight: Int, scaleRatio: Float, private val rotation: Int, nativeFramerate: Int, recordQualityScale: Float, private val drawOverlay: Boolean, customBitrate: Boolean, recordCustomBitrate: Int, private val customKeyFrame: Boolean, private val recordCustomKeyframe: Int, codec: String, codecProfileLevel: MediaCodecInfo.CodecProfileLevel, val bitmapBeforeCamera: Bitmap?, val bitmapAfterCamera: Bitmap?, var camera: VideoOverlay.CameraItem?, val vDisplay: VirtualDisplay, val useCustomFormat: Boolean, val customFormat: String, val useCropArea: Boolean, val smoothCrop: Boolean, val cropAreaWidth: Int, val cropAreaHeight: Int, val cropAreaX: Int, val cropAreaY: Int) : Encoder {
     private val BPP: Float = 0.25f
     private var height: Int = 1920
     private var scaleRatio: Float = 1.0f
@@ -134,7 +134,11 @@ class VideoEncoder(private val context: Context, customWidth: Int, customHeight:
         mediaFormatCreateVideoFormat.setInteger(MediaFormat.KEY_COLOR_FORMAT, MediaCodecInfo.CodecCapabilities.COLOR_FormatSurface)
         mediaFormatCreateVideoFormat.setInteger(MediaFormat.KEY_BIT_RATE, this.usedBitrate)
         mediaFormatCreateVideoFormat.setInteger(MediaFormat.KEY_FRAME_RATE, this.screenFramerate)
-        mediaFormatCreateVideoFormat.setInteger(MediaFormat.KEY_I_FRAME_INTERVAL, 1)
+        if (customKeyFrame) {
+            mediaFormatCreateVideoFormat.setInteger(MediaFormat.KEY_I_FRAME_INTERVAL, recordCustomKeyframe)
+        } else {
+            mediaFormatCreateVideoFormat.setInteger(MediaFormat.KEY_I_FRAME_INTERVAL, 1)
+        }
         mediaFormatCreateVideoFormat.setInteger("i-frame-interval", 1)
         if (this.codecProfileLevel != null) {
             if (this.codecProfileLevel!!.profile != 0 && this.codecProfileLevel!!.level != 0) {

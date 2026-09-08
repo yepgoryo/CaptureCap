@@ -44,6 +44,8 @@ class SettingsFragment : PreferenceFragmentCompat() {
             val preferenceFindPreference22: Preference = findPreference("cropscreen")!!
             val preferenceFindPreference23: Preference = findPreference("cropscreencontents")!!
             val preferenceFindPreference24: Preference = findPreference("cropscreensmoothcrop")!!
+            val preferenceFindPreference25: Preference = findPreference("customkeyframe")!!
+            val preferenceFindPreference26: Preference = findPreference("keyframevalue")!!
 
             val preferenceCategory2: PreferenceCategory = findPreference("capturesettings")!!
             preferenceCategory2.removePreference(preferenceFindPreference5)
@@ -66,6 +68,8 @@ class SettingsFragment : PreferenceFragmentCompat() {
             preferenceCategory2.removePreference(preferenceFindPreference22)
             preferenceCategory2.removePreference(preferenceFindPreference23)
             preferenceCategory2.removePreference(preferenceFindPreference24)
+            preferenceCategory2.removePreference(preferenceFindPreference25)
+            preferenceCategory2.removePreference(preferenceFindPreference26)
         }
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
             val preferenceFindPreference21: PreferenceCategory = findPreference("shizukusettings")!!

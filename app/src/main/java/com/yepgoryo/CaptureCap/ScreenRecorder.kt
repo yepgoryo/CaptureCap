@@ -1485,6 +1485,16 @@ class ScreenRecorder : Service() {
                     "0"
                 )
             )
+            val customKeyframe: Boolean = this.appSettings!!.getBooleanProperty(
+                GlobalProperties.PropertiesBoolean.CUSTOM_KEYFRAME,
+                false
+            )
+            val keyframeValue: Int = Integer.parseInt(
+                this.appSettings!!.getStringProperty(
+                    GlobalProperties.PropertiesString.KEYFRAME_VALUE,
+                    "1"
+                )
+            )
             val useCropArea: Boolean = this.appSettings!!.getBooleanProperty(
                 GlobalProperties.PropertiesBoolean.CROP_SCREEN,
                 false
@@ -1627,6 +1637,8 @@ class ScreenRecorder : Service() {
                     fpsValue,
                     customBitrate,
                     bitrateValue,
+                    customKeyframe,
+                    keyframeValue,
                     useCustomFormat,
                     format,
                     useCustomCodec,

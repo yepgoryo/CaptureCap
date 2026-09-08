@@ -43,6 +43,10 @@
     <string name="bitrate_indicator_custom_description">Ignore automatic bitrate settings</string>
     <string name="bitrate_indicator">Recording bitrate</string>
     <string name="bitrate_indicator_description">Set custom bitrate</string>
+    <string name="keyframe_indicator_custom">Custom keyframe</string>
+    <string name="keyframe_indicator_custom_description">Ignore automatic keyframe interval settings</string>
+    <string name="keyframe_indicator">Recording keyframe</string>
+    <string name="keyframe_indicator_description">Set custom keyframe interval</string>
     <string name="audio_sources_list">Select input audio sources</string>
     <string name="audio_source_media">Media audio source</string>
     <string name="audio_source_game">Game audio source</string>

@@ -52,6 +52,8 @@ class PlaybackRecorder(
     fpsValue: Int,
     private var customBitrate: Boolean,
     bitrateValue: Int,
+    private val customKeyFrame: Boolean,
+    private val customKeyFrameValue: Int,
     chooseCustomFormat: Boolean,
     formatName: String,
     chooseCustomCodec: Boolean,
@@ -350,7 +352,7 @@ class PlaybackRecorder(
             val bitmapBeforeCamera = VideoOverlay.BitmapSerializer.loadBitmapFromFile(context, bitmapBeforeCameraName)
             val bitmapAfterCamera = VideoOverlay.BitmapSerializer.loadBitmapFromFile(context, bitmapAfterCameraName)
 
-            this.mVideoEncoder = VideoEncoder(context, customWidth, customHeight, scaleRatio, rotation, this.nativeFramerate, this.recordQualityScale, drawOverlay, customBitrate, this.recordCustomBitrate, codec, this.currentProfileLevel!!, bitmapBeforeCamera, bitmapAfterCamera, cameraItem, virtualDisplay!!, useCustomFormat, customFormat, useCropArea, smoothCrop, cropAreaWidth, cropAreaHeight, cropAreaX, cropAreaY)
+            this.mVideoEncoder = VideoEncoder(context, customWidth, customHeight, scaleRatio, rotation, this.nativeFramerate, this.recordQualityScale, drawOverlay, customBitrate, this.recordCustomBitrate, customKeyFrame, customKeyFrameValue, codec, this.currentProfileLevel!!, bitmapBeforeCamera, bitmapAfterCamera, cameraItem, virtualDisplay!!, useCustomFormat, customFormat, useCropArea, smoothCrop, cropAreaWidth, cropAreaHeight, cropAreaX, cropAreaY)
         } else {
             this.mVideoEncoder = null
         }

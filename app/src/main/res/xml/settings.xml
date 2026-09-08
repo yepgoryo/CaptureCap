@@ -56,6 +56,21 @@
             android:inputType="number"
             android:defaultValue="1" />
 
+        <SwitchPreferenceCompat
+            android:key="customkeyframe"
+            android:summary="@string/keyframe_indicator_custom_description"
+            android:title="@string/keyframe_indicator_custom"
+            android:defaultValue="false" />
+
+        <com.yepgoryo.CaptureCap.NonNullText
+            android:key="keyframevalue"
+            android:dependency="customkeyframe"
+            android:summary="@string/keyframe_indicator_description"
+            android:title="@string/keyframe_indicator"
+            android:gravity="center"
+            android:inputType="number"
+            android:defaultValue="1" />
+
         <com.yepgoryo.CaptureCap.ResolutionList
             android:key="resolutionvalue"
             android:summary="@string/resolution_option_description"
