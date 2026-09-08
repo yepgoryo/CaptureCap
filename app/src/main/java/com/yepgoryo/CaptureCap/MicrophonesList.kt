@@ -3,16 +3,12 @@ package com.yepgoryo.CaptureCap
 import android.content.Context
 import android.media.AudioDeviceInfo
 import android.media.AudioManager
-import android.media.MediaCodecList
-import android.media.MediaFormat
 import android.util.AttributeSet
 import androidx.preference.ListPreference
 
 class MicrophonesList(context: Context, attributeSet: AttributeSet?): ListPreference(context, attributeSet) {
     private val microphonesList: ArrayList<String> = ArrayList()
     private val microphonesIDList: ArrayList<String> = ArrayList()
-    private val prefName: String = key
-    private val appSettings = GlobalProperties(context)
 
     private fun getAllMicrophones() {
         microphonesList.clear()

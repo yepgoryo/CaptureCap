@@ -23,53 +23,55 @@ import java.util.ArrayList
 import java.util.LinkedList
 import java.util.concurrent.atomic.AtomicBoolean
 
-class PlaybackRecorder(private var context: Context,
-        private var recordOnlyAudio: Boolean,
-        private var virtualDisplay: VirtualDisplay?,
-        private var fileDescriptor: FileDescriptor?,
-        private var mediaProjection: MediaProjection?,
-        private var enableStream: Boolean,
-        private var streamUrl: String?,
-        private var streamKey: String?,
-        private var saveStreamToFile: Boolean,
-        private var customWidth: Int,
-        private var customHeight: Int,
-        private var forceOrientation: GlobalProperties.ScreenOrientationProperty,
-        private var forceRotation: GlobalProperties.ScreenRotationProperty,
-        private var scaleRatio: Float,
-        private val rotation: Int,
-        refreshRate: Int,
-        private var recordMicrophone: Boolean,
-        private var recordPlayback: Boolean,
-        private var shizukuRecordPhoneCall: Boolean,
-        var shizukuRecordService: IShizukuRecordService?,
-        private var shizukuAudioSource: GlobalProperties.ShizukuPhoneCallAudioSource,
-        private val drawOverlay: Boolean,
-        customQuality: Boolean,
-        qualityScale: Float,
-        customFps: Boolean,
-        fpsValue: Int,
-        private var customBitrate: Boolean,
-        bitrateValue: Int,
-        chooseCustomFormat: Boolean,
-        formatName: String,
-        chooseCustomCodec: Boolean,
-        codecName: String,
-        chooseCustomAudioFormat: Boolean,
-        audioFormatName: String,
-        chooseCustomAudioCodec: Boolean,
-        audioCodecName: String,
-        private var customSampleRate: Int,
-        private var customChannelsCount: Int,
-        private val useCropArea: Boolean,
-        private val smoothCrop: Boolean,
-        private val cropAreaWidth: Int,
-        private val cropAreaHeight: Int,
-        private val cropAreaX: Int,
-        private val cropAreaY: Int,
-        private var mediaAudioSource: Boolean,
-        private var gameAudioSource: Boolean,
-        private var unknownAudioSource: Boolean) {
+class PlaybackRecorder(
+    private var context: Context,
+    private var recordOnlyAudio: Boolean,
+    private var virtualDisplay: VirtualDisplay?,
+    private var fileDescriptor: FileDescriptor?,
+    private var mediaProjection: MediaProjection?,
+    private var enableStream: Boolean,
+    private var streamUrl: String?,
+    private var streamKey: String?,
+    private var saveStreamToFile: Boolean,
+    private var customWidth: Int,
+    private var customHeight: Int,
+    private var forceOrientation: GlobalProperties.ScreenOrientationProperty,
+    private var forceRotation: GlobalProperties.ScreenRotationProperty,
+    private var scaleRatio: Float,
+    private val rotation: Int,
+    refreshRate: Int,
+    private var recordMicrophone: Boolean,
+    private var recordPlayback: Boolean,
+    private var shizukuRecordPhoneCall: Boolean,
+    var shizukuRecordService: IShizukuRecordService?,
+    private var shizukuAudioSource: GlobalProperties.ShizukuPhoneCallAudioSource,
+    private val drawOverlay: Boolean,
+    customQuality: Boolean,
+    qualityScale: Float,
+    customFps: Boolean,
+    fpsValue: Int,
+    private var customBitrate: Boolean,
+    bitrateValue: Int,
+    chooseCustomFormat: Boolean,
+    formatName: String,
+    chooseCustomCodec: Boolean,
+    codecName: String,
+    chooseCustomAudioFormat: Boolean,
+    audioFormatName: String,
+    chooseCustomAudioCodec: Boolean,
+    audioCodecName: String,
+    private var customSampleRate: Int,
+    private var customChannelsCount: Int,
+    private val useCropArea: Boolean,
+    private val smoothCrop: Boolean,
+    private val cropAreaWidth: Int,
+    private val cropAreaHeight: Int,
+    private val cropAreaX: Int,
+    private val cropAreaY: Int,
+    private var mediaAudioSource: Boolean,
+    private var gameAudioSource: Boolean,
+    private var unknownAudioSource: Boolean
+) {
     private var INVALID_INDEX: Int = -1
     private var STOP_WITH_EOS: Int = 1
     private var TAG: String = "PlaybackRecorder"
@@ -528,7 +530,6 @@ class PlaybackRecorder(private var context: Context,
 
     private fun writeSampleData(isVideo: Boolean, bufferInfo: MediaCodec.BufferInfo, byteBuffer: ByteBuffer) {
         var byteBufferWrite: ByteBuffer? = byteBuffer
-        var callback: Callback
         if ((bufferInfo.flags and MediaCodec.BUFFER_FLAG_CODEC_CONFIG) != 0) {
             bufferInfo.size = 0
         }
@@ -698,12 +699,20 @@ class PlaybackRecorder(private var context: Context,
 
     fun ByteArray.hex() = joinToString(" ") { "%02X".format(it) }
 
+    /*
+     * This function has been co-authored by an AI.
+     * Model name: Qwen 3 Coder Next
+     */
     private fun startVideoStallTimer() {
         pollHandler?.removeCallbacks(pollRunnable!!)
         pollHandler = Handler(mWorker!!.looper)
         checkStallAndRefeed()
     }
 
+    /*
+     * This function has been co-authored by an AI.
+     * Model name: Qwen 3 Coder Next
+     */
     private fun checkStallAndRefeed() {
         pollRunnable = object : Runnable {
             override fun run() {

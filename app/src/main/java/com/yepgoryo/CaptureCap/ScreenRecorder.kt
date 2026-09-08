@@ -78,8 +78,6 @@ class ScreenRecorder : Service() {
 
         const val ACTION_CONTINUE: String = MainActivity.appName + ".CONTINUE_RECORDING"
         const val ACTION_STOP: String = MainActivity.appName + ".STOP_RECORDING"
-        const val ACTION_ACTIVITY_CONNECT: String = MainActivity.appName + ".ACTIVITY_CONNECT"
-        const val ACTION_ACTIVITY_DISCONNECT: String = MainActivity.appName + ".ACTIVITY_DISCONNECT"
         const val ACTION_ACTIVITY_DELETE_FINISHED_FILE: String =
             MainActivity.appName + ".ACTIVITY_DELETE_FINISHED_FILE"
 
@@ -110,7 +108,6 @@ class ScreenRecorder : Service() {
     private var recordFilePathParent: Uri? = null
     private var recorderPlayback: PlaybackRecorder? = null
     private var recordingFileDescriptor: FileDescriptor? = null
-    private var recordingFilePath: String = ""
     private var recordingMediaProjection: MediaProjection? = null
     private var recordingMediaRecorder: MediaRecorder? = null
     private var recordingNotificationManager: NotificationManagerCompat? = null
@@ -118,10 +115,7 @@ class ScreenRecorder : Service() {
     private var recordingVirtualDisplay: VirtualDisplay? = null
     private var screenHeightNormal: Int = 0
     private var screenWidthNormal: Int = 0
-    private var screenWindowHeight: Int = 0
-    private var screenWindowWidth: Int = 0
     private var sensor: SensorManager? = null
-    private var windowManager: WindowManager? = null
     private val NOTIFICATIONS_RECORDING_CHANNEL: String = "notifications"
     var runningService: Boolean = false
     private var recordingBinder: IBinder = RecordingBinder()
@@ -146,8 +140,6 @@ class ScreenRecorder : Service() {
     private var enableSoundControlsNotification: Boolean = false
     private var forceOrientation: GlobalProperties.ScreenOrientationProperty = GlobalProperties.ScreenOrientationProperty.DEFAULT
     private var forceRotation: GlobalProperties.ScreenRotationProperty = GlobalProperties.ScreenRotationProperty.DEFAULT
-    private var micMuted: Boolean = false
-    private var playbackMuted: Boolean = false
     private var isPaused: Boolean = false
     private var isStopped: Boolean = false
     private var showFloatingControls: Boolean = false
@@ -343,7 +335,7 @@ class ScreenRecorder : Service() {
                 if (mShizukuRecordServiceConnection != null) {
                     Shizuku.bindUserService(shizukuServiceArgs(), mShizukuRecordServiceConnection!!)
                 }
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 Log.e(TAG, "Failed to bind RecorderService")
             }
         } else {
@@ -490,7 +482,7 @@ class ScreenRecorder : Service() {
             this@ScreenRecorder.actionDisconnect()
         }
 
-        fun setPreStart(resultCode: Int, intent: Intent, width: Int, height: Int) {
+        fun setPreStart(resultCode: Int, intent: Intent) {
             this@ScreenRecorder.intentResult = resultCode
             this@ScreenRecorder.intentData = intent
         }
@@ -637,23 +629,7 @@ class ScreenRecorder : Service() {
         }
     }
 
-    inner class SettingsPanelBinder : Binder() {
-        fun shizukuStart() {
-            this@ScreenRecorder.shizukuManageStart()
-        }
-
-        fun shizukuStop() {
-            this@ScreenRecorder.shizukuManageStop()
-        }
-
-        fun shizukuConnect() {
-            this@ScreenRecorder.shizukuConnect()
-        }
-
-        fun shizukuDisconnect() {
-            this@ScreenRecorder.shizukuDisconnect()
-        }
-    }
+    inner class SettingsPanelBinder : Binder() {}
 
     private var stoppedOnError = false
 
@@ -850,11 +826,6 @@ class ScreenRecorder : Service() {
         return START_STICKY
     }
 
-    fun refreshNotification() {
-        val refreshNotificationBuilder = getRecordingNotification()
-        this.recordingNotificationManager!!.notify(NotificationID.NOTIFICATION_RECORDING_ID.ordinal, refreshNotificationBuilder.build())
-    }
-
     fun refreshSoundControlsNotification() {
         val soundNotification = getSoundSwitchNotification()
         this.recordingNotificationManager!!.notify(NotificationID.NOTIFICATION_RECORDING_AUDIO_CONTROLS_ID.ordinal, soundNotification.build())
@@ -1003,7 +974,7 @@ class ScreenRecorder : Service() {
                     if (Integer.parseInt(property) > 44100 && Integer.parseInt(property) >= 48000) {
                         this.customSampleRate = 48000
                     }
-                } catch (exc: NumberFormatException) {
+                } catch (_: NumberFormatException) {
                     this.customSampleRate = 44100
                 }
             }
@@ -1044,22 +1015,18 @@ class ScreenRecorder : Service() {
         this.activityBinder = activityBinder
         if (this.runningService) {
             if (!this.isPaused) {
-                if (activityBinder != null) {
-                    if (!timerRunning && !startedFromPanel) {
-                        activityBinder.recordingStart(false)
-                    } else if (startedFromPanel) {
-                        activityBinder.preRecordingStart()
-                    } else {
-                        activityBinder.timerStart(timerEndsAtRealtime)
-                    }
+                if (!timerRunning && !startedFromPanel) {
+                    activityBinder.recordingStart(false)
+                } else if (startedFromPanel) {
+                    activityBinder.preRecordingStart()
+                } else {
+                    activityBinder.timerStart(timerEndsAtRealtime)
                 }
             } else {
-                if (this.isPaused && activityBinder != null) {
-                    activityBinder.recordingPause(this.timeRecorded, false)
-                }
+                activityBinder.recordingPause(this.timeRecorded, false)
             }
         } else {
-            if (this.isStopped && activityBinder != null) {
+            if (this.isStopped) {
                 activityBinder.recordingStop(false)
             }
         }
@@ -1100,7 +1067,7 @@ class ScreenRecorder : Service() {
     }
 
     fun getModeNight(): Boolean {
-        val uiModeManager: UiModeManager = baseContext.getSystemService(Context.UI_MODE_SERVICE) as UiModeManager
+        val uiModeManager: UiModeManager = baseContext.getSystemService(UI_MODE_SERVICE) as UiModeManager
         val mode = uiModeManager.getNightMode()
         if (mode == UiModeManager.MODE_NIGHT_YES) {
             return true
@@ -1306,8 +1273,7 @@ class ScreenRecorder : Service() {
                         recordingFileName
                     )
                     if (!fullFilePathCreateDocument.toString()
-                            .endsWith(fileExtension) && this.recordOnlyAudio
-                    ) {
+                            .endsWith(fileExtension) && this.recordOnlyAudio) {
                         try {
                             fullFilePathRenameDocument = DocumentsContract.renameDocument(
                                 contentResolver,
@@ -1324,7 +1290,7 @@ class ScreenRecorder : Service() {
                         fullFilePathCreateDocument = fullFilePathRenameDocument
                     }
                     file = null
-                } catch (exc: Exception) {
+                } catch (_: Exception) {
                     Log.e(TAG, "Invalid recording path: $documentParentPath")
                     if (activityBinder != null) {
                         this.errorDir = true
@@ -1340,7 +1306,7 @@ class ScreenRecorder : Service() {
                     file = File(fullFilePath.toString())
                     file.createNewFile()
                     fullFilePathCreateDocument = null
-                } catch (exc: Exception) {
+                } catch (_: Exception) {
                     file = null
                     fullFilePathCreateDocument = null
                 }
@@ -1443,13 +1409,10 @@ class ScreenRecorder : Service() {
                     screenScale = 1080.0f
                 } else if (resolution == GlobalProperties.ResolutionProperty._720P_ && screenHeight >= 720) {
                     screenScale = 720.0f
-                } else if (resolution != GlobalProperties.ResolutionProperty._480P_ || screenHeight < 480) {
-                    if (resolution == GlobalProperties.ResolutionProperty._360P_ && screenHeight >= 360) {
-                        screenScale = 360.0f
-                    }
-                    scaleRatio = 1.0f
-                } else {
+                } else if (resolution == GlobalProperties.ResolutionProperty._480P_ && screenHeight >= 480) {
                     screenScale = 480.0f
+                } else if (resolution == GlobalProperties.ResolutionProperty._360P_ && screenHeight >= 360) {
+                    screenScale = 360.0f
                 }
                 scaleRatio = screenScale / screenHeight
             }
@@ -1609,26 +1572,26 @@ class ScreenRecorder : Service() {
                         this.recordingMediaRecorder!!.setVideoFrameRate(refreshRate)
                     }
                     this.recordingMediaRecorder!!.prepare()
-                } catch (exc: IOException) {
+                } catch (_: IOException) {
                     recordingError()
                 }
                 try {
                     this.recordingMediaRecorder!!.start()
-                } catch (exc: IllegalStateException) {
+                } catch (_: IllegalStateException) {
                     recordingError()
                 }
                 if (!this.recordOnlyAudio) {
                     this.recordingVirtualDisplay!!.surface = this.recordingMediaRecorder!!.surface
                 }
             } else {
-                if (!enableStream || (enableStream && streamSave)) {
+                if (!enableStream || streamSave) {
                     try {
                         val parcelFileDescriptorOpenFileDescriptor: ParcelFileDescriptor =
                             contentResolver.openFileDescriptor(this.recordFilePath!!, "rw")!!
                         this.recordingOpenFileDescriptor = parcelFileDescriptorOpenFileDescriptor
                         this.recordingFileDescriptor =
                             parcelFileDescriptorOpenFileDescriptor.fileDescriptor
-                    } catch (exc: Exception) {
+                    } catch (_: Exception) {
                         recordingError()
                     }
                 }
@@ -2074,7 +2037,7 @@ class ScreenRecorder : Service() {
                     this.recordingMediaRecorder?.stop()
                     this.recordingMediaRecorder?.reset()
                     this.recordingMediaRecorder?.release()
-                } catch (exc: RuntimeException) {
+                } catch (_: RuntimeException) {
                     Toast.makeText(this, R.string.error_recorder_failed, Toast.LENGTH_SHORT).show()
                 }
             }
@@ -2087,7 +2050,7 @@ class ScreenRecorder : Service() {
                 if (!enableStream || (enableStream && streamSave)) {
                     try {
                         this.recordingOpenFileDescriptor!!.close()
-                    } catch (exc: IOException) {
+                    } catch (_: IOException) {
                         Toast.makeText(this, R.string.error_recorder_failed, Toast.LENGTH_SHORT)
                             .show()
                     }
@@ -2117,7 +2080,7 @@ class ScreenRecorder : Service() {
         }
         val activity: PendingIntent = PendingIntent.getActivity(this, 0, this.finishedFileIntent, this.intentFlag)
         val recordingDeleteIntent = Intent(this, ScreenRecorder::class.java)
-        recordingDeleteIntent.setAction(ScreenRecorder.ACTION_ACTIVITY_DELETE_FINISHED_FILE)
+        recordingDeleteIntent.setAction(ACTION_ACTIVITY_DELETE_FINISHED_FILE)
         var iconRecordDelete: IconCompat = IconCompat.createWithBitmap(getBitmapDescriptor(R.drawable.icon_record_delete_color_action))
         if (getModeNight()) {
             iconRecordDelete = IconCompat.createWithBitmap(getBitmapDescriptor(R.drawable.icon_record_delete_color_action_dark))
@@ -2179,7 +2142,7 @@ class ScreenRecorder : Service() {
         val notificationDelete: NotificationCompat.Builder = finishedRecordingBuilder.setContentIntent(activity).setSmallIcon(R.drawable.icon_record_finished_status).setLargeIcon(finishedIcon).addAction(notificationShareBuilder.build()).addAction(notificationDeleteBuilder.build()).setAutoCancel(true).setPriority(NotificationCompat.PRIORITY_LOW)
         val notificationStreamFinished: NotificationCompat.Builder = finishedRecordingBuilder.setContentIntent(activity).setSmallIcon(R.drawable.icon_record_finished_status).setLargeIcon(finishedIcon).setAutoCancel(true).setPriority(NotificationCompat.PRIORITY_LOW)
         if (!isRestarting) {
-            if (!this.dontNotifyOnFinish && (!enableStream || (enableStream && streamSave))) {
+            if (!this.dontNotifyOnFinish && (!enableStream || streamSave)) {
                 this.recordingNotificationManager!!.notify(
                     NotificationID.NOTIFICATION_RECORDING_FINISHED_ID.ordinal,
                     notificationDelete.build()

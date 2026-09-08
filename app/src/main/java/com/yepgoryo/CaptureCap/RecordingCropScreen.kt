@@ -22,7 +22,6 @@ import android.view.View
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.TooltipCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -31,14 +30,12 @@ import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
-import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
 import kotlinx.coroutines.*
 import kotlin.math.*
-
 
 class RecordingCropScreen : AppCompatActivity() {
     private lateinit var cropBar: RecordingCropBar

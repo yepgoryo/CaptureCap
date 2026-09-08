@@ -36,8 +36,8 @@ class TimerDialogFragment : PreferenceDialogFragmentCompat() {
     }
 
     public override fun onBindDialogView(view: View) {
-        this.textMinutes = view.findViewById<EditText>(R.id.time_minutes)
-        this.textSeconds = view.findViewById<EditText>(R.id.time_seconds)
+        this.textMinutes = view.findViewById(R.id.time_minutes)
+        this.textSeconds = view.findViewById(R.id.time_seconds)
         textMinutes!!.addTextChangedListener(InputMinutesValidator())
         textSeconds!!.addTextChangedListener(InputSecondsValidator())
         val totalSeconds: Int = this.appSettings!!.getIntProperty(GlobalProperties.PropertiesInt.TIMER_SECONDS, 10)
@@ -65,7 +65,7 @@ class TimerDialogFragment : PreferenceDialogFragmentCompat() {
             } else {
                 if (!string.contentEquals("")) {
                     val parsed: Int = Integer.parseInt(string)
-                    if (parsed > 59 || parsed < 0) {
+                    if (parsed !in 0..59) {
                         this@TimerDialogFragment.textSeconds?.setText(this@TimerDialogFragment.textSecondsInputData)
                     } else {
                         this@TimerDialogFragment.textSecondsInputData = string

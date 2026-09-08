@@ -4,7 +4,6 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
-import android.content.res.Configuration
 import android.graphics.Rect
 import android.hardware.display.DisplayManager
 import android.os.Build
@@ -15,7 +14,6 @@ import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
@@ -27,13 +25,6 @@ class PanelPositionScreen : AppCompatActivity() {
     private var mPanelPositionConnection: ServiceConnection = object: ServiceConnection {
         override fun onServiceConnected(componentName: ComponentName, iBinder: IBinder) {
             this@PanelPositionScreen.panelPositionBinder = iBinder as FloatingControls.PanelPositionBinder
-            var rotation: Int = (this@PanelPositionScreen.baseContext.getSystemService("display") as DisplayManager).getDisplay(0).rotation
-            var rect = Rect()
-            this@PanelPositionScreen.window.decorView.getWindowVisibleDisplayFrame(rect)
-            rect.width()
-            rect.height()
-            if (rotation != Surface.ROTATION_90) {
-            }
             var intent = Intent(this@PanelPositionScreen, FloatingControls::class.java)
             intent.setAction(FloatingControls.ACTION_POSITION_PANEL)
             this@PanelPositionScreen.startService(intent)

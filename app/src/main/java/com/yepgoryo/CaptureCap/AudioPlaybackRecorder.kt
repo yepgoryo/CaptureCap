@@ -34,23 +34,24 @@ import java.nio.ByteBuffer
 import java.util.LinkedList
 import java.util.concurrent.atomic.AtomicBoolean
 
-class AudioPlaybackRecorder(private val recordMicrophone: Boolean,
-                            private val recordAudio: Boolean,
-                            sampleRate: Int,
-                            channels: Int,
-                            mediaProjection: MediaProjection?,
-                            useCustomCodec: Boolean,
-                            codecName: String,
-                            useCustomFormat: Boolean,
-                            formatName: String,
-                            recordOnlyAudio: Boolean,
-                            private var shizukuRecordPhoneCall: Boolean,
-                            private var shizukuRecordService: IShizukuRecordService?,
-                            private var shizukuAudioSource: GlobalProperties.ShizukuPhoneCallAudioSource,
-                            private val context: Context,
-                            private var sourceMedia: Boolean,
-                            private var sourceGame: Boolean,
-                            private var sourceUnknown: Boolean
+class AudioPlaybackRecorder(
+    private val recordMicrophone: Boolean,
+    private val recordAudio: Boolean,
+    sampleRate: Int,
+    channels: Int,
+    mediaProjection: MediaProjection?,
+    useCustomCodec: Boolean,
+    codecName: String,
+    useCustomFormat: Boolean,
+    formatName: String,
+    recordOnlyAudio: Boolean,
+    private var shizukuRecordPhoneCall: Boolean,
+    private var shizukuRecordService: IShizukuRecordService?,
+    private var shizukuAudioSource: GlobalProperties.ShizukuPhoneCallAudioSource,
+    private val context: Context,
+    private var sourceMedia: Boolean,
+    private var sourceGame: Boolean,
+    private var sourceUnknown: Boolean,
 ) : Encoder {
     private val LAST_FRAME_ID: Int = -1
     private val TAG: String = "AudioPlaybackRecorder"
@@ -684,7 +685,7 @@ class AudioPlaybackRecorder(private val recordMicrophone: Boolean,
                 return null
             }
             return audioRecord
-        } catch (unused: Exception) {
+        } catch (_: Exception) {
             return null
         }
     }
@@ -704,7 +705,7 @@ class AudioPlaybackRecorder(private val recordMicrophone: Boolean,
             scrcpyInputStream!!.readFully(audioBytes)
 
             return audioBytes
-        } catch (e: EOFException) {
+        } catch (_: EOFException) {
             Log.d(TAG, "Stream ended: EOF")
         } catch (e: Exception) {
             Log.e(TAG, "Stream ended with error: ${e.message}", e)

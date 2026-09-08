@@ -1,9 +1,6 @@
 package com.yepgoryo.CaptureCap
 
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.content.res.Configuration
-import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -11,7 +8,6 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
@@ -32,8 +28,6 @@ class AppInfo : AppCompatActivity() {
 
     public override fun onCreate(bundle: Bundle?) {
         this.appSettings = GlobalProperties(baseContext)
-
-        val darkTheme: GlobalProperties.DarkThemeProperty = this.appSettings!!.getDarkTheme(true)
 
         super.onCreate(bundle)
         setContentView(R.layout.about)

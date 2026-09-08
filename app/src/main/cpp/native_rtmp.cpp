@@ -640,7 +640,7 @@ JNIEXPORT jboolean JNICALL Java_com_yepgoryo_CaptureCap_RtmpMuxer_nativeWriteVid
     if (!ctx || !ctx->rtmp) return JNI_FALSE;
 
     if (!RTMP_IsConnected(ctx->rtmp) || RTMP_IsTimedout(ctx->rtmp)) {
-        LOGE("RTMP not connected yet — skipping packet");
+        LOGE("RTMP not connected yet, skipping packet");
         return JNI_FALSE;
     }
 
@@ -697,7 +697,7 @@ JNIEXPORT jboolean JNICALL Java_com_yepgoryo_CaptureCap_RtmpMuxer_nativeWriteHEV
     if (!ctx || !ctx->rtmp) return JNI_FALSE;
 
     if (!RTMP_IsConnected(ctx->rtmp) || RTMP_IsTimedout(ctx->rtmp)) {
-        LOGE("RTMP not connected yet — skipping packet");
+        LOGE("RTMP not connected yet, skipping packet");
         return JNI_FALSE;
     }
 

@@ -91,7 +91,7 @@ class ShizukuConnectionHelper() {
 
                 context.sendBroadcast(intent)
                 Log.d(TAG, "Sent broadcast to stop Shizuku to $packageName")
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 Log.e(TAG, "Failed to send broadcast to stop Shizuku")
             }
         }

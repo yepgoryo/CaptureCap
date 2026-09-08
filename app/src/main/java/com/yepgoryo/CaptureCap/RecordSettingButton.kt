@@ -20,7 +20,6 @@ import androidx.appcompat.widget.SwitchCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 
-
 class RecordSettingButton @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,

@@ -10,7 +10,7 @@ import androidx.preference.EditTextPreference
 
 class NonNullText(context: Context, attributeSet: AttributeSet) : EditTextPreference(context, attributeSet) {
     private var defaultString: String = ""
-    private var editListener: EditTextPreference.OnBindEditTextListener
+    private var editListener: OnBindEditTextListener
     private var inputData: String = ""
     private var persistedString: String = ""
     private var prefName: String = ""

@@ -101,7 +101,6 @@ class MainActivity : AppCompatActivity() {
     var preRecordStart: Button? = null
     var preRecordAbort: Button? = null
     var recordStatusMessage: TextView? = null
-    var timerPanel: LinearLayout? = null
     var captureOptionStream: ImageView? = null
     var captureOptionRecord: ImageView? = null
     var captureOptionScreen: ImageView? = null
@@ -174,8 +173,7 @@ class MainActivity : AppCompatActivity() {
             if (requestCode == RecordingPermissionRequest.REQUEST_SHIZUKU.ordinal) {
                 Shizuku.removeRequestPermissionResultListener(this)
 
-                if (grantResult == PackageManager.PERMISSION_GRANTED) {
-                } else {
+                if (grantResult != PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(this@MainActivity, R.string.error_shizuku_required, Toast.LENGTH_LONG).show()
                 }
             }
@@ -618,18 +616,8 @@ class MainActivity : AppCompatActivity() {
     fun doStartService(resultCode: Int, intent: Intent?) {
         val display: Display = (baseContext.getSystemService("display") as DisplayManager).getDisplay(0)
         this.display = display
-        val rotation: Int = display.rotation
-        val rect = Rect()
-        window.decorView.getWindowVisibleDisplayFrame(rect)
-        window.decorView.getWindowVisibleDisplayFrame(Rect())
-        var iWidth: Int = rect.width()
-        var iHeight: Int = rect.height()
-        if (rotation == Surface.ROTATION_270 || rotation == Surface.ROTATION_90) {
-            iWidth = iHeight
-            iHeight = iWidth
-        }
         if (intent != null) {
-            this.recordingBinder!!.setPreStart(resultCode, intent!!, iWidth, iHeight)
+            this.recordingBinder!!.setPreStart(resultCode, intent!!)
         }
         updateRecordModeData()
         updateRecordButtonConditions()
@@ -707,7 +695,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreate(bundle: Bundle?) {
-        val splashScreen = installSplashScreen()
+        installSplashScreen()
         val display: Display =
             (baseContext.getSystemService("display") as DisplayManager).getDisplay(Display.DEFAULT_DISPLAY)
         this.display = display
@@ -789,10 +777,6 @@ class MainActivity : AppCompatActivity() {
             this.appSettings!!.setBooleanProperty(GlobalProperties.PropertiesBoolean.FLOATING_CONTROLS, false)
         }
         updateRecordModeData()
-        val darkTheme2: GlobalProperties.DarkThemeProperty = this.appSettings!!.getDarkTheme(true)
-        if (((getResources().configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES && darkTheme == GlobalProperties.DarkThemeProperty.AUTOMATIC) || darkTheme2 == GlobalProperties.DarkThemeProperty.DARK) {
-        } else {
-        }
         this.mainRecordingButton = RecordButton(baseContext, findViewById<ImageButton>(R.id.recordingmainbutton)!!)
         this.captureStartButton = findViewById<Button>(R.id.capture_start_button)
         this.captureStartButton!!.setOnClickListener(object: View.OnClickListener {
@@ -869,9 +853,7 @@ class MainActivity : AppCompatActivity() {
             captureOptionsPanel!!.isVisible = recordOptionsOpen
         }
 
-
         captureOptionsPanel = findViewById<LinearLayout>(R.id.capture_options)
-
 
         captureOptionsPanel!!.isVisible = recordOptionsOpen
 
@@ -907,7 +889,6 @@ class MainActivity : AppCompatActivity() {
         } else {
             recordBtn.isSelected = true
         }
-
 
         recordBtn.setOnClickListener {
             if (streamBtn.isSelected) {

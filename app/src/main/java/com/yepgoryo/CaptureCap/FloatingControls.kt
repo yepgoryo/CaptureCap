@@ -866,7 +866,7 @@ class FloatingControls : Service() {
         }
 
         this@FloatingControls.resumeButton?.visibility = View.GONE
-        panelWrapped = floatingPanel!!.findViewById<LinearLayout>(R.id.panelwrapped)
+        panelWrapped = floatingPanel!!.findViewById(R.id.panelwrapped)
         if (this@FloatingControls.panelHidden) {
             panelWrapped!!.visibility = View.GONE
             this@FloatingControls.stopButton?.visibility = View.GONE

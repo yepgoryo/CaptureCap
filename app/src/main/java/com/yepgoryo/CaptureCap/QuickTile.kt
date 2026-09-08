@@ -15,8 +15,6 @@ import android.service.quicksettings.TileService
 import androidx.annotation.RequiresApi
 import java.io.IOException
 
-
-@RequiresApi(Build.VERSION_CODES.N)
 class QuickTile : TileService() {
     companion object {
         const val ACTION_CONNECT_TILE: String = MainActivity.appName + ".ACTION_CONNECT_TILE"

@@ -481,23 +481,21 @@ class VideoOverlay @JvmOverloads constructor(
 
         val bitmap = trimmedBitmap
 
-        if (bitmap != null) {
-            val item = OverlayItem(
-                bitmap = bitmap,
-                text = null,
-                textColor = Color.WHITE,
-                textSize = 32,
-                textCentered = false,
-                isCamera = false,
-                x = bounds.left.toFloat()+bitmap.width/2,
-                y = bounds.top.toFloat()+bitmap.height/2,
-                width = bitmap.width,
-                height = bitmap.height
-            )
-            items.add(item)
-            checkItemsBoundaries()
-            invalidate()
-        }
+        val item = OverlayItem(
+            bitmap = bitmap,
+            text = null,
+            textColor = Color.WHITE,
+            textSize = 32,
+            textCentered = false,
+            isCamera = false,
+            x = bounds.left.toFloat()+bitmap.width/2,
+            y = bounds.top.toFloat()+bitmap.height/2,
+            width = bitmap.width,
+            height = bitmap.height
+        )
+        items.add(item)
+        checkItemsBoundaries()
+        invalidate()
     }
 
     private fun findTightBounds(bitmap: Bitmap): Rect {

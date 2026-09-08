@@ -19,7 +19,6 @@ import androidx.vectordrawable.graphics.drawable.Animatable2Compat
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
 import java.util.ArrayList
-
 class RecordButton(context: Context, imageButton: ImageButton) {
     private var appSettings: GlobalProperties? = null
     var buttonUse: ImageButton? = null
