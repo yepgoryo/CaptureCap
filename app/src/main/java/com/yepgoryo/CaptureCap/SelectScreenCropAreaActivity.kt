@@ -349,11 +349,11 @@ class SelectScreenCropAreaActivity : AppCompatActivity() {
         val cropAreaX = cropAreaWidget.getCropPositionScreenX()
         val cropAreaY = cropAreaWidget.getCropPositionScreenY()
 
-        indicatorWidth!!.setText("Width:")
+        indicatorWidth!!.setText("${getString(R.string.crop_screen_width)}:")
         editWidth!!.tag = "editing"
         editWidth!!.setText("$cropAreaWidth")
         editWidth!!.tag = ""
-        indicatorHeight!!.setText("Height:")
+        indicatorHeight!!.setText("${getString(R.string.crop_screen_height)}:")
         editHeight!!.tag = "editing"
         editHeight!!.setText("$cropAreaHeight")
         editHeight!!.tag = ""
