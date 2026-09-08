@@ -1118,15 +1118,11 @@ class VideoOverlay @JvmOverloads constructor(
             }
         }
 
-        if (!itemsBeforeCamera.isEmpty()) {
-            var fileName = if (isHorizontal) BITMAP_BEFORE_CAMERA_HORIZONTAL else BITMAP_BEFORE_CAMERA_VERTICAL
-            BitmapSerializer.saveBitmapToFile(context, fileName, genBitmap(itemsBeforeCamera))
-        }
+        var fileNameBeforeCamera = if (isHorizontal) BITMAP_BEFORE_CAMERA_HORIZONTAL else BITMAP_BEFORE_CAMERA_VERTICAL
+        BitmapSerializer.saveBitmapToFile(context, fileNameBeforeCamera, genBitmap(itemsBeforeCamera))
 
-        if (!itemsAfterCamera.isEmpty()) {
-            var fileName = if (isHorizontal) BITMAP_AFTER_CAMERA_HORIZONTAL else BITMAP_AFTER_CAMERA_VERTICAL
-            BitmapSerializer.saveBitmapToFile(context, fileName, genBitmap(itemsAfterCamera))
-        }
+        var fileNameAfterCamera = if (isHorizontal) BITMAP_AFTER_CAMERA_HORIZONTAL else BITMAP_AFTER_CAMERA_VERTICAL
+        BitmapSerializer.saveBitmapToFile(context, fileNameAfterCamera, genBitmap(itemsAfterCamera))
 
     }
 

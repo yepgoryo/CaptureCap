@@ -302,6 +302,9 @@ class LayerRenderer(
         GLES20.glViewport(0, 0, (width*displayRatio).toInt(), (height*displayRatio).toInt())
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT)
 
+        GLES20.glEnable(GLES20.GL_BLEND)
+        GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA)
+
         GLES20.glUseProgram(programOesBackground)
 
         setCoordsFullScreen()
@@ -321,9 +324,6 @@ class LayerRenderer(
                 GLES20.glActiveTexture(GLES20.GL_TEXTURE1)
                 GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texOverlay1)
                 GLES20.glUniform1i(uLocsOverlay1, 1)
-
-                GLES20.glEnable(GLES20.GL_BLEND)
-                GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA)
 
                 QuadBuffers.drawIndexed()
             }
