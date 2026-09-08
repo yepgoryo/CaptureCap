@@ -1,3 +1,5 @@
 Opptak av lydavspilling krever Android 10 eller nyere. Root ikke nødvendig.
 
 (ADVARSEL: Noen telefonprodusenter tillater ikke opptak av enkelte eller alle lydavspilling kilder)
+
+AI-varsel: Dette programmet har kode assistert/skrevet av AI-en. For mer informasjon, se hele meldingen i appen, eller i prosjektets repo.
