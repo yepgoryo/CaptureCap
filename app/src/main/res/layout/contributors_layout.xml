@@ -22,7 +22,7 @@
             android:textColor="?attr/colorOnPrimaryContainer"
             android:textStyle="bold|italic"
             android:gravity="center"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
         <TextView
@@ -31,7 +31,7 @@
             android:textSize="12sp"
             android:textColor="?attr/colorOnPrimaryContainer"
             android:gravity="center"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
         <LinearLayout
