@@ -1204,9 +1204,11 @@ class MainActivity : AppCompatActivity() {
                         }
                     } else {
                         this@MainActivity.shizukuRecordPhoneCall = false
-                        if (!hasShizukuPermission) {
+                        if (!hasShizukuPermission && ShizukuConnectionHelper.shizukuAvailable()) {
                             Shizuku.addRequestPermissionResultListener(shizukuPermissionListener)
                             Shizuku.requestPermission(RecordingPermissionRequest.REQUEST_SHIZUKU.ordinal)
+                        } else {
+                            recordOptionPhoneCall!!.setSwitchChecked(false)
                         }
                     }
                 }
@@ -1579,6 +1581,7 @@ class MainActivity : AppCompatActivity() {
                         return
                     }
                 } else {
+                    Toast.makeText(this, R.string.shizuku_waiting, Toast.LENGTH_LONG).show()
                     return
                 }
             }

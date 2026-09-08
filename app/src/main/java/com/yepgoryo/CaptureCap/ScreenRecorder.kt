@@ -280,6 +280,10 @@ class ScreenRecorder : Service() {
         if (!shizukuServerAuthKey.isBlank() && !ShizukuConnectionHelper.shizukuAvailable()) {
             ShizukuConnectionHelper.startShizuku(this@ScreenRecorder, shizukuServerAuthKey)
         }
+
+        if (!ShizukuConnectionHelper.waitForShizuku()) {
+            Log.e(TAG, "Failed to start Shizuku Service!")
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.R)
@@ -301,11 +305,6 @@ class ScreenRecorder : Service() {
 
         if (mShizukuRecordServiceConnection != null && shizukuRecordService != null) {
             Log.e(TAG, "Shizuku connection already established")
-            return
-        }
-
-        if (!ShizukuConnectionHelper.waitForShizuku()) {
-            Log.e(TAG, "Timed out while waiting for Shizuku server")
             return
         }
 
@@ -346,7 +345,6 @@ class ScreenRecorder : Service() {
                 }
             } catch (e: Exception) {
                 Log.e(TAG, "Failed to bind RecorderService")
-                throw e
             }
         } else {
             Toast.makeText(this, R.string.error_shizuku_required, Toast.LENGTH_LONG).show()
@@ -356,9 +354,6 @@ class ScreenRecorder : Service() {
     @RequiresApi(Build.VERSION_CODES.R)
     fun shizukuDisconnect() {
         if (mShizukuRecordServiceConnection != null) {
-            if (!ShizukuConnectionHelper.waitForShizuku()) {
-                Log.e(TAG, "Timed out while waiting for Shizuku server")
-            }
             try {
                 if (ShizukuConnectionHelper.shizukuAvailable()) {
                     Shizuku.unbindUserService(shizukuServiceArgs(), mShizukuRecordServiceConnection, false)
@@ -745,6 +740,7 @@ class ScreenRecorder : Service() {
         if (useShizuku) {
             if (shizukuAutoManage) {
                 shizukuManageStart()
+                shizukuConnect()
             } else {
                 shizukuConnect()
             }
@@ -1186,6 +1182,15 @@ class ScreenRecorder : Service() {
         shizukuAutoManage = this.appSettings!!.getBooleanProperty(GlobalProperties.PropertiesBoolean.SHIZUKU_AUTO_MANAGE, false)
         shizukuServerAuthKey = this.appSettings!!.getStringProperty(GlobalProperties.PropertiesString.SHIZUKU_AUTH_KEY, "")
 
+        if (useShizuku && useShizukuPhoneCallRecording) {
+            if (!ShizukuConnectionHelper.shizukuAvailable()) {
+                Toast.makeText(baseContext, R.string.shizuku_waiting, Toast.LENGTH_LONG).show()
+                shizukuConnect()
+                screenRecordingStop()
+                stopSelf()
+                return
+            }
+        }
         val format: String = this.appSettings!!.getStringProperty(GlobalProperties.PropertiesString.FORMAT_VALUE, resources.getString(R.string.format_option_auto_value))
         val audioFormat: String = this.appSettings!!.getStringProperty(GlobalProperties.PropertiesString.AUDIO_FORMAT_VALUE, resources.getString(R.string.audio_format_option_auto_value))
 
