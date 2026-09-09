@@ -119,7 +119,21 @@ class VideoOverlay @JvmOverloads constructor(
             try {
                 val fileName = if (isHorizontal) FILE_NAME_HORIZONTAL else FILE_NAME_VERTICAL
                 val file = File(context.filesDir, fileName)
-                file.delete()
+                if (file.exists()) {
+                    file.delete()
+                }
+
+                var fileNameBeforeCamera = if (isHorizontal) BITMAP_BEFORE_CAMERA_HORIZONTAL else BITMAP_BEFORE_CAMERA_VERTICAL
+                val fileBeforeCamera = File(context.filesDir, fileNameBeforeCamera)
+                if (fileBeforeCamera.exists()) {
+                    fileBeforeCamera.delete()
+                }
+
+                var fileNameAfterCamera = if (isHorizontal) BITMAP_AFTER_CAMERA_HORIZONTAL else BITMAP_AFTER_CAMERA_VERTICAL
+                val fileAfterCamera = File(context.filesDir, fileNameAfterCamera)
+                if (fileAfterCamera.exists()) {
+                    fileAfterCamera.delete()
+                }
             } catch (e: Exception) {
                 e.printStackTrace()
             }
