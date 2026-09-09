@@ -2,4 +2,4 @@ Audio Playback recording requires Android 10 or later. No Root needed.
 
 (WARNING: Some device vendors may not allow recording some Audio Playback sources, or even recording it at all)
 
-AI Notice: This program has code assisted/written by the AI. More information is in-app or in repo.
+AI Notice: This program has code assisted/written by the AI. More information is available in-app or in repo.

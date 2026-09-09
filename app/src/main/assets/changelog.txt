@@ -1,3 +1,16 @@
+Version 3.9.7.4 code 42
+---
+ * Added option to set video keyframe frequency.
+
+ * Added option to record only selected screen portion.
+
+ * Fixed phantom objects appearing in screen overlay.
+
+ * Fixed Shizuku connection behaviour freezing the app constantly.
+
+ * Fixed changelog formatting, distinguished new contributors from old ones.
+
+
 Version 3.9.7 code 41
 ---
  * Added H.265 support for both recording and streaming.
