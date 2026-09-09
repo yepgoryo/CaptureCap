@@ -2021,14 +2021,6 @@ class ScreenRecorder : Service() {
             tileBinder?.recordingState(false)
         }
 
-        val callRecordingEnabled = (useShizuku && useShizukuPhoneCallRecording)
-
-        if (callRecordingEnabled && shizukuConnectionHelper != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            if (!shizukuServerAuthKey.isBlank() && shizukuAutoManage) {
-                ShizukuConnectionHelper.stopShizuku(this, shizukuServerAuthKey)
-            }
-        }
-
         if (!this.errorDir && this.activityBinder != null) {
             if (!isRestarting) {
                 this.activityBinder!!.recordingStop(true)
