@@ -272,10 +272,6 @@ class ScreenRecorder : Service() {
         if (!shizukuServerAuthKey.isBlank() && !ShizukuConnectionHelper.shizukuAvailable()) {
             ShizukuConnectionHelper.startShizuku(this@ScreenRecorder, shizukuServerAuthKey)
         }
-
-        if (!ShizukuConnectionHelper.waitForShizuku()) {
-            Log.e(TAG, "Failed to start Shizuku Service!")
-        }
     }
 
     @RequiresApi(Build.VERSION_CODES.R)
@@ -1152,6 +1148,9 @@ class ScreenRecorder : Service() {
         if (useShizuku && useShizukuPhoneCallRecording) {
             if (!ShizukuConnectionHelper.shizukuAvailable()) {
                 Toast.makeText(baseContext, R.string.shizuku_waiting, Toast.LENGTH_LONG).show()
+                if (shizukuAutoManage && !shizukuServerAuthKey.isBlank()) {
+                    shizukuManageStart()
+                }
                 shizukuConnect()
                 screenRecordingStop()
                 stopSelf()

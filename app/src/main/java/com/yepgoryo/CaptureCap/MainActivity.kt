@@ -123,6 +123,8 @@ class MainActivity : AppCompatActivity() {
     private var recordOnlyAudio: Boolean = false
     private var enableShizuku: Boolean = false
     private var shizukuRecordPhoneCall: Boolean = false
+    private var shizukuAutoManage: Boolean = false
+    private var shizukuAutoManageKey: String = ""
 
     data class StreamCredentialsData(
         val url: String,
@@ -257,6 +259,8 @@ class MainActivity : AppCompatActivity() {
         this.recordOnlyAudio = this.appSettings!!.getBooleanProperty(GlobalProperties.PropertiesBoolean.RECORD_MODE, false)
         this.enableShizuku = this.appSettings!!.getBooleanProperty(GlobalProperties.PropertiesBoolean.SHIZUKU_ENABLE, false)
         this.shizukuRecordPhoneCall = this.appSettings!!.getBooleanProperty(GlobalProperties.PropertiesBoolean.SHIZUKU_RECORD_PHONECALL, false)
+        this.shizukuAutoManage = this.appSettings!!.getBooleanProperty(GlobalProperties.PropertiesBoolean.SHIZUKU_AUTO_MANAGE, false)
+        this.shizukuAutoManageKey = this.appSettings!!.getStringProperty(GlobalProperties.PropertiesString.SHIZUKU_AUTH_KEY, "")
         if (this.recordOnlyAudio && !this.recordPlayback && !this.recordMicrophone) {
             this.recordOnlyAudio = false
         }
@@ -1563,6 +1567,10 @@ class MainActivity : AppCompatActivity() {
                     }
                 } else {
                     Toast.makeText(this, R.string.shizuku_waiting, Toast.LENGTH_LONG).show()
+                    updateRecordModeData()
+                    if (shizukuAutoManage && !shizukuAutoManageKey.isEmpty()) {
+                        ShizukuConnectionHelper.startShizuku(this, shizukuAutoManageKey)
+                    }
                     return
                 }
             }

@@ -95,17 +95,5 @@ class ShizukuConnectionHelper() {
                 Log.e(TAG, "Failed to send broadcast to stop Shizuku")
             }
         }
-
-        fun waitForShizuku(timeoutSecs: Long = 10): Boolean {
-            val startTime = System.currentTimeMillis()
-            while (System.currentTimeMillis() - startTime < timeoutSecs * 1000) {
-                if (shizukuAvailable()) {
-                    return true
-                }
-                Thread.sleep(200)
-            }
-            Log.w(TAG, "Timed out waiting for Shizuku after ${timeoutSecs} seconds")
-            return false
-        }
     }
 }
