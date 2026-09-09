@@ -2,4 +2,4 @@ La grabación de reproducción de audio requiere Android 10 o más reciente. No 
 
 (ADVERTENCIA: Es posible que algunos vendedores de dispositivos no permitan grabar algunas fuentes de reproducción de audio, o incluso no permitir grabarlas en absoluto)
 
-Aviso de IA: Este programa tiene código asistido/escrito por la IA. Para más información, consulte el aviso completo dentro de la aplicación o en el repositorio del proyecto.
+Aviso de IA: Este programa tiene código asistido/escrito por la IA. Más información está dentro de la app o en el repositorio.
