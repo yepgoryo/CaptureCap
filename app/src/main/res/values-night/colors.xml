@@ -1,5 +1,7 @@
 <resources>
-    <color name="ic_launcher_background">#004dcc</color>
+    <color name="ic_launcher_background">#060914</color>
+    <color name="ic_launcher_background_gradient_1">#192b60</color>
+    <color name="ic_launcher_background_gradient_2">#060914</color>
     <color name="md_theme_primary">#b7bec8</color>
     <color name="md_theme_onPrimary">#21252b</color>
     <color name="md_theme_primaryContainer">#4e5765</color>

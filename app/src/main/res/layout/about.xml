@@ -43,7 +43,7 @@
                     android:layout_width="128dp"
                     android:layout_height="128dp"
                     android:contentDescription="@string/record_start"
-                    android:background="@drawable/ic_launcher" />
+                    android:background="@drawable/ic_launcher_splash" />
 
                 <LinearLayout
                     android:id="@+id/appinfo"

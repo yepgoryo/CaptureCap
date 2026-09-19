@@ -110,6 +110,8 @@
     <string name="rotatehardwaresensor_option_description">Detect rotation by hardware sensors instead of display</string>
     <string name="prerecording_option">Pre-recording pause</string>
     <string name="prerecording_option_description">Start the recording whenever you need to</string>
+    <string name="disable_animations_option">Disable animations</string>
+    <string name="disable_animations_option_description">Disable in-app animations</string>
     <string name="shizuku_settings">Shizuku settings</string>
     <string name="shizuku_enable_option">Enable Shizuku</string>
     <string name="shizuku_enable_option_description">Enable Shizuku for phone call recording</string>

@@ -358,6 +358,12 @@
             android:title="@string/floating_controls_reduce_to_dot"
             android:defaultValue="false" />
 
+        <CheckBoxPreference
+            android:key="disableanimations"
+            android:summary="@string/disable_animations_option_description"
+            android:title="@string/disable_animations_option"
+            android:defaultValue="false" />
+
         <ListPreference
             android:key="darktheme"
             android:summary="@string/dark_theme_option_description"

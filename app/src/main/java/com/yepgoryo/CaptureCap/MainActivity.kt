@@ -7,7 +7,6 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.content.pm.PackageManager
 import android.content.res.Configuration
-import android.graphics.Rect
 import android.hardware.display.DisplayManager
 import android.media.projection.MediaProjectionManager
 import android.net.Uri
@@ -32,6 +31,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.RelativeLayout.LayoutParams
+import android.widget.ScrollView
 import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
@@ -47,6 +47,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
+import androidx.media3.ui.PlayerView
 import com.google.android.flexbox.FlexboxLayout
 import rikka.shizuku.Shizuku
 
@@ -63,7 +64,8 @@ class MainActivity : AppCompatActivity() {
     private var dialog: AlertDialog? = null
     private var display: Display? = null
     var postRecordingPanel: LinearLayout? = null
-    var mainRecordingButton: RecordButton? = null
+    var mainRecordingStatusVideoAnimationsContainer: FrameLayout? = null
+    var mainRecordingStatusVideoAnimations: RecordStatusVideoAnimations? = null
     var captureStartButton: Button? = null
     var recordOptionsPanel: LinearLayout? = null
     var recordControls: FlexboxLayout? = null
@@ -112,6 +114,7 @@ class MainActivity : AppCompatActivity() {
     var recordOptionSound: RecordSettingButton? = null
     var recordOptionMicrophone: RecordSettingButton? = null
     var recordOptionPhoneCall: RecordSettingButton? = null
+    private var mainScroll: ScrollView? = null
     private var recordingState: ActionState = ActionState.RECORDING_STOPPED
     private var screenRecorderStarted: Boolean = false
     private var stateActivated: Boolean = false
@@ -121,6 +124,7 @@ class MainActivity : AppCompatActivity() {
     private var recordStream: Boolean = false
     private var saveStreamToFile: Boolean = false
     private var recordOnlyAudio: Boolean = false
+    private var disableAnimations: Boolean = false
     private var enableShizuku: Boolean = false
     private var shizukuRecordPhoneCall: Boolean = false
     private var shizukuAutoManage: Boolean = false
@@ -201,40 +205,79 @@ class MainActivity : AppCompatActivity() {
         REQUEST_SHIZUKU,
     }
 
-    fun showCounter(starting: Boolean, buttonState: RecordButton.ButtonState) {
+    fun showCounter(starting: Boolean, animationRecordStatusState: RecordStatusVideoAnimations.RecordStatus) {
         if (starting) {
             this.timeCounter!!.scaleX = 0.0f
             this.timeCounter!!.scaleY = 0.0f
             timeCounter!!.visibility = View.VISIBLE
-            this@MainActivity.mainRecordingButton!!.setButtonState(buttonState)
-            val animateCounterX: ObjectAnimator = ObjectAnimator.ofFloat(this.timeCounter, "scaleX", 0.0f, 1.0f)
-            val animateCounterY: ObjectAnimator = ObjectAnimator.ofFloat(this.timeCounter, "scaleY", 0.0f, 1.0f)
-            animateCounterX.setDuration(400L)
-            animateCounterY.setDuration(400L)
-            animateCounterX.start()
-            animateCounterY.start()
-        } else {
-            this.timeCounter!!.scaleX = 1.0f
-            this.timeCounter!!.scaleY = 1.0f
-            timeCounter!!.visibility = View.VISIBLE
-            val animateCounterX: ObjectAnimator = ObjectAnimator.ofFloat(this.timeCounter, "scaleX", 1.0f, 0.0f)
-            val animateCounterY: ObjectAnimator = ObjectAnimator.ofFloat(this.timeCounter, "scaleY", 1.0f, 0.0f)
-            animateCounterX.addUpdateListener { valueAnimator ->
-                if ((valueAnimator.getAnimatedValue() as Float) == 0.0f) {
-                    timeCounter!!.visibility = View.GONE
-                    this@MainActivity.mainRecordingButton!!.transitionToButtonState(buttonState)
-                }
+            mainScroll!!.post {
+                updateRecordButtonConditions()
+                this@MainActivity.mainRecordingStatusVideoAnimations!!.setRecordStatusState(
+                    animationRecordStatusState
+                )
             }
-            animateCounterX.setDuration(400L)
-            animateCounterY.setDuration(400L)
-            animateCounterX.start()
-            animateCounterY.start()
+            if (disableAnimations) {
+                this.timeCounter!!.scaleX = 1.0f
+                this.timeCounter!!.scaleY = 1.0f
+            } else {
+                val animateCounterX: ObjectAnimator =
+                    ObjectAnimator.ofFloat(this.timeCounter, "scaleX", 0.0f, 1.0f)
+                val animateCounterY: ObjectAnimator =
+                    ObjectAnimator.ofFloat(this.timeCounter, "scaleY", 0.0f, 1.0f)
+                animateCounterX.setDuration(400L)
+                animateCounterY.setDuration(400L)
+                animateCounterX.start()
+                animateCounterY.start()
+            }
+        } else {
+            if (disableAnimations) {
+                this.timeCounter!!.scaleX = 0.0f
+                this.timeCounter!!.scaleY = 0.0f
+                timeCounter!!.visibility = View.GONE
+                mainScroll!!.post {
+                    updateRecordButtonConditions()
+                    this@MainActivity.mainRecordingStatusVideoAnimations!!.setRecordStatusState(
+                        animationRecordStatusState
+                    )
+                }
+            } else {
+                this.timeCounter!!.scaleX = 1.0f
+                this.timeCounter!!.scaleY = 1.0f
+                timeCounter!!.visibility = View.VISIBLE
+                val animateCounterX: ObjectAnimator =
+                    ObjectAnimator.ofFloat(this.timeCounter, "scaleX", 1.0f, 0.0f)
+                val animateCounterY: ObjectAnimator =
+                    ObjectAnimator.ofFloat(this.timeCounter, "scaleY", 1.0f, 0.0f)
+                animateCounterX.addUpdateListener { valueAnimator ->
+                    if ((valueAnimator.getAnimatedValue() as Float) == 0.0f) {
+                        timeCounter!!.visibility = View.GONE
+                        mainScroll!!.post {
+                            updateRecordButtonConditions()
+                            this@MainActivity.mainRecordingStatusVideoAnimations!!.setRecordStatusState(
+                                animationRecordStatusState
+                            )
+                        }
+                    }
+                }
+                animateCounterX.setDuration(400L)
+                animateCounterY.setDuration(400L)
+                animateCounterX.start()
+                animateCounterY.start()
+            }
         }
     }
 
     fun updateRecordButtonConditions() {
-        if (this.mainRecordingButton != null) {
-            this.mainRecordingButton?.updateConditions(this.recordMicrophone, this.recordPlayback, this.recordOnlyAudio)
+        updateRecordModeData()
+
+        if (this.mainRecordingStatusVideoAnimations != null) {
+            mainScroll!!.post {
+                this.mainRecordingStatusVideoAnimations?.updateConditions(
+                    this.recordMicrophone,
+                    this.recordPlayback,
+                    this.recordOnlyAudio
+                )
+            }
         }
     }
 
@@ -250,6 +293,7 @@ class MainActivity : AppCompatActivity() {
     private fun updateRecordModeData() {
         this.recordMicrophone = this.appSettings!!.getBooleanProperty(GlobalProperties.PropertiesBoolean.CHECK_SOUND_MIC, false)
         this.recordPlayback = this.appSettings!!.getBooleanProperty(GlobalProperties.PropertiesBoolean.CHECK_SOUND_PLAYBACK, false)
+        this.disableAnimations = this.appSettings!!.getBooleanProperty(GlobalProperties.PropertiesBoolean.DISABLE_ANIMATIONS, false)
         this.recordStream = this.appSettings!!.getBooleanProperty(GlobalProperties.PropertiesBoolean.CHECK_STREAM, false)
         this.saveStreamToFile = appSettings!!.getBooleanProperty(GlobalProperties.PropertiesBoolean.STREAM_SAVE_TO_FILE, false)
         if (this.recordPlayback && Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
@@ -273,7 +317,9 @@ class MainActivity : AppCompatActivity() {
                 recordOptionsFullPanel!!.visibility = View.GONE
                 this@MainActivity.optionsPanel!!.visibility = View.GONE
                 captureStartButton!!.isVisible = false
-                mainRecordingButton!!.innerButton().isVisible = false
+                mainScroll!!.post {
+                    mainRecordingStatusVideoAnimationsContainer!!.visibility = View.GONE
+                }
                 recordOptionsFullPanel!!.isVisible = false
                 recordControls!!.visibility = View.GONE
 
@@ -287,7 +333,9 @@ class MainActivity : AppCompatActivity() {
                 recordOptionsFullPanel!!.visibility = View.GONE
                 this@MainActivity.optionsPanel!!.visibility = View.GONE
                 captureStartButton!!.isVisible = false
-                mainRecordingButton!!.innerButton().isVisible = false
+                mainScroll!!.post {
+                    mainRecordingStatusVideoAnimationsContainer!!.visibility = View.GONE
+                }
                 recordOptionsFullPanel!!.isVisible = false
                 recordControls!!.visibility = View.GONE
 
@@ -320,7 +368,10 @@ class MainActivity : AppCompatActivity() {
                 this@MainActivity.optionsPanel!!.visibility = View.GONE
                 this@MainActivity.recordingState = ActionState.RECORDING_IN_PROGRESS
                 captureStartButton!!.isVisible = false
-                mainRecordingButton!!.innerButton().isVisible = true
+                mainScroll!!.post {
+                    mainRecordingStatusVideoAnimationsContainer!!.visibility = View.VISIBLE
+                    mainRecordingStatusVideoAnimations!!.innerPreview().visibility = View.VISIBLE
+                }
                 recordOptionsFullPanel!!.isVisible = false
                 if (this@MainActivity.recordingBinder!!.recordMic() || this@MainActivity.recordingBinder!!.recordAudio()) {
                     recordControlAdjustVolume!!.visibility = View.VISIBLE
@@ -379,13 +430,18 @@ class MainActivity : AppCompatActivity() {
                 if (stateToRestore) {
                     this@MainActivity.showCounter(
                         true,
-                        RecordButton.ButtonState.WHILE_RECORDING_NORMAL
+                        RecordStatusVideoAnimations.RecordStatus.START_RECORDING,
                     )
                 } else {
                     this@MainActivity.timeCounter!!.scaleX = 1.0f
                     this@MainActivity.timeCounter!!.scaleY = 1.0f
                     timeCounter!!.visibility = View.VISIBLE
-                    this@MainActivity.mainRecordingButton!!.transitionToButtonState(RecordButton.ButtonState.WHILE_RECORDING_NORMAL)
+                    mainScroll!!.post {
+                        updateRecordButtonConditions()
+                        this@MainActivity.mainRecordingStatusVideoAnimations!!.setRecordStatusState(
+                            RecordStatusVideoAnimations.RecordStatus.WHILE_RECORDING_NORMAL
+                        )
+                    }
                 }
             }
         }
@@ -415,11 +471,23 @@ class MainActivity : AppCompatActivity() {
                 recordOptionsFullPanel!!.visibility = View.GONE
                 this@MainActivity.optionsPanel!!.visibility = View.GONE
                 postRecordingPanel!!.visibility = View.VISIBLE
+
+                postRecordShare!!.visibility = View.VISIBLE
+                postRecordDelete!!.visibility = View.VISIBLE
+                postRecordOpen!!.visibility = View.VISIBLE
+                postRecordCrop!!.visibility = View.VISIBLE
+                postRecordBack!!.visibility = View.VISIBLE
+
                 captureStartButton!!.visibility = View.GONE
-                mainRecordingButton!!.innerButton().visibility = View.VISIBLE
+                mainScroll!!.post {
+                    mainRecordingStatusVideoAnimations!!.innerPreview().visibility = View.VISIBLE
+                }
                 recordStatusMessage!!.visibility = View.VISIBLE
                 if (recordStream && !saveStreamToFile) {
-                    postRecordingPanel!!.visibility = View.GONE
+                    postRecordShare!!.visibility = View.GONE
+                    postRecordDelete!!.visibility = View.GONE
+                    postRecordOpen!!.visibility = View.GONE
+                    postRecordCrop!!.visibility = View.GONE
                 }
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
                     this@MainActivity.audioPlaybackUnavailable!!.visibility = View.VISIBLE
@@ -428,11 +496,16 @@ class MainActivity : AppCompatActivity() {
                 if (stateToRestore) {
                     this@MainActivity.showCounter(
                         false,
-                        RecordButton.ButtonState.TRANSITION_TO_RECORDING_END
+                        RecordStatusVideoAnimations.RecordStatus.TRANSITION_TO_RECORDING_END,
                     )
                 } else {
                     timeCounter!!.visibility = View.GONE
-                    this@MainActivity.mainRecordingButton!!.transitionToButtonState(RecordButton.ButtonState.ENDED_RECORDING_NORMAL)
+                    mainScroll!!.post {
+                        updateRecordButtonConditions()
+                        this@MainActivity.mainRecordingStatusVideoAnimations!!.setRecordStatusState(
+                            RecordStatusVideoAnimations.RecordStatus.ENDED_RECORDING_NORMAL
+                        )
+                    }
                     this@MainActivity.recordingState = ActionState.RECORDING_ENDED
                 }
             }
@@ -451,7 +524,10 @@ class MainActivity : AppCompatActivity() {
                 this@MainActivity.timeCounter!!.scaleY = 1.0f
                 timeCounter!!.visibility = View.VISIBLE
                 captureStartButton!!.visibility = View.GONE
-                mainRecordingButton!!.innerButton().visibility = View.VISIBLE
+                mainScroll!!.post {
+                    mainRecordingStatusVideoAnimationsContainer!!.visibility = View.VISIBLE
+                    mainRecordingStatusVideoAnimations!!.innerPreview().visibility = View.VISIBLE
+                }
                 recordStatusMessage!!.visibility = View.VISIBLE
                 recordControls!!.visibility = View.VISIBLE
                 recordControlMuteMic!!.visibility = View.GONE
@@ -471,10 +547,19 @@ class MainActivity : AppCompatActivity() {
                         recordStatusMessage!!.setText(R.string.recording_paused_text)
                     }
                 }
+                updateRecordButtonConditions()
                 if (stateToRestore) {
-                    this@MainActivity.mainRecordingButton!!.transitionToButtonState(RecordButton.ButtonState.TRANSITION_TO_RECORDING_PAUSE)
+                    mainScroll!!.post {
+                        this@MainActivity.mainRecordingStatusVideoAnimations!!.setRecordStatusState(
+                            RecordStatusVideoAnimations.RecordStatus.TRANSITION_TO_RECORDING_PAUSE
+                        )
+                    }
                 } else {
-                    this@MainActivity.mainRecordingButton!!.transitionToButtonState(RecordButton.ButtonState.WHILE_PAUSE_NORMAL)
+                    mainScroll!!.post {
+                        this@MainActivity.mainRecordingStatusVideoAnimations!!.setRecordStatusState(
+                            RecordStatusVideoAnimations.RecordStatus.WHILE_PAUSE_NORMAL
+                        )
+                    }
                     this@MainActivity.recordingState = ActionState.RECORDING_PAUSED
                 }
             }
@@ -544,7 +629,12 @@ class MainActivity : AppCompatActivity() {
                 }
                 recordControlPause!!.visibility = View.VISIBLE
                 recordControlResume!!.visibility = View.GONE
-                this@MainActivity.mainRecordingButton!!.transitionToButtonState(RecordButton.ButtonState.TRANSITION_FROM_PAUSE)
+                mainScroll!!.post {
+                    updateRecordButtonConditions()
+                    this@MainActivity.mainRecordingStatusVideoAnimations!!.setRecordStatusState(
+                        RecordStatusVideoAnimations.RecordStatus.TRANSITION_FROM_PAUSE
+                    )
+                }
                 this@MainActivity.recordingState = ActionState.RECORDING_IN_PROGRESS
             }
         }
@@ -554,12 +644,27 @@ class MainActivity : AppCompatActivity() {
             preRecordControls!!.visibility = View.GONE
             timerCountdown!!.stop()
             postRecordingPanel!!.visibility = View.GONE
+
+            postRecordShare!!.visibility = View.GONE
+            postRecordDelete!!.visibility = View.GONE
+            postRecordOpen!!.visibility = View.GONE
+            postRecordCrop!!.visibility = View.GONE
+            postRecordBack!!.visibility = View.GONE
+
             this@MainActivity.optionsPanel!!.visibility = View.VISIBLE
             recordStatusMessage!!.visibility = View.GONE
-            mainRecordingButton!!.innerButton().isVisible = false
+            mainScroll!!.post {
+                mainRecordingStatusVideoAnimationsContainer!!.visibility = View.GONE
+                mainRecordingStatusVideoAnimations!!.innerPreview().isVisible = false
+            }
             captureStartButton!!.isVisible = true
             recordOptionsFullPanel!!.isVisible = true
-            this@MainActivity.mainRecordingButton!!.transitionToButtonState(RecordButton.ButtonState.TRANSITION_TO_RESTART)
+            mainScroll!!.post {
+                updateRecordButtonConditions()
+                this@MainActivity.mainRecordingStatusVideoAnimations!!.setRecordStatusState(
+                    RecordStatusVideoAnimations.RecordStatus.TRANSITION_TO_RESTART
+                )
+            }
             postRecordingPanel!!.visibility = View.GONE
             this@MainActivity.optionsPanel!!.visibility = View.VISIBLE
             this@MainActivity.recordingState = ActionState.RECORDING_STOPPED
@@ -678,10 +783,16 @@ class MainActivity : AppCompatActivity() {
         }
         recordOptionsOpen = true
         captureOptionsPanel!!.translationY = -captureOptionsPanel!!.measuredHeight.toFloat()
-        captureOptionsPanel!!.animate().translationY(0F).setDuration(300L).withStartAction {
+        if (disableAnimations) {
+            captureOptionsPanel!!.translationY = 0f
             recordOptionsButton!!.setupBackgroundOpened()
             captureOptionsPanel!!.isVisible = true
-        }.start()
+        } else {
+            captureOptionsPanel!!.animate().translationY(0F).setDuration(300L).withStartAction {
+                recordOptionsButton!!.setupBackgroundOpened()
+                captureOptionsPanel!!.isVisible = true
+            }.start()
+        }
     }
 
     /*
@@ -692,10 +803,17 @@ class MainActivity : AppCompatActivity() {
         recordOptionsOpen = false
         menuHiddenTopMargin = -captureOptionsPanel!!.height
         recordOptionsButton!!.setupBackground()
-        captureOptionsPanel!!.animate().translationY(menuHiddenTopMargin.toFloat()).setDuration(300L).withEndAction {
+        if (disableAnimations) {
+            captureOptionsPanel!!.translationY = menuHiddenTopMargin.toFloat()
             captureOptionsPanel!!.isVisible = false
             captureStartButton!!.isVisible = true
-        }.start()
+        } else {
+            captureOptionsPanel!!.animate().translationY(menuHiddenTopMargin.toFloat())
+                .setDuration(300L).withEndAction {
+                captureOptionsPanel!!.isVisible = false
+                captureStartButton!!.isVisible = true
+            }.start()
+        }
     }
 
     override fun onCreate(bundle: Bundle?) {
@@ -746,7 +864,9 @@ class MainActivity : AppCompatActivity() {
         statusbarlayoutparams.height = statusBarHeight
         statusbarlayout.setLayoutParams(statusbarlayoutparams)
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.mainscroll)) { v, insets ->
+        mainScroll = findViewById(R.id.mainscroll)
+
+        ViewCompat.setOnApplyWindowInsetsListener(mainScroll!!) { v, insets ->
             val bars = insets.getInsets(
                 WindowInsetsCompat.Type.systemBars()
             )
@@ -781,14 +901,34 @@ class MainActivity : AppCompatActivity() {
             this.appSettings!!.setBooleanProperty(GlobalProperties.PropertiesBoolean.FLOATING_CONTROLS, false)
         }
         updateRecordModeData()
-        this.mainRecordingButton = RecordButton(baseContext, findViewById<ImageButton>(R.id.recordingmainbutton)!!)
+        updateRecordButtonConditions()
+
+        this.mainRecordingStatusVideoAnimationsContainer = findViewById(R.id.recordinganimationcontainer)
+        mainScroll!!.post {
+            updateRecordModeData()
+            this.mainRecordingStatusVideoAnimations = RecordStatusVideoAnimations(
+                baseContext,
+                findViewById<PlayerView>(R.id.recordinganimation)!!,
+                findViewById<ImageView>(R.id.recordinganimationpreview)!!,
+                mainScroll!!,
+                mainRecordingStatusVideoAnimationsContainer!!,
+                this.recordMicrophone,
+                this.recordPlayback,
+                this.recordOnlyAudio
+            )
+        }
+
         this.captureStartButton = findViewById<Button>(R.id.capture_start_button)
         this.captureStartButton!!.setOnClickListener(object: View.OnClickListener {
             override fun onClick(view: View) {
                 if (this@MainActivity.recordingState == ActionState.RECORDING_ENDED) {
                     this@MainActivity.recordingBinder!!.recordingReset()
                 } else if (this@MainActivity.recordingState == ActionState.RECORDING_PAUSED) {
-                    this@MainActivity.mainRecordingButton!!.transitionToButtonState(RecordButton.ButtonState.TRANSITION_FROM_PAUSE)
+                    mainScroll!!.post {
+                        this@MainActivity.mainRecordingStatusVideoAnimations!!.setRecordStatusState(
+                            RecordStatusVideoAnimations.RecordStatus.TRANSITION_FROM_PAUSE
+                        )
+                    }
                     this@MainActivity.recordingBinder!!.recordingResume()
                 } else if (this@MainActivity.recordingState != ActionState.RECORDING_STOPPED) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && !recordStream) {
@@ -802,29 +942,6 @@ class MainActivity : AppCompatActivity() {
             }
         })
         updateRecordButtonConditions()
-        this.mainRecordingButton!!.innerButton().setOnClickListener(object: View.OnClickListener {
-            override fun onClick(view: View) {
-                if (!this@MainActivity.mainRecordingButton!!.getLockButton()) {
-                    this@MainActivity.mainRecordingButton!!.setLockButton(true)
-
-                    if (this@MainActivity.recordingState == ActionState.RECORDING_ENDED) {
-                        this@MainActivity.recordingBinder!!.recordingReset()
-                    } else if (this@MainActivity.recordingState == ActionState.RECORDING_PAUSED) {
-                        this@MainActivity.mainRecordingButton!!.transitionToButtonState(RecordButton.ButtonState.TRANSITION_FROM_PAUSE)
-                        this@MainActivity.recordingBinder!!.recordingResume()
-                    } else if (this@MainActivity.recordingState != ActionState.RECORDING_STOPPED) {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && !recordStream) {
-                            this@MainActivity.recordingBinder!!.recordingPause()
-                        } else {
-                            this@MainActivity.recordingBinder!!.stopService()
-                        }
-                    } else {
-                        this@MainActivity.recordingStart()
-                    }
-                }
-            }
-        })
-        findViewById<LinearLayout>(R.id.mainlayout).setOnClickListener { this@MainActivity.mainRecordingButton!!.releaseFocus() }
         this.recordInfo = findViewById<ImageButton>(R.id.openinfo)!!
         this.recordSettings = findViewById<ImageButton>(R.id.opensettings)!!
         postRecordShare = findViewById<Button>(R.id.post_record_controls_share)
@@ -1060,7 +1177,6 @@ class MainActivity : AppCompatActivity() {
                 recordControlPause!!.isVisible = true
             }
             recordControlResume!!.isVisible = false
-            this@MainActivity.mainRecordingButton!!.releaseFocus()
             this@MainActivity.recordingBinder!!.stopService()
         }
 
@@ -1076,7 +1192,6 @@ class MainActivity : AppCompatActivity() {
 
         recordOptionScreen!!.setOnToggleListener(object: RecordSettingButton.OnToggleListener {
             override fun onToggle(isChecked: Boolean) {
-                this@MainActivity.mainRecordingButton!!.releaseFocus()
 
                 if (!isChecked && !((this@MainActivity.shizukuRecordPhoneCall && this@MainActivity.enableShizuku) || this@MainActivity.recordMicrophone || (this@MainActivity.recordPlayback || Build.VERSION.SDK_INT < Build.VERSION_CODES.Q))) {
                     recordOptionScreen!!.setSwitchChecked(true)
@@ -1106,7 +1221,6 @@ class MainActivity : AppCompatActivity() {
 
         recordOptionMicrophone!!.setOnToggleListener(object: RecordSettingButton.OnToggleListener {
             override fun onToggle(isChecked: Boolean) {
-                this@MainActivity.mainRecordingButton!!.releaseFocus()
 
                 if (!isChecked && this@MainActivity.recordOnlyAudio && !((this@MainActivity.shizukuRecordPhoneCall && this@MainActivity.enableShizuku) || (this@MainActivity.recordPlayback && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q))) {
                     recordOptionMicrophone!!.setSwitchChecked(true)
@@ -1136,7 +1250,6 @@ class MainActivity : AppCompatActivity() {
 
         recordOptionSound!!.setOnToggleListener(object: RecordSettingButton.OnToggleListener {
             override fun onToggle(isChecked: Boolean) {
-                this@MainActivity.mainRecordingButton!!.releaseFocus()
 
                 if (!isChecked && this@MainActivity.recordOnlyAudio && !(this@MainActivity.recordMicrophone || (this@MainActivity.shizukuRecordPhoneCall && this@MainActivity.enableShizuku))) {
                     recordOptionSound!!.setSwitchChecked(true)
@@ -1167,7 +1280,6 @@ class MainActivity : AppCompatActivity() {
         recordOptionPhoneCall!!.setOnToggleListener(object: RecordSettingButton.OnToggleListener {
             @RequiresApi(Build.VERSION_CODES.R)
             override fun onToggle(isChecked: Boolean) {
-                this@MainActivity.mainRecordingButton!!.releaseFocus()
 
                 var hasShizukuPermission = false
                 if (ShizukuConnectionHelper.shizukuAvailable()) {
@@ -1270,27 +1382,22 @@ class MainActivity : AppCompatActivity() {
         })
 
         postRecordShare!!.setOnClickListener {
-            this@MainActivity.mainRecordingButton!!.releaseFocus()
             this@MainActivity.recordingBinder!!.recordingShare()
         }
 
         postRecordDelete!!.setOnClickListener {
-            this@MainActivity.mainRecordingButton!!.releaseFocus()
             this@MainActivity.recordingBinder!!.recordingDelete()
         }
 
         postRecordOpen!!.setOnClickListener {
-            this@MainActivity.mainRecordingButton!!.releaseFocus()
             this@MainActivity.recordingBinder!!.recordingOpen()
         }
 
         this.recordInfo!!.setOnClickListener {
-            this@MainActivity.mainRecordingButton!!.releaseFocus()
             this@MainActivity.startActivity(Intent(this@MainActivity, AppInfo::class.java))
         }
 
         this.recordSettings!!.setOnClickListener {
-            this@MainActivity.mainRecordingButton!!.releaseFocus()
             this@MainActivity.startActivity(Intent(this@MainActivity, SettingsPanel::class.java))
         }
     }

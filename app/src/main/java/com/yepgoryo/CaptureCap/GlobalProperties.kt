@@ -80,6 +80,7 @@ class GlobalProperties(context: Context) {
         SHIZUKU_AUTO_MANAGE,
         CROP_SCREEN,
         SMOOTH_CROP,
+        DISABLE_ANIMATIONS,
     }
 
     enum class PropertiesInt {

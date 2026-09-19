@@ -29,15 +29,28 @@
             android:orientation="vertical"
             android:gravity="center">
 
-            <ImageButton
-                android:id="@+id/recordingmainbutton"
+            <FrameLayout
                 android:layout_width="250dp"
                 android:layout_height="250dp"
-                android:visibility="gone"
-                android:contentDescription="@string/record_start"
-                android:background="@drawable/icon_recording_stopped"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true" />
+                android:id="@+id/recordinganimationcontainer"
+                android:visibility="gone">
+
+                <androidx.media3.ui.PlayerView
+                    android:id="@+id/recordinganimation"
+                    android:layout_width="250dp"
+                    android:layout_height="250dp"
+                    android:layout_centerVertical="true"
+                    android:layout_centerHorizontal="true"
+                    app:use_controller="false" />
+
+                <ImageView
+                    android:id="@+id/recordinganimationpreview"
+                    android:layout_width="250dp"
+                    android:layout_height="250dp"
+                    android:layout_centerVertical="true"
+                    android:layout_centerHorizontal="true" />
+
+            </FrameLayout>
 
             <LinearLayout
                 android:id="@+id/recordpanel"
