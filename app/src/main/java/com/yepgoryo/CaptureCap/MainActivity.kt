@@ -501,6 +501,9 @@ class MainActivity : AppCompatActivity() {
                 } else {
                     timeCounter!!.visibility = View.GONE
                     mainScroll!!.post {
+                        mainRecordingStatusVideoAnimationsContainer!!.visibility = View.VISIBLE
+                        mainRecordingStatusVideoAnimations!!.innerPreview().visibility = View.VISIBLE
+
                         updateRecordButtonConditions()
                         this@MainActivity.mainRecordingStatusVideoAnimations!!.setRecordStatusState(
                             RecordStatusVideoAnimations.RecordStatus.ENDED_RECORDING_NORMAL

@@ -50,8 +50,10 @@ class RecordStatusVideoAnimations(
     private var recordingInProgressAudioMicNoAudio: MediaItem? = null
 
     private var recordingFinishedAudioPreview: Drawable? = null
+    private var recordingFinishedAudioStaticPreview: Drawable? = null
     private var recordingFinishedAudio: MediaItem? = null
     private var recordingFinishedVideoPreview: Drawable? = null
+    private var recordingFinishedVideoStaticPreview: Drawable? = null
     private var recordingFinishedVideo: MediaItem? = null
     private var useContext: Context = context
     private var recordMicrophone: Boolean = false
@@ -61,6 +63,7 @@ class RecordStatusVideoAnimations(
     private var isReady: AtomicBoolean = AtomicBoolean(false)
     private var useAnimate: AtomicBoolean = AtomicBoolean(true)
     private var fadingEnded: AtomicBoolean = AtomicBoolean(true)
+    private var isLooping: AtomicBoolean = AtomicBoolean(false)
     private var disableAnimations: Boolean = false
     var recordingAnimationPlayer: ExoPlayer? = null
 
@@ -77,11 +80,13 @@ class RecordStatusVideoAnimations(
     }
 
     private fun playerSetAnimation(item: MediaItem, repeat: Boolean, autoplay: Boolean = false) {
+        isLooping.set(false)
         if (disableAnimations) {
             return
         }
         recordingAnimationPlayer!!.stop()
         if (repeat) {
+            isLooping.set(true)
             recordingAnimationPlayer!!.repeatMode = ExoPlayer.REPEAT_MODE_ONE
         } else {
             recordingAnimationPlayer!!.repeatMode = ExoPlayer.REPEAT_MODE_OFF
@@ -111,6 +116,10 @@ class RecordStatusVideoAnimations(
             recordingInProgressAudioNoMicAudio = MediaItem.fromUri("asset:///animations/recording_in_progress_audio_nomic_audio_dark.mp4".toUri())
             recordingInProgressAudioMicNoAudioPreview = context.getDrawable(R.drawable.icon_recording_in_progress_audio_mic_noaudio_dark_preview_rendered)
             recordingInProgressAudioMicNoAudio = MediaItem.fromUri("asset:///animations/recording_in_progress_audio_mic_noaudio_dark.mp4".toUri())
+            recordingFinishedAudioStaticPreview =
+                context.getDrawable(R.drawable.icon_recording_finished_reels_audio_dark_static_preview_rendered)
+            recordingFinishedVideoStaticPreview =
+                context.getDrawable(R.drawable.icon_recording_finished_reels_video_dark_static_preview_rendered)
 
             if (disableAnimations) {
                 recordingFinishedAudioPreview =
@@ -144,6 +153,11 @@ class RecordStatusVideoAnimations(
             recordingInProgressAudioNoMicAudio = MediaItem.fromUri("asset:///animations/recording_in_progress_audio_nomic_audio.mp4".toUri())
             recordingInProgressAudioMicNoAudioPreview = context.getDrawable(R.drawable.icon_recording_in_progress_audio_mic_noaudio_preview_rendered)
             recordingInProgressAudioMicNoAudio = MediaItem.fromUri("asset:///animations/recording_in_progress_audio_mic_noaudio.mp4".toUri())
+            recordingFinishedAudioStaticPreview =
+                context.getDrawable(R.drawable.icon_recording_finished_reels_audio_static_preview_rendered)
+
+            recordingFinishedVideoStaticPreview =
+                context.getDrawable(R.drawable.icon_recording_finished_reels_video_static_preview_rendered)
 
             if (disableAnimations) {
                 recordingFinishedAudioPreview =
@@ -195,7 +209,14 @@ class RecordStatusVideoAnimations(
                                 }
                             }
                         }
-                        ExoPlayer.STATE_ENDED -> {}
+                        ExoPlayer.STATE_ENDED -> {
+                            scrollView.post {
+                                if (!isLooping.getAndSet(false) &&
+                                    currentRecordStatus == RecordStatus.END_SHOW_REELS) {
+                                    setRecordStatusState(RecordStatus.ENDED_RECORDING_NORMAL)
+                                }
+                            }
+                        }
                     }
                 }
             })
@@ -432,9 +453,9 @@ class RecordStatusVideoAnimations(
 
                 useAnimate.set(false)
                 if (recordOnlyAudio) {
-                    playerPreviewUse.setImageDrawable(recordingFinishedAudioPreview)
+                    playerPreviewUse.setImageDrawable(recordingFinishedAudioStaticPreview)
                 } else {
-                    playerPreviewUse.setImageDrawable(recordingFinishedVideoPreview)
+                    playerPreviewUse.setImageDrawable(recordingFinishedVideoStaticPreview)
                 }
                 playerUse.visibility = View.INVISIBLE
                 playerPreviewUse.visibility = View.VISIBLE
