@@ -131,13 +131,8 @@ class PlaybackRecorder(
     private var csd: ByteArray? = null
     private var asc: ByteArray? = null
 
-    private var pollHandler: Handler? = null
-    private var pollRunnable: Runnable? = null
-    private var lastQueuedVideoBufferIndex: Int = MediaCodec.INFO_TRY_AGAIN_LATER
-    private var lastQueuedVideoPtsUs: Long = 0L
-    private var lastVideoOutputTimeNs: Long = 0L
-    private var videoEncoderStallTimer: Handler? = null
-    private var lastQueuedVideoData: ByteArray? = null
+    private var videoLastPtsOffset = 0L
+    private var audioLastPtsOffset = 0L
 
     var recordingCallback: ScreenRecorder.RecordingFinishedCallback? = null
 
@@ -496,7 +491,12 @@ class PlaybackRecorder(
             } else {
                 if (!this.mIsPaused.get()) {
                     val outputBuffer: ByteBuffer = this.mVideoEncoder!!.getOutputBuffer(index)
-                    bufferInfo.presentationTimeUs -= this.lastTimeout
+                    val oldPtsWithoutTimeout = bufferInfo.presentationTimeUs - lastTimeout
+                    if (oldPtsWithoutTimeout <= videoLastPtsOffset) {
+                        lastTimeout -= videoLastPtsOffset - oldPtsWithoutTimeout
+                    }
+                    bufferInfo.presentationTimeUs -= lastTimeout
+                    videoLastPtsOffset = bufferInfo.presentationTimeUs
                     writeSampleData(true, bufferInfo, outputBuffer)
                 }
                 this.mVideoEncoder!!.releaseOutputBuffer(index)
@@ -517,7 +517,12 @@ class PlaybackRecorder(
             } else {
                 if (!this.mIsPaused.get()) {
                     val outputBuffer: ByteBuffer = this.mAudioEncoder!!.getOutputBuffer(index)!!
-                    bufferInfo.presentationTimeUs -= this.lastTimeout
+                    val oldPtsWithoutTimeout = bufferInfo.presentationTimeUs - lastTimeout
+                    if (oldPtsWithoutTimeout <= audioLastPtsOffset) {
+                        lastTimeout -= audioLastPtsOffset - oldPtsWithoutTimeout
+                    }
+                    bufferInfo.presentationTimeUs -= lastTimeout
+                    audioLastPtsOffset = bufferInfo.presentationTimeUs
                     writeSampleData(false, bufferInfo, outputBuffer)
                 }
                 this.mAudioEncoder!!.releaseOutputBuffer(index)
@@ -701,71 +706,8 @@ class PlaybackRecorder(
 
     fun ByteArray.hex() = joinToString(" ") { "%02X".format(it) }
 
-    /*
-     * This function has been co-authored by an AI.
-     * Model name: Qwen 3 Coder Next
-     */
-    private fun startVideoStallTimer() {
-        pollHandler?.removeCallbacks(pollRunnable!!)
-        pollHandler = Handler(mWorker!!.looper)
-        checkStallAndRefeed()
-    }
-
-    /*
-     * This function has been co-authored by an AI.
-     * Model name: Qwen 3 Coder Next
-     */
-    private fun checkStallAndRefeed() {
-        pollRunnable = object : Runnable {
-            override fun run() {
-                if (!mIsRunning.get() || mMuxerStarted || mVideoEncoder == null) {
-                    return
-                }
-
-                val nowNs = System.nanoTime()
-                val timeoutNs = 1_000_000_000L
-
-                if (lastVideoOutputTimeNs != 0L && nowNs - lastVideoOutputTimeNs > timeoutNs) {
-                    if (lastQueuedVideoBufferIndex != MediaCodec.INFO_TRY_AGAIN_LATER && mVideoEncoder != null) {
-                        try {
-                            val inputIndex = mVideoEncoder!!.mEncoder?.dequeueInputBuffer(0)
-                            if (inputIndex!! >= 0) {
-                                val inputBuffer = mVideoEncoder!!.mEncoder?.getInputBuffer(inputIndex)
-                                val data = lastQueuedVideoData ?: return
-                                inputBuffer?.clear()
-                                inputBuffer?.put(data)
-                                inputBuffer?.flip()
-                                mVideoEncoder!!.queueInputBuffer(inputIndex,
-                                    0,
-                                    data.size,
-                                    lastQueuedVideoPtsUs,
-                                    0
-                                )
-                            }
-                        } catch (exc: Exception) {
-                            recordingCallback?.onError(exc)
-                        }
-                    }
-                }
-                pollHandler?.postDelayed({
-                    checkStallAndRefeed()
-                }, 1000)
-            }
-        }
-        pollHandler?.postDelayed({
-            checkStallAndRefeed()
-        }, 1000)
-    }
-
     private fun prepareVideoEncoder() {
         this.mVideoEncoder!!.setCallback(object: VideoEncoder.Callback() {
-            override fun onInputBufferAvailable(videoEncoder: VideoEncoder, index: Int) {
-                val inputBuffer = videoEncoder.getInputBuffer(index)
-                lastQueuedVideoData = ByteArray(inputBuffer.remaining())
-                inputBuffer.get(lastQueuedVideoData!!)
-                super.onInputBufferAvailable(videoEncoder, index)
-            }
-
             override fun onOutputBufferAvailable(videoEncoder: VideoEncoder, index: Int, bufferInfo: MediaCodec.BufferInfo) {
                 try {
                     this@PlaybackRecorder.muxVideo(index, bufferInfo)
@@ -956,7 +898,6 @@ class PlaybackRecorder(
             }
         })
         this.mVideoEncoder!!.prepare()
-        startVideoStallTimer()
     }
 
     private fun prepareAudioEncoder() {
@@ -1003,8 +944,6 @@ class PlaybackRecorder(
 
     fun stopEncoders() {
         this.mIsRunning.set(false)
-        videoEncoderStallTimer?.removeCallbacksAndMessages(null)
-        pollHandler?.removeCallbacks(pollRunnable!!)
         this.mPendingAudioEncoderBufferInfos.clear()
         this.mPendingAudioEncoderBufferIndices.clear()
         this.mPendingVideoEncoderBufferInfos.clear()
