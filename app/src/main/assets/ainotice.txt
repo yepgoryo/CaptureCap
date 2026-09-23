@@ -22,7 +22,7 @@ ValueSeekBar
 VideoOverlay
 VideoOverlaySettings
 
-Other classes *could* and *can* get created or modified by adding AI assisted/written code too.
+Other classes can be assumed as created or modified by adding AI assisted/written code too. However, all the functions and classes made with the help of AI are usually marked with a comment. I also intend to keep the most part of this project human-written.
 
 The full notice is available in the repository, under AI.md file.
 
