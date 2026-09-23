@@ -655,6 +655,15 @@ class ScreenRecorder : Service() {
         if (useShizuku && shizukuAutoManage && !shizukuServerAuthKey.isEmpty()) {
             shizukuManageStop()
         }
+
+        if (useShizuku) {
+            shizukuDisconnect()
+        }
+
+        if (this.panelBinder != null) {
+            unbindService(this.mPanelConnection)
+        }
+
         super.onDestroy()
     }
 

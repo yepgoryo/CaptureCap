@@ -755,8 +755,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     protected override fun onDestroy() {
-        super.onDestroy()
         doUnbindService()
+        super.onDestroy()
     }
 
     var recordOptionsButtonIcons: RelativeLayout? = null
