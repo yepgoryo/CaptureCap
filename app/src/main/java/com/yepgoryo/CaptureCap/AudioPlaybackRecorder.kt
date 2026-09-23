@@ -20,7 +20,6 @@ import android.os.Message
 import android.os.ParcelFileDescriptor
 import android.os.SystemClock
 import android.util.Log
-import android.util.SparseLongArray
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.annotation.RequiresPermission
@@ -33,6 +32,11 @@ import java.io.FileInputStream
 import java.nio.ByteBuffer
 import java.util.LinkedList
 import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.locks.ReentrantLock
+
+import kotlin.concurrent.withLock
+
+import kotlinx.coroutines.*
 
 class AudioPlaybackRecorder(
     private val recordMicrophone: Boolean,
@@ -69,7 +73,7 @@ class AudioPlaybackRecorder(
     private var mFormat: Int = AudioFormat.ENCODING_PCM_16BIT
     private var mForceStop: AtomicBoolean = AtomicBoolean(false)
     private var audioFrameGap: Long = -1L
-    private var lastAudioFramePts: Long = 0L
+    private var lastAudioFramePst: Long = 0L
     private var audioMuted: Boolean = false
     private var shizukuPhoneCallMuted: Boolean = false
     private var micMuted: Boolean = false
@@ -78,6 +82,32 @@ class AudioPlaybackRecorder(
     private var audioManager: AudioManager? = null
     private var scrcpyInputStream: DataInputStream? = null
     private var scrcpyInputPfd: ParcelFileDescriptor? = null
+    private val scrcpyReadScope = CoroutineScope(Dispatchers.IO)
+
+    class PhoneCallBufferQueue {
+        private val lock = ReentrantLock()
+        private val list: ArrayList<ByteArray> = arrayListOf()
+
+        fun queueBuffer(buf: ByteArray) = lock.withLock {
+            /* 1MB ~= 244 AAC stereo buffers, 12200 ~= 50MB */
+            if (list.size >= 12200) {
+                list.clear()
+            }
+            list.addLast(buf)
+        }
+
+        fun getBuffer(): ByteArray = lock.withLock {
+            if (list.isEmpty()) {
+                return ByteArray(0)
+            } else {
+                return list.removeFirst()
+            }
+        }
+    }
+
+    private var scrcpyAudioBufferQueue: PhoneCallBufferQueue = PhoneCallBufferQueue()
+
+    private var scrcpyStreamRunning: AtomicBoolean = AtomicBoolean(false)
 
     companion object {
         const val AUDIO_BUFFER_SHORTS_MONO_SIZE = 1024
@@ -123,6 +153,9 @@ class AudioPlaybackRecorder(
         }
         if (shizukuRecordPhoneCall) {
             initScrcpyRecord()
+            scrcpyReadScope.launch {
+                runScrcpyAudioBufferStream()
+            }
         }
         this.mRecordThread.start()
         this.mRecordHandler = RecordHandler(this.mRecordThread.getLooper())
@@ -135,6 +168,8 @@ class AudioPlaybackRecorder(
         this.mForceStop.set(true)
         val recordHandler: RecordHandler? = this.mRecordHandler
         recordHandler?.sendEmptyMessage(RecordMessage.MSG_STOP.ordinal)
+        stopScrcpyAudioBufferStream()
+        scrcpyReadScope.cancel()
         if (shizukuRecordPhoneCall) {
             releaseScrcpyRecord()
         }
@@ -367,7 +402,10 @@ class AudioPlaybackRecorder(
                     noneRead = mMic!!.read(framePlayback, 0, bufSizeBytes)
                 }
 
-                getScrcpyAudioBuffer()
+                if (shizukuRecordPhoneCall) {
+                    val readPhoneCall = getScrcpyAudioBuffer().size
+                    if (readPhoneCall > noneRead) noneRead = readPhoneCall
+                }
 
                 var i = 0
                 while (i < noneRead) {
@@ -696,12 +734,12 @@ class AudioPlaybackRecorder(
             frameGap = (totalSamples.toLong() * 1_000_000) / this.mChannelsSampleRate
             audioFrameGap = frameGap
         }
-        var lastFramePts: Long = lastAudioFramePts
-        if (lastFramePts == 0L) {
-            lastFramePts = (SystemClock.elapsedRealtimeNanos() / 1000) - frameGap
+        var lastFramePst: Long = lastAudioFramePst
+        if (lastFramePst == 0L) {
+            lastFramePst = (SystemClock.elapsedRealtimeNanos() / 1000) - frameGap
         }
-        lastAudioFramePts = lastFramePts+frameGap
-        return lastFramePts
+        lastAudioFramePst = lastFramePst+frameGap
+        return lastFramePst
     }
 
     @RequiresPermission(Manifest.permission.RECORD_AUDIO)
@@ -777,28 +815,33 @@ class AudioPlaybackRecorder(
         }
     }
 
-    private fun getScrcpyAudioBuffer(): ByteArray {
-        try {
-            /* Skip buffer header */
-            scrcpyInputStream!!.skipBytes(8)
+    private fun getScrcpyAudioBuffer(): ByteArray = scrcpyAudioBufferQueue.getBuffer()
 
-            val bufferSize = scrcpyInputStream!!.readInt()
+    private fun stopScrcpyAudioBufferStream() = scrcpyStreamRunning.set(false)
 
-            if (bufferSize !in 1..AUDIO_BUFFER_SHORTS_STEREO_SIZE * 2) {
-                throw java.io.IOException("Invalid audio buffer size $bufferSize")
+    private suspend fun runScrcpyAudioBufferStream() = withContext(Dispatchers.IO) {
+        scrcpyStreamRunning.set(true)
+        while (scrcpyStreamRunning.get()) {
+            try {
+                /* Skip buffer header */
+                scrcpyInputStream!!.skipBytes(8)
+
+                val bufferSize = scrcpyInputStream!!.readInt()
+
+                if (bufferSize !in 1..AUDIO_BUFFER_SHORTS_STEREO_SIZE * 2) {
+                    throw java.io.IOException("Invalid audio buffer size $bufferSize")
+                }
+
+                val array = ByteArray(bufferSize)
+                scrcpyInputStream!!.readFully(array)
+                scrcpyAudioBufferQueue.queueBuffer(array)
+
+            } catch (_: EOFException) {
+                Log.d(TAG, "Stream ended: EOF")
+            } catch (e: Exception) {
+                Log.e(TAG, "Stream ended with error: ${e.message}", e)
             }
-
-            val audioBytes = ByteArray(bufferSize)
-            scrcpyInputStream!!.readFully(audioBytes)
-
-            return audioBytes
-        } catch (_: EOFException) {
-            Log.d(TAG, "Stream ended: EOF")
-        } catch (e: Exception) {
-            Log.e(TAG, "Stream ended with error: ${e.message}", e)
         }
-
-        return ByteArray(0)
     }
 
     private fun initScrcpyRecord() {

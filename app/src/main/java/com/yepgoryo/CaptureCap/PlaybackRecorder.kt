@@ -131,8 +131,8 @@ class PlaybackRecorder(
     private var csd: ByteArray? = null
     private var asc: ByteArray? = null
 
-    private var videoLastPtsOffset = 0L
-    private var audioLastPtsOffset = 0L
+    private var videoLastPstOffset = 0L
+    private var audioLastPstOffset = 0L
 
     var recordingCallback: ScreenRecorder.RecordingFinishedCallback? = null
 
@@ -491,14 +491,14 @@ class PlaybackRecorder(
             } else {
                 if (!this.mIsPaused.get()) {
                     val outputBuffer: ByteBuffer = this.mVideoEncoder!!.getOutputBuffer(index)
-                    val oldPtsWithoutTimeout = bufferInfo.presentationTimeUs - lastTimeout
-                    if (oldPtsWithoutTimeout <= videoLastPtsOffset) {
-                        lastTimeout -= videoLastPtsOffset - oldPtsWithoutTimeout
-                        Log.d(TAG, "Accounting for video overhead: ${videoLastPtsOffset - oldPtsWithoutTimeout}")
+                    val pstWithoutTimeout = bufferInfo.presentationTimeUs - lastTimeout
+                    if (pstWithoutTimeout >= videoLastPstOffset) {
+                        bufferInfo.presentationTimeUs = pstWithoutTimeout
+                        videoLastPstOffset = bufferInfo.presentationTimeUs
+                        writeSampleData(true, bufferInfo, outputBuffer)
+                    } else {
+                        Log.d(TAG, "Found video buffer out of order: pst = $pstWithoutTimeout")
                     }
-                    bufferInfo.presentationTimeUs -= lastTimeout
-                    videoLastPtsOffset = bufferInfo.presentationTimeUs
-                    writeSampleData(true, bufferInfo, outputBuffer)
                 }
                 this.mVideoEncoder!!.releaseOutputBuffer(index)
                 if ((bufferInfo.flags and MediaCodec.BUFFER_FLAG_END_OF_STREAM) != 0) {
@@ -518,14 +518,14 @@ class PlaybackRecorder(
             } else {
                 if (!this.mIsPaused.get()) {
                     val outputBuffer: ByteBuffer = this.mAudioEncoder!!.getOutputBuffer(index)!!
-                    val oldPtsWithoutTimeout = bufferInfo.presentationTimeUs - lastTimeout
-                    if (oldPtsWithoutTimeout <= audioLastPtsOffset) {
-                        lastTimeout -= audioLastPtsOffset - oldPtsWithoutTimeout
-                        Log.d(TAG, "Accounting for audio overhead: ${audioLastPtsOffset - oldPtsWithoutTimeout}")
+                    val pstWithoutTimeout = bufferInfo.presentationTimeUs - lastTimeout
+                    if (pstWithoutTimeout >= audioLastPstOffset) {
+                        bufferInfo.presentationTimeUs = pstWithoutTimeout
+                        audioLastPstOffset = bufferInfo.presentationTimeUs
+                        writeSampleData(false, bufferInfo, outputBuffer)
+                    } else {
+                        Log.d(TAG, "Found audio buffer out of order: pst = $pstWithoutTimeout")
                     }
-                    bufferInfo.presentationTimeUs -= lastTimeout
-                    audioLastPtsOffset = bufferInfo.presentationTimeUs
-                    writeSampleData(false, bufferInfo, outputBuffer)
                 }
                 this.mAudioEncoder!!.releaseOutputBuffer(index)
                 if ((bufferInfo.flags and MediaCodec.BUFFER_FLAG_END_OF_STREAM) != 0) {
