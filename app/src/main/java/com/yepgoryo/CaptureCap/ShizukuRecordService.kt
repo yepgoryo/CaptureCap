@@ -74,7 +74,7 @@ class ShizukuRecordService : IShizukuRecordService.Stub {
 
                 Log.d("${TAG}AudioRelay", "Scrcpy is connected to the socket")
 
-                val buffer = ByteArray(AudioPlaybackRecorder.AUDIO_BUFFER_SIZE)
+                val buffer = ByteArray(AudioPlaybackRecorder.AUDIO_BUFFER_SHORTS_STEREO_SIZE * 2)
 
                 ParcelFileDescriptor.AutoCloseOutputStream(audioWritePipe).use { output ->
                     while (isActive) {

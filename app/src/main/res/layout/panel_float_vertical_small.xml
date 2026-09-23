@@ -109,172 +109,239 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
+                android:orientation="horizontal"
                 android:gravity="center">
 
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="8"
+                    android:layout_height="match_parent"
                     android:orientation="vertical"
-                    android:layout_marginBottom="6dp"
-                    android:id="@+id/audio_volume_panel"
                     android:gravity="center">
 
-                    <TextView
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="10sp"
-                        android:textColor="?attr/colorOnPrimary"
-                        android:gravity="center"
-                        android:text="@string/audio_volume_audio" />
+                        android:orientation="vertical"
+                        android:layout_marginBottom="6dp"
+                        android:id="@+id/audio_volume_panel"
+                        android:gravity="center">
 
-                    <SeekBar
-                        android:id="@+id/audio_volume_seek"
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="10sp"
+                            android:textColor="?attr/colorOnPrimary"
+                            android:gravity="center"
+                            android:text="@string/audio_volume_audio" />
+
+                        <SeekBar
+                            android:id="@+id/audio_volume_seek"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="5dp"
+                            android:thumbTint="?attr/colorOnPrimary"
+                            android:thumbTintMode="src_in"
+                            android:progressTint="?attr/colorOnPrimary"
+                            android:progressTintMode="src_in"
+                            android:progressBackgroundTint="?attr/colorOnPrimary"
+                            android:progressBackgroundTintMode="src_in"
+                            android:gravity="center"
+                            android:max="100" />
+
+                        <TextView
+                            android:id="@+id/audio_volume_value"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="10sp"
+                            android:textColor="?attr/colorOnPrimary"
+                            android:gravity="center"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="5dp"
+                            android:text="100" />
+
+                        <CheckBox
+                            android:id="@+id/audio_mute"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/mute_audio"
+                            android:buttonTint="?attr/colorOnPrimary"
+                            android:buttonTintMode="src_in"
+                            android:textColor="?attr/colorOnPrimary"
+                            android:textSize="10sp"
+                            android:layout_centerHorizontal="true"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
-                        android:thumbTint="?attr/colorOnPrimary"
-                        android:thumbTintMode="src_in"
-                        android:progressTint="?attr/colorOnPrimary"
-                        android:progressTintMode="src_in"
-                        android:progressBackgroundTint="?attr/colorOnPrimary"
-                        android:progressBackgroundTintMode="src_in"
-                        android:gravity="center"
-                        android:max="100" />
+                        android:orientation="vertical"
+                        android:id="@+id/mic_volume_panel"
+                        android:layout_marginBottom="6dp"
+                        android:gravity="center">
 
-                    <TextView
-                        android:id="@+id/audio_volume_value"
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="10sp"
+                            android:textColor="?attr/colorOnPrimary"
+                            android:gravity="center"
+                            android:text="@string/audio_volume_microphone" />
+
+                        <SeekBar
+                            android:id="@+id/microphone_volume_seek"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="5dp"
+                            android:thumbTint="?attr/colorOnPrimary"
+                            android:thumbTintMode="src_in"
+                            android:progressTint="?attr/colorOnPrimary"
+                            android:progressTintMode="src_in"
+                            android:progressBackgroundTint="?attr/colorOnPrimary"
+                            android:progressBackgroundTintMode="src_in"
+                            android:gravity="center"
+                            android:max="100" />
+
+                        <TextView
+                            android:id="@+id/microphone_volume_value"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="10sp"
+                            android:textColor="?attr/colorOnPrimary"
+                            android:gravity="center"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="5dp"
+                            android:text="100" />
+
+                        <CheckBox
+                            android:id="@+id/mic_mute"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/mute_microphone"
+                            android:buttonTint="?attr/colorOnPrimary"
+                            android:buttonTintMode="src_in"
+                            android:textColor="?attr/colorOnPrimary"
+                            android:textSize="10sp"
+                            android:layout_centerHorizontal="true"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="10sp"
-                        android:textColor="?attr/colorOnPrimary"
-                        android:gravity="center"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
-                        android:text="100" />
+                        android:orientation="vertical"
+                        android:id="@+id/phonecall_volume_panel"
+                        android:gravity="center">
 
-                    <CheckBox
-                        android:id="@+id/audio_mute"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/mute_audio"
-                        android:buttonTint="?attr/colorOnPrimary"
-                        android:buttonTintMode="src_in"
-                        android:textColor="?attr/colorOnPrimary"
-                        android:textSize="10sp"
-                        android:layout_centerHorizontal="true"/>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="10sp"
+                            android:textColor="?attr/colorOnPrimary"
+                            android:gravity="center"
+                            android:text="@string/audio_volume_phonecall" />
+
+                        <SeekBar
+                            android:id="@+id/phonecall_volume_seek"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="5dp"
+                            android:thumbTint="?attr/colorOnPrimary"
+                            android:thumbTintMode="src_in"
+                            android:progressTint="?attr/colorOnPrimary"
+                            android:progressTintMode="src_in"
+                            android:progressBackgroundTint="?attr/colorOnPrimary"
+                            android:progressBackgroundTintMode="src_in"
+                            android:gravity="center"
+                            android:max="100" />
+
+                        <TextView
+                            android:id="@+id/phonecall_volume_value"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="10sp"
+                            android:textColor="?attr/colorOnPrimary"
+                            android:gravity="center"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="5dp"
+                            android:text="100" />
+
+                        <CheckBox
+                            android:id="@+id/phonecall_mute"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/mute_phonecall"
+                            android:buttonTint="?attr/colorOnPrimary"
+                            android:buttonTintMode="src_in"
+                            android:textColor="?attr/colorOnPrimary"
+                            android:textSize="10sp"
+                            android:layout_centerHorizontal="true"/>
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                <com.yepgoryo.CaptureCap.PresetButtonChoose
+                    android:id="@+id/audio_volume_preset"
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="6dp"
                     android:orientation="vertical"
-                    android:id="@+id/mic_volume_panel"
-                    android:layout_marginBottom="6dp"
                     android:gravity="center">
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                    <androidx.appcompat.widget.AppCompatToggleButton
+                        android:id="@+id/audio_button_preset_1"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:background="@drawable/bg_setting_rounded_button_checked"
                         android:textSize="10sp"
-                        android:textColor="?attr/colorOnPrimary"
-                        android:gravity="center"
-                        android:text="@string/audio_volume_microphone" />
+                        android:layout_centerHorizontal="true"
+                        android:textOff="1"
+                        android:textOn="1"
+                        android:text="1" />
 
-                    <SeekBar
-                        android:id="@+id/microphone_volume_seek"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
-                        android:thumbTint="?attr/colorOnPrimary"
-                        android:thumbTintMode="src_in"
-                        android:progressTint="?attr/colorOnPrimary"
-                        android:progressTintMode="src_in"
-                        android:progressBackgroundTint="?attr/colorOnPrimary"
-                        android:progressBackgroundTintMode="src_in"
-                        android:gravity="center"
-                        android:max="100" />
-
-                    <TextView
-                        android:id="@+id/microphone_volume_value"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                    <androidx.appcompat.widget.AppCompatToggleButton
+                        android:id="@+id/audio_button_preset_2"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/bg_setting_rounded_button_checked"
                         android:textSize="10sp"
-                        android:textColor="?attr/colorOnPrimary"
-                        android:gravity="center"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
-                        android:text="100" />
+                        android:layout_centerHorizontal="true"
+                        android:textOff="2"
+                        android:textOn="2"
+                        android:text="2" />
 
-                    <CheckBox
-                        android:id="@+id/mic_mute"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/mute_microphone"
-                        android:buttonTint="?attr/colorOnPrimary"
-                        android:buttonTintMode="src_in"
-                        android:textColor="?attr/colorOnPrimary"
+                    <androidx.appcompat.widget.AppCompatToggleButton
+                        android:id="@+id/audio_button_preset_3"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/bg_setting_rounded_button_checked"
                         android:textSize="10sp"
-                        android:layout_centerHorizontal="true"/>
+                        android:layout_centerHorizontal="true"
+                        android:textOff="3"
+                        android:textOn="3"
+                        android:text="3" />
 
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:id="@+id/phonecall_volume_panel"
-                    android:gravity="center">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                    <androidx.appcompat.widget.AppCompatToggleButton
+                        android:id="@+id/audio_button_preset_4"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/bg_setting_rounded_button_checked"
                         android:textSize="10sp"
-                        android:textColor="?attr/colorOnPrimary"
-                        android:gravity="center"
-                        android:text="@string/audio_volume_phonecall" />
+                        android:layout_centerHorizontal="true"
+                        android:textOff="4"
+                        android:textOn="4"
+                        android:text="4" />
 
-                    <SeekBar
-                        android:id="@+id/phonecall_volume_seek"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
-                        android:thumbTint="?attr/colorOnPrimary"
-                        android:thumbTintMode="src_in"
-                        android:progressTint="?attr/colorOnPrimary"
-                        android:progressTintMode="src_in"
-                        android:progressBackgroundTint="?attr/colorOnPrimary"
-                        android:progressBackgroundTintMode="src_in"
-                        android:gravity="center"
-                        android:max="100" />
-
-                    <TextView
-                        android:id="@+id/phonecall_volume_value"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="10sp"
-                        android:textColor="?attr/colorOnPrimary"
-                        android:gravity="center"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
-                        android:text="100" />
-
-                    <CheckBox
-                        android:id="@+id/phonecall_mute"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/mute_phonecall"
-                        android:buttonTint="?attr/colorOnPrimary"
-                        android:buttonTintMode="src_in"
-                        android:textColor="?attr/colorOnPrimary"
-                        android:textSize="10sp"
-                        android:layout_centerHorizontal="true"/>
-
-                </LinearLayout>
+                </com.yepgoryo.CaptureCap.PresetButtonChoose>
 
             </LinearLayout>
 

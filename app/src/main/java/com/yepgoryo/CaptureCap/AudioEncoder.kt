@@ -144,8 +144,8 @@ open class AudioEncoder(
     }
 
     @Throws(MediaCodec.CryptoException::class)
-    fun queueInputBuffer(index: Int, offset: Int, size: Int, presentationTimeUs: Int, flags: Int) {
-        this.mEncoder!!.queueInputBuffer(index, offset, size, presentationTimeUs.toLong(), flags)
+    fun queueInputBuffer(index: Int, offset: Int, size: Int, presentationTimeUs: Long, flags: Int) {
+        this.mEncoder!!.queueInputBuffer(index, offset, size, presentationTimeUs, flags)
     }
 
     fun releaseOutputBuffer(num: Int) {

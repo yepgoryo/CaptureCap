@@ -26,6 +26,7 @@ class RecordStatusVideoAnimations(
     private val container: FrameLayout,
     micEnabled: Boolean,
     playbackEnabled: Boolean,
+    shizukuPhoneCallEnabled: Boolean,
     onlyAudio: Boolean,
 ) {
 
@@ -58,6 +59,7 @@ class RecordStatusVideoAnimations(
     private var useContext: Context = context
     private var recordMicrophone: Boolean = false
     private var recordPlayback: Boolean = false
+    private var recordShizukuPhoneCall: Boolean = false
     private var recordOnlyAudio: Boolean = false
     private var nextRecordStatus: RecordStatus? = null
     private var isReady: AtomicBoolean = AtomicBoolean(false)
@@ -183,6 +185,7 @@ class RecordStatusVideoAnimations(
         this.appSettings = GlobalProperties(this.useContext)
         recordMicrophone = micEnabled
         recordPlayback = playbackEnabled
+        recordShizukuPhoneCall = shizukuPhoneCallEnabled
         recordOnlyAudio = onlyAudio
         updateAnimationResources()
 
@@ -231,10 +234,11 @@ class RecordStatusVideoAnimations(
         return this.playerPreviewUse
     }
 
-    fun updateConditions(microphone: Boolean, playback: Boolean, onlyAudio: Boolean) {
+    fun updateConditions(microphone: Boolean, playback: Boolean, phoneCall: Boolean, onlyAudio: Boolean) {
         this.recordMicrophone = microphone
         this.recordPlayback = playback
         this.recordOnlyAudio = onlyAudio
+        this.recordShizukuPhoneCall = phoneCall
         updateAnimationResources()
     }
 
@@ -299,7 +303,7 @@ class RecordStatusVideoAnimations(
 
                 useAnimate.set(true)
                 if (recordOnlyAudio) {
-                    if (this.recordPlayback && this.recordMicrophone) {
+                    if ((this.recordPlayback && this.recordMicrophone) || recordShizukuPhoneCall) {
                         playerPreviewUse.setImageDrawable(recordingInProgressAudioMicAudioPreview)
                         playerSetAnimation(recordingInProgressAudioMicAudio!!, true)
                     } else if (!this.recordMicrophone) {
@@ -310,7 +314,7 @@ class RecordStatusVideoAnimations(
                         playerSetAnimation(recordingInProgressAudioMicNoAudio!!, true)
                     }
                 } else {
-                    if (this.recordPlayback && this.recordMicrophone) {
+                    if ((this.recordPlayback && this.recordMicrophone) || recordShizukuPhoneCall) {
                         playerPreviewUse.setImageDrawable(recordingInProgressVideoMicAudioPreview)
                         playerSetAnimation(recordingInProgressVideoMicAudio!!, true)
                     } else if (!this.recordPlayback && !this.recordMicrophone) {
@@ -331,7 +335,7 @@ class RecordStatusVideoAnimations(
 
                 useAnimate.set(true)
                 if (recordOnlyAudio) {
-                    if (this.recordPlayback && this.recordMicrophone) {
+                    if ((this.recordPlayback && this.recordMicrophone) || recordShizukuPhoneCall) {
                         playerPreviewUse.setImageDrawable(recordingInProgressAudioMicAudioPreview)
                         playerSetAnimation(recordingInProgressAudioMicAudio!!, true)
                     } else if (!this.recordMicrophone) {
@@ -342,7 +346,7 @@ class RecordStatusVideoAnimations(
                         playerSetAnimation(recordingInProgressAudioMicNoAudio!!, true)
                     }
                 } else {
-                    if (this.recordPlayback && this.recordMicrophone) {
+                    if ((this.recordPlayback && this.recordMicrophone) || recordShizukuPhoneCall) {
                         playerPreviewUse.setImageDrawable(recordingInProgressVideoMicAudioPreview)
                         playerSetAnimation(recordingInProgressVideoMicAudio!!, true)
                     } else if (!this.recordPlayback && !this.recordMicrophone) {
@@ -368,7 +372,7 @@ class RecordStatusVideoAnimations(
 
                 useAnimate.set(false)
                 if (recordOnlyAudio) {
-                    if (this.recordPlayback && this.recordMicrophone) {
+                    if ((this.recordPlayback && this.recordMicrophone) || recordShizukuPhoneCall) {
                         playerPreviewUse.setImageDrawable(recordingInProgressAudioMicAudioPreview)
                         playerSetAnimation(recordingInProgressAudioMicAudio!!, true)
                     } else if (!this.recordMicrophone) {
@@ -379,7 +383,7 @@ class RecordStatusVideoAnimations(
                         playerSetAnimation(recordingInProgressAudioMicNoAudio!!, true)
                     }
                 } else {
-                    if (this.recordPlayback && this.recordMicrophone) {
+                    if ((this.recordPlayback && this.recordMicrophone) || recordShizukuPhoneCall) {
                         playerPreviewUse.setImageDrawable(recordingInProgressVideoMicAudioPreview)
                         playerSetAnimation(recordingInProgressVideoMicAudio!!, true)
                     } else if (!this.recordPlayback && !this.recordMicrophone) {
@@ -402,7 +406,7 @@ class RecordStatusVideoAnimations(
 
                 useAnimate.set(true)
                 if (recordOnlyAudio) {
-                    if (this.recordPlayback && this.recordMicrophone) {
+                    if ((this.recordPlayback && this.recordMicrophone) || recordShizukuPhoneCall) {
                         playerPreviewUse.setImageDrawable(recordingInProgressAudioMicAudioPreview)
                         playerSetAnimation(recordingInProgressAudioMicAudio!!, true)
                     } else if (!this.recordMicrophone) {
@@ -413,7 +417,7 @@ class RecordStatusVideoAnimations(
                         playerSetAnimation(recordingInProgressAudioMicNoAudio!!, true)
                     }
                 } else {
-                    if (this.recordPlayback && this.recordMicrophone) {
+                    if ((this.recordPlayback && this.recordMicrophone) || recordShizukuPhoneCall) {
                         playerPreviewUse.setImageDrawable(recordingInProgressVideoMicAudioPreview)
                         playerSetAnimation(recordingInProgressVideoMicAudio!!, true)
                     } else if (!this.recordPlayback && !this.recordMicrophone) {

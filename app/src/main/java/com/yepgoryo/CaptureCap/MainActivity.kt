@@ -275,6 +275,7 @@ class MainActivity : AppCompatActivity() {
                 this.mainRecordingStatusVideoAnimations?.updateConditions(
                     this.recordMicrophone,
                     this.recordPlayback,
+                    (this.enableShizuku && this.shizukuRecordPhoneCall),
                     this.recordOnlyAudio
                 )
             }
@@ -305,7 +306,7 @@ class MainActivity : AppCompatActivity() {
         this.shizukuRecordPhoneCall = this.appSettings!!.getBooleanProperty(GlobalProperties.PropertiesBoolean.SHIZUKU_RECORD_PHONECALL, false)
         this.shizukuAutoManage = this.appSettings!!.getBooleanProperty(GlobalProperties.PropertiesBoolean.SHIZUKU_AUTO_MANAGE, false)
         this.shizukuAutoManageKey = this.appSettings!!.getStringProperty(GlobalProperties.PropertiesString.SHIZUKU_AUTH_KEY, "")
-        if (this.recordOnlyAudio && !this.recordPlayback && !this.recordMicrophone) {
+        if (this.recordOnlyAudio && !this.recordPlayback && !this.recordMicrophone && !(this.enableShizuku && this.shizukuRecordPhoneCall)) {
             this.recordOnlyAudio = false
         }
     }
@@ -917,7 +918,8 @@ class MainActivity : AppCompatActivity() {
                 mainRecordingStatusVideoAnimationsContainer!!,
                 this.recordMicrophone,
                 this.recordPlayback,
-                this.recordOnlyAudio
+                (this.enableShizuku && this.shizukuRecordPhoneCall),
+                this.recordOnlyAudio,
             )
         }
 
@@ -1405,19 +1407,107 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun saveVolumeToSlot() {
+        when (volumeSlotChosen) {
+            1 -> {
+                this.appSettings!!.setIntProperty(GlobalProperties.PropertiesInt.AUDIO_VOLUME, this.audioVolumeScale)
+                this.appSettings!!.setIntProperty(GlobalProperties.PropertiesInt.MICROPHONE_VOLUME, this.micVolumeScale)
+                this.appSettings!!.setIntProperty(GlobalProperties.PropertiesInt.SHIZUKU_PHONE_CALL_VOLUME, this.shizukuPhoneCallVolumeScale)
+            }
+            2 -> {
+                this.appSettings!!.setIntProperty(GlobalProperties.PropertiesInt.AUDIO_VOLUME_SLOT2, this.audioVolumeScale)
+                this.appSettings!!.setIntProperty(GlobalProperties.PropertiesInt.MICROPHONE_VOLUME_SLOT2, this.micVolumeScale)
+                this.appSettings!!.setIntProperty(GlobalProperties.PropertiesInt.SHIZUKU_PHONE_CALL_VOLUME_SLOT2, this.shizukuPhoneCallVolumeScale)
+            }
+            3 -> {
+                this.appSettings!!.setIntProperty(GlobalProperties.PropertiesInt.AUDIO_VOLUME_SLOT3, this.audioVolumeScale)
+                this.appSettings!!.setIntProperty(GlobalProperties.PropertiesInt.MICROPHONE_VOLUME_SLOT3, this.micVolumeScale)
+                this.appSettings!!.setIntProperty(GlobalProperties.PropertiesInt.SHIZUKU_PHONE_CALL_VOLUME_SLOT3, this.shizukuPhoneCallVolumeScale)
+            }
+            4 -> {
+                this.appSettings!!.setIntProperty(GlobalProperties.PropertiesInt.AUDIO_VOLUME_SLOT4, this.audioVolumeScale)
+                this.appSettings!!.setIntProperty(GlobalProperties.PropertiesInt.MICROPHONE_VOLUME_SLOT4, this.micVolumeScale)
+                this.appSettings!!.setIntProperty(GlobalProperties.PropertiesInt.SHIZUKU_PHONE_CALL_VOLUME_SLOT4, this.shizukuPhoneCallVolumeScale)
+            }
+        }
+    }
+
+    private fun loadVolumeFromSlot() {
+        volumeSlotChosen = this.appSettings!!.getIntProperty(GlobalProperties.PropertiesInt.VOLUME_SLOT_CHOSEN, 1)
+
+        when (volumeSlotChosen) {
+            1 -> {
+                this.audioVolumeScale = this.appSettings!!.getIntProperty(GlobalProperties.PropertiesInt.AUDIO_VOLUME, 100)
+                this.micVolumeScale = this.appSettings!!.getIntProperty(GlobalProperties.PropertiesInt.MICROPHONE_VOLUME, 100)
+                this.shizukuPhoneCallVolumeScale = this.appSettings!!.getIntProperty(GlobalProperties.PropertiesInt.SHIZUKU_PHONE_CALL_VOLUME, 100)
+            }
+            2 -> {
+                this.audioVolumeScale = this.appSettings!!.getIntProperty(GlobalProperties.PropertiesInt.AUDIO_VOLUME_SLOT2, 100)
+                this.micVolumeScale = this.appSettings!!.getIntProperty(GlobalProperties.PropertiesInt.MICROPHONE_VOLUME_SLOT2, 100)
+                this.shizukuPhoneCallVolumeScale = this.appSettings!!.getIntProperty(GlobalProperties.PropertiesInt.SHIZUKU_PHONE_CALL_VOLUME_SLOT2, 100)
+            }
+            3 -> {
+                this.audioVolumeScale = this.appSettings!!.getIntProperty(GlobalProperties.PropertiesInt.AUDIO_VOLUME_SLOT3, 100)
+                this.micVolumeScale = this.appSettings!!.getIntProperty(GlobalProperties.PropertiesInt.MICROPHONE_VOLUME_SLOT3, 100)
+                this.shizukuPhoneCallVolumeScale = this.appSettings!!.getIntProperty(GlobalProperties.PropertiesInt.SHIZUKU_PHONE_CALL_VOLUME_SLOT3, 100)
+            }
+            4 -> {
+                this.audioVolumeScale = this.appSettings!!.getIntProperty(GlobalProperties.PropertiesInt.AUDIO_VOLUME_SLOT4, 100)
+                this.micVolumeScale = this.appSettings!!.getIntProperty(GlobalProperties.PropertiesInt.MICROPHONE_VOLUME_SLOT4, 100)
+                this.shizukuPhoneCallVolumeScale = this.appSettings!!.getIntProperty(GlobalProperties.PropertiesInt.SHIZUKU_PHONE_CALL_VOLUME_SLOT4, 100)
+            }
+        }
+
+        audioSeekBar?.progress = this.audioVolumeScale
+        audioVolume?.text = this.audioVolumeScale.toString()
+
+        micSeekBar?.progress = this.micVolumeScale
+        micVolume?.text = this.micVolumeScale.toString()
+
+        shizukuPhoneCallSeekBar?.progress = this.shizukuPhoneCallVolumeScale
+        shizukuPhoneCallVolume?.text = this.shizukuPhoneCallVolumeScale.toString()
+
+        if (this.recordingBinder != null) {
+            this.recordingBinder!!.setChosenAudioSlot(volumeSlotChosen)
+            this.recordingBinder!!.setAudioVolume(audioVolumeScale)
+            this.recordingBinder!!.setMicVolume(micVolumeScale)
+            this.recordingBinder!!.setShizukuPhoneCallVolume(micVolumeScale)
+        }
+    }
+
+    private var audioVolume: TextView? = null
+    private var audioSeekBar: SeekBar? = null
+    private var micVolume: TextView? = null
+    private var micSeekBar: SeekBar? = null
+    private var shizukuPhoneCallVolume: TextView? = null
+    private var shizukuPhoneCallSeekBar: SeekBar? = null
+    private var audioVolumeScale: Int = 100
+    private var micVolumeScale: Int = 100
+    private var shizukuPhoneCallVolumeScale: Int = 100
+    private var volumeSlotChosen: Int = 1
+    private var chooseVolumeSlotButton: PresetButtonChoose? = null
+
     fun showAudioVolumeDialog() {
         val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_audio_volume, null)
 
-        var audioVolumeScale = this.appSettings!!.getIntProperty(GlobalProperties.PropertiesInt.AUDIO_VOLUME, 100)
-        var micVolumeScale = this.appSettings!!.getIntProperty(GlobalProperties.PropertiesInt.MICROPHONE_VOLUME, 100)
-        var shizukuPhoneCallVolumeScale = this.appSettings!!.getIntProperty(GlobalProperties.PropertiesInt.SHIZUKU_PHONE_CALL_VOLUME, 100)
+        loadVolumeFromSlot()
+
+        chooseVolumeSlotButton = dialogView.findViewById(R.id.audio_volume_preset)
+
+        chooseVolumeSlotButton!!.setButtonChecked(volumeSlotChosen)
+
+        chooseVolumeSlotButton!!.stateChanged = { newState ->
+            saveVolumeToSlot()
+            appSettings?.setIntProperty(GlobalProperties.PropertiesInt.VOLUME_SLOT_CHOSEN, newState)
+            loadVolumeFromSlot()
+        }
 
         val audioPanel: LinearLayout = dialogView.findViewById(R.id.audio_volume_panel)
-        val audioVolume: TextView = dialogView.findViewById(R.id.audio_volume_value)
-        val audioSeekBar: SeekBar = dialogView.findViewById(R.id.audio_volume_seek)
-        audioSeekBar.progress = audioVolumeScale
-        audioVolume.text = audioVolumeScale.toString()
-        audioSeekBar.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener {
+        audioVolume = dialogView.findViewById(R.id.audio_volume_value)
+        audioSeekBar = dialogView.findViewById(R.id.audio_volume_seek)
+        audioSeekBar!!.progress = audioVolumeScale
+        audioVolume!!.text = audioVolumeScale.toString()
+        audioSeekBar!!.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener {
             override fun onStartTrackingTouch(seekBar: SeekBar) {
             }
 
@@ -1426,7 +1516,7 @@ class MainActivity : AppCompatActivity() {
 
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 audioVolumeScale = progress
-                audioVolume.text = audioVolumeScale.toString()
+                audioVolume!!.text = audioVolumeScale.toString()
             }
         })
 
@@ -1437,11 +1527,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         val micPanel: LinearLayout = dialogView.findViewById(R.id.mic_volume_panel)
-        val micVolume: TextView = dialogView.findViewById(R.id.microphone_volume_value)
-        val micSeekBar: SeekBar = dialogView.findViewById(R.id.microphone_volume_seek)
-        micSeekBar.progress = micVolumeScale
-        micVolume.text = micVolumeScale.toString()
-        micSeekBar.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener {
+        micVolume = dialogView.findViewById(R.id.microphone_volume_value)
+        micSeekBar = dialogView.findViewById(R.id.microphone_volume_seek)
+        micSeekBar!!.progress = micVolumeScale
+        micVolume!!.text = micVolumeScale.toString()
+        micSeekBar!!.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener {
             override fun onStartTrackingTouch(seekBar: SeekBar) {
             }
 
@@ -1450,7 +1540,7 @@ class MainActivity : AppCompatActivity() {
 
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 micVolumeScale = progress
-                micVolume.text = micVolumeScale.toString()
+                micVolume!!.text = micVolumeScale.toString()
             }
         })
 
@@ -1461,11 +1551,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         val shizukuPhoneCallPanel: LinearLayout = dialogView.findViewById(R.id.phonecall_volume_panel)
-        val shizukuPhoneCallVolume: TextView = dialogView.findViewById(R.id.phonecall_volume_value)
-        val shizukuPhoneCallSeekBar: SeekBar = dialogView.findViewById(R.id.phonecall_volume_seek)
-        shizukuPhoneCallSeekBar.progress = shizukuPhoneCallVolumeScale
-        shizukuPhoneCallVolume.text = shizukuPhoneCallVolumeScale.toString()
-        shizukuPhoneCallSeekBar.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener {
+        shizukuPhoneCallVolume = dialogView.findViewById(R.id.phonecall_volume_value)
+        shizukuPhoneCallSeekBar = dialogView.findViewById(R.id.phonecall_volume_seek)
+        shizukuPhoneCallSeekBar!!.progress = shizukuPhoneCallVolumeScale
+        shizukuPhoneCallVolume!!.text = shizukuPhoneCallVolumeScale.toString()
+        shizukuPhoneCallSeekBar!!.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener {
             override fun onStartTrackingTouch(seekBar: SeekBar) {
             }
 
@@ -1474,7 +1564,7 @@ class MainActivity : AppCompatActivity() {
 
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 shizukuPhoneCallVolumeScale = progress
-                shizukuPhoneCallVolume.text = shizukuPhoneCallVolumeScale.toString()
+                shizukuPhoneCallVolume!!.text = shizukuPhoneCallVolumeScale.toString()
             }
         })
 
@@ -1488,11 +1578,9 @@ class MainActivity : AppCompatActivity() {
             .setTitle(R.string.audio_volume_option)
             .setView(dialogView)
             .setPositiveButton(R.string.dialog_ok) { _, _ ->
-                this.appSettings?.setIntProperty(GlobalProperties.PropertiesInt.AUDIO_VOLUME, audioVolumeScale)
-                this.appSettings?.setIntProperty(GlobalProperties.PropertiesInt.MICROPHONE_VOLUME, micVolumeScale)
-                this.appSettings?.setIntProperty(GlobalProperties.PropertiesInt.SHIZUKU_PHONE_CALL_VOLUME, shizukuPhoneCallVolumeScale)
-
+                saveVolumeToSlot()
                 if (this.recordingBinder != null) {
+                    this.recordingBinder!!.setChosenAudioSlot(volumeSlotChosen)
                     this.recordingBinder!!.setAudioVolume(audioVolumeScale)
                     this.recordingBinder!!.setMicVolume(micVolumeScale)
                     this.recordingBinder!!.setShizukuPhoneCallVolume(micVolumeScale)

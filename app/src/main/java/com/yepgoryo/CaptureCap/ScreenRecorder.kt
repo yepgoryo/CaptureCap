@@ -37,7 +37,6 @@ import android.util.DisplayMetrics
 import android.util.Log
 import android.view.Display
 import android.view.Surface
-import android.view.WindowManager
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationChannelCompat
@@ -175,7 +174,6 @@ class ScreenRecorder : Service() {
     private var shizukuPhoneCallAudioSource: GlobalProperties.ShizukuPhoneCallAudioSource? = null
     private var shizukuAutoManage: Boolean = false
     private var shizukuServerAuthKey: String = ""
-    private var shizukuConnectionHelper: ShizukuConnectionHelper? = null
 
     private var sensorListener: SensorEventListener = object : SensorEventListener {
         override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {}
@@ -500,6 +498,12 @@ class ScreenRecorder : Service() {
                 this@ScreenRecorder.panelBinder!!.setShizukuPhoneCallVolume(vol)
             }
         }
+
+        fun setChosenAudioSlot(index: Int) {
+            if (this@ScreenRecorder.panelBinder != null) {
+                this@ScreenRecorder.panelBinder!!.setChosenAudioSlot(index)
+            }
+        }
     }
 
     inner class RecordingTileBinder : Binder() {
@@ -753,27 +757,15 @@ class ScreenRecorder : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if (intent != null) {
-            useShizuku = this.appSettings!!.getBooleanProperty(GlobalProperties.PropertiesBoolean.SHIZUKU_ENABLE, false)
-            useShizukuPhoneCallRecording = this.appSettings!!.getBooleanProperty(GlobalProperties.PropertiesBoolean.SHIZUKU_RECORD_PHONECALL, false)
             if (intent.action == ACTION_START) {
-                if (useShizuku && useShizukuPhoneCallRecording && !ShizukuConnectionHelper.shizukuAvailable()) {
-                    initShizukuConnection()
-                    Toast.makeText(this, R.string.shizuku_waiting, Toast.LENGTH_SHORT).show()
-                } else {
-                    if (!this@ScreenRecorder.timerRunning) {
-                        this.recordOnlyAudio = false
-                        actionStart()
-                    }
+                if (!this@ScreenRecorder.timerRunning) {
+                    this.recordOnlyAudio = false
+                    actionStart()
                 }
             } else if (intent.action == ACTION_START_NOVIDEO) {
-                if (useShizuku && useShizukuPhoneCallRecording && !ShizukuConnectionHelper.shizukuAvailable()) {
-                    initShizukuConnection()
-                    Toast.makeText(this, R.string.shizuku_waiting, Toast.LENGTH_SHORT).show()
-                } else {
-                    if (!this@ScreenRecorder.timerRunning) {
-                        this.recordOnlyAudio = true
-                        actionStart()
-                    }
+                if (!this@ScreenRecorder.timerRunning) {
+                    this.recordOnlyAudio = true
+                    actionStart()
                 }
             } else if (intent.action == ACTION_STOP) {
                 if (!this@ScreenRecorder.timerRunning && !this@ScreenRecorder.startFromPanel) {
@@ -925,6 +917,13 @@ class ScreenRecorder : Service() {
     }
 
     fun actionStart() {
+        useShizuku = this.appSettings!!.getBooleanProperty(GlobalProperties.PropertiesBoolean.SHIZUKU_ENABLE, false)
+        useShizukuPhoneCallRecording = this.appSettings!!.getBooleanProperty(GlobalProperties.PropertiesBoolean.SHIZUKU_RECORD_PHONECALL, false)
+        if (useShizuku && useShizukuPhoneCallRecording && (!ShizukuConnectionHelper.shizukuAvailable() || shizukuRecordService == null)) {
+            initShizukuConnection()
+            Toast.makeText(this, R.string.shizuku_waiting, Toast.LENGTH_SHORT).show()
+            return
+        }
         val displayMetrics = DisplayMetrics()
         this.display!!.getRealMetrics(displayMetrics)
         this.orientationOnStart = this.display!!.rotation
@@ -977,6 +976,11 @@ class ScreenRecorder : Service() {
         }
         if (this.appSettings!!.getAudioChannels() == GlobalProperties.AudioChannelsProperty.MONO) {
             this.customChannelsCount = 1
+
+            if (useShizuku && useShizukuPhoneCallRecording) {
+                Toast.makeText(baseContext, R.string.error_phonecall_mono, Toast.LENGTH_LONG).show()
+                return
+            }
         } else {
             this.customChannelsCount = 2
         }
@@ -1146,7 +1150,7 @@ class ScreenRecorder : Service() {
         shizukuServerAuthKey = this.appSettings!!.getStringProperty(GlobalProperties.PropertiesString.SHIZUKU_AUTH_KEY, "")
 
         if (useShizuku && useShizukuPhoneCallRecording) {
-            if (!ShizukuConnectionHelper.shizukuAvailable()) {
+            if (!ShizukuConnectionHelper.shizukuAvailable() || shizukuRecordService == null) {
                 Toast.makeText(baseContext, R.string.shizuku_waiting, Toast.LENGTH_LONG).show()
                 if (shizukuAutoManage && !shizukuServerAuthKey.isBlank()) {
                     shizukuManageStart()

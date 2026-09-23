@@ -162,6 +162,62 @@
 
         </LinearLayout>
 
+        <com.yepgoryo.CaptureCap.PresetButtonChoose
+            android:id="@+id/audio_volume_preset"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <androidx.appcompat.widget.AppCompatToggleButton
+                android:id="@+id/audio_button_preset_1"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:background="@drawable/bg_setting_rounded_button_checked"
+                android:textSize="13sp"
+                android:layout_centerHorizontal="true"
+                android:textOff="1"
+                android:textOn="1"
+                android:text="1" />
+
+            <androidx.appcompat.widget.AppCompatToggleButton
+                android:id="@+id/audio_button_preset_2"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_marginLeft="8dp"
+                android:background="@drawable/bg_setting_rounded_button_checked"
+                android:textSize="13sp"
+                android:layout_centerHorizontal="true"
+                android:textOff="2"
+                android:textOn="2"
+                android:text="2" />
+
+            <androidx.appcompat.widget.AppCompatToggleButton
+                android:id="@+id/audio_button_preset_3"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_marginLeft="8dp"
+                android:background="@drawable/bg_setting_rounded_button_checked"
+                android:textSize="13sp"
+                android:layout_centerHorizontal="true"
+                android:textOff="3"
+                android:textOn="3"
+                android:text="3" />
+
+            <androidx.appcompat.widget.AppCompatToggleButton
+                android:id="@+id/audio_button_preset_4"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_marginLeft="8dp"
+                android:background="@drawable/bg_setting_rounded_button_checked"
+                android:textSize="13sp"
+                android:layout_centerHorizontal="true"
+                android:textOff="4"
+                android:textOn="4"
+                android:text="4" />
+
+        </com.yepgoryo.CaptureCap.PresetButtonChoose>
+
     </LinearLayout>
 
 </ScrollView>

@@ -494,6 +494,7 @@ class PlaybackRecorder(
                     val oldPtsWithoutTimeout = bufferInfo.presentationTimeUs - lastTimeout
                     if (oldPtsWithoutTimeout <= videoLastPtsOffset) {
                         lastTimeout -= videoLastPtsOffset - oldPtsWithoutTimeout
+                        Log.d(TAG, "Accounting for video overhead: ${videoLastPtsOffset - oldPtsWithoutTimeout}")
                     }
                     bufferInfo.presentationTimeUs -= lastTimeout
                     videoLastPtsOffset = bufferInfo.presentationTimeUs
@@ -520,6 +521,7 @@ class PlaybackRecorder(
                     val oldPtsWithoutTimeout = bufferInfo.presentationTimeUs - lastTimeout
                     if (oldPtsWithoutTimeout <= audioLastPtsOffset) {
                         lastTimeout -= audioLastPtsOffset - oldPtsWithoutTimeout
+                        Log.d(TAG, "Accounting for audio overhead: ${audioLastPtsOffset - oldPtsWithoutTimeout}")
                     }
                     bufferInfo.presentationTimeUs -= lastTimeout
                     audioLastPtsOffset = bufferInfo.presentationTimeUs

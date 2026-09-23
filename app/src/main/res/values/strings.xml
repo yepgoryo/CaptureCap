@@ -254,6 +254,7 @@
     <string name="timer_wait_title">Timer is ticking</string>
     <string name="timer_wait_description">The recording will start shortly</string>
     <string name="timer_abort">Abort timer</string>
+    <string name="error_phonecall_mono">Error: Phone call records only in stereo</string>
     <string name="error_storage_required">Error: Storage permission required</string>
     <string name="error_storage_select_folder">Error: Select recordings folder</string>
     <string name="error_audio_required">Error: Allow recording audio</string>

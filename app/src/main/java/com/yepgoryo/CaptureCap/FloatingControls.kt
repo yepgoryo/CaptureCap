@@ -82,6 +82,8 @@ class FloatingControls : Service() {
     private var micSeekBar: SeekBar? = null
     private var shizukuPhoneCallVolume: TextView? = null
     private var shizukuPhoneCallSeekBar: SeekBar? = null
+    private var chooseVolumeSlotButton: PresetButtonChoose? = null
+    private var volumeSlotChosen: Int = 1
     private var audioVolumeScale: Int = 100
     private var micVolumeScale: Int = 100
     private var shizukuPhoneCallVolumeScale: Int = 100
@@ -293,6 +295,11 @@ class FloatingControls : Service() {
             shizukuPhoneCallSeekBar!!.progress = vol
             shizukuPhoneCallVolume!!.text = vol.toString()
             shizukuPhoneCallVolumeScale = vol
+        }
+
+        fun setChosenAudioSlot(index: Int) {
+            volumeSlotChosen = index
+            chooseVolumeSlotButton?.setButtonChecked(volumeSlotChosen)
         }
     }
 
@@ -559,6 +566,67 @@ class FloatingControls : Service() {
         }
     }
 
+    private fun saveVolumeToSlot() {
+        when (volumeSlotChosen) {
+            1 -> {
+                this.appSettings!!.setIntProperty(GlobalProperties.PropertiesInt.AUDIO_VOLUME, this.audioVolumeScale)
+                this.appSettings!!.setIntProperty(GlobalProperties.PropertiesInt.MICROPHONE_VOLUME, this.micVolumeScale)
+                this.appSettings!!.setIntProperty(GlobalProperties.PropertiesInt.SHIZUKU_PHONE_CALL_VOLUME, this.shizukuPhoneCallVolumeScale)
+            }
+            2 -> {
+                this.appSettings!!.setIntProperty(GlobalProperties.PropertiesInt.AUDIO_VOLUME_SLOT2, this.audioVolumeScale)
+                this.appSettings!!.setIntProperty(GlobalProperties.PropertiesInt.MICROPHONE_VOLUME_SLOT2, this.micVolumeScale)
+                this.appSettings!!.setIntProperty(GlobalProperties.PropertiesInt.SHIZUKU_PHONE_CALL_VOLUME_SLOT2, this.shizukuPhoneCallVolumeScale)
+            }
+            3 -> {
+                this.appSettings!!.setIntProperty(GlobalProperties.PropertiesInt.AUDIO_VOLUME_SLOT3, this.audioVolumeScale)
+                this.appSettings!!.setIntProperty(GlobalProperties.PropertiesInt.MICROPHONE_VOLUME_SLOT3, this.micVolumeScale)
+                this.appSettings!!.setIntProperty(GlobalProperties.PropertiesInt.SHIZUKU_PHONE_CALL_VOLUME_SLOT3, this.shizukuPhoneCallVolumeScale)
+            }
+            4 -> {
+                this.appSettings!!.setIntProperty(GlobalProperties.PropertiesInt.AUDIO_VOLUME_SLOT4, this.audioVolumeScale)
+                this.appSettings!!.setIntProperty(GlobalProperties.PropertiesInt.MICROPHONE_VOLUME_SLOT4, this.micVolumeScale)
+                this.appSettings!!.setIntProperty(GlobalProperties.PropertiesInt.SHIZUKU_PHONE_CALL_VOLUME_SLOT4, this.shizukuPhoneCallVolumeScale)
+            }
+        }
+    }
+
+    private fun loadVolumeFromSlot() {
+        volumeSlotChosen = this.appSettings!!.getIntProperty(GlobalProperties.PropertiesInt.VOLUME_SLOT_CHOSEN, 1)
+
+        when (volumeSlotChosen) {
+            1 -> {
+                this.audioVolumeScale = this.appSettings!!.getIntProperty(GlobalProperties.PropertiesInt.AUDIO_VOLUME, 100)
+                this.micVolumeScale = this.appSettings!!.getIntProperty(GlobalProperties.PropertiesInt.MICROPHONE_VOLUME, 100)
+                this.shizukuPhoneCallVolumeScale = this.appSettings!!.getIntProperty(GlobalProperties.PropertiesInt.SHIZUKU_PHONE_CALL_VOLUME, 100)
+            }
+            2 -> {
+                this.audioVolumeScale = this.appSettings!!.getIntProperty(GlobalProperties.PropertiesInt.AUDIO_VOLUME_SLOT2, 100)
+                this.micVolumeScale = this.appSettings!!.getIntProperty(GlobalProperties.PropertiesInt.MICROPHONE_VOLUME_SLOT2, 100)
+                this.shizukuPhoneCallVolumeScale = this.appSettings!!.getIntProperty(GlobalProperties.PropertiesInt.SHIZUKU_PHONE_CALL_VOLUME_SLOT2, 100)
+            }
+            3 -> {
+                this.audioVolumeScale = this.appSettings!!.getIntProperty(GlobalProperties.PropertiesInt.AUDIO_VOLUME_SLOT3, 100)
+                this.micVolumeScale = this.appSettings!!.getIntProperty(GlobalProperties.PropertiesInt.MICROPHONE_VOLUME_SLOT3, 100)
+                this.shizukuPhoneCallVolumeScale = this.appSettings!!.getIntProperty(GlobalProperties.PropertiesInt.SHIZUKU_PHONE_CALL_VOLUME_SLOT3, 100)
+            }
+            4 -> {
+                this.audioVolumeScale = this.appSettings!!.getIntProperty(GlobalProperties.PropertiesInt.AUDIO_VOLUME_SLOT4, 100)
+                this.micVolumeScale = this.appSettings!!.getIntProperty(GlobalProperties.PropertiesInt.MICROPHONE_VOLUME_SLOT4, 100)
+                this.shizukuPhoneCallVolumeScale = this.appSettings!!.getIntProperty(GlobalProperties.PropertiesInt.SHIZUKU_PHONE_CALL_VOLUME_SLOT4, 100)
+            }
+        }
+
+        audioSeekBar?.progress = this.audioVolumeScale
+        audioVolume?.text = this.audioVolumeScale.toString()
+
+        micSeekBar?.progress = this.micVolumeScale
+        micVolume?.text = this.micVolumeScale.toString()
+
+        shizukuPhoneCallSeekBar?.progress = this.shizukuPhoneCallVolumeScale
+        shizukuPhoneCallVolume?.text = this.shizukuPhoneCallVolumeScale.toString()
+    }
+
     fun startRecord() {
         updateMetrics()
 
@@ -617,9 +685,17 @@ class FloatingControls : Service() {
             }
         }
 
+        loadVolumeFromSlot()
 
-        this.audioVolumeScale = this.appSettings!!.getIntProperty(GlobalProperties.PropertiesInt.AUDIO_VOLUME, 100)
-        this.micVolumeScale = this.appSettings!!.getIntProperty(GlobalProperties.PropertiesInt.MICROPHONE_VOLUME, 100)
+        chooseVolumeSlotButton = floatingPanel!!.findViewById(R.id.audio_volume_preset)
+
+        chooseVolumeSlotButton!!.setButtonChecked(volumeSlotChosen)
+
+        chooseVolumeSlotButton!!.stateChanged = { newState ->
+            saveVolumeToSlot()
+            this@FloatingControls.appSettings?.setIntProperty(GlobalProperties.PropertiesInt.VOLUME_SLOT_CHOSEN, newState)
+            loadVolumeFromSlot()
+        }
 
         audioVolume = this@FloatingControls.floatingPanel!!.findViewById(R.id.audio_volume_value)
         audioSeekBar = this@FloatingControls.floatingPanel!!.findViewById(R.id.audio_volume_seek)
@@ -635,7 +711,20 @@ class FloatingControls : Service() {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 this@FloatingControls.audioVolumeScale = progress
                 audioVolume!!.text = this@FloatingControls.audioVolumeScale.toString()
-                this@FloatingControls.appSettings?.setIntProperty(GlobalProperties.PropertiesInt.AUDIO_VOLUME, this@FloatingControls.audioVolumeScale)
+                when (volumeSlotChosen) {
+                    1 -> {
+                        this@FloatingControls.appSettings?.setIntProperty(GlobalProperties.PropertiesInt.AUDIO_VOLUME, this@FloatingControls.audioVolumeScale)
+                    }
+                    2 -> {
+                        this@FloatingControls.appSettings?.setIntProperty(GlobalProperties.PropertiesInt.AUDIO_VOLUME_SLOT2, this@FloatingControls.audioVolumeScale)
+                    }
+                    3 -> {
+                        this@FloatingControls.appSettings?.setIntProperty(GlobalProperties.PropertiesInt.AUDIO_VOLUME_SLOT3, this@FloatingControls.audioVolumeScale)
+                    }
+                    4 -> {
+                        this@FloatingControls.appSettings?.setIntProperty(GlobalProperties.PropertiesInt.AUDIO_VOLUME_SLOT4, this@FloatingControls.audioVolumeScale)
+                    }
+                }
             }
         })
 
@@ -653,7 +742,20 @@ class FloatingControls : Service() {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 this@FloatingControls.micVolumeScale = progress
                 micVolume!!.text = this@FloatingControls.micVolumeScale.toString()
-                this@FloatingControls.appSettings?.setIntProperty(GlobalProperties.PropertiesInt.MICROPHONE_VOLUME, this@FloatingControls.micVolumeScale)
+                when (volumeSlotChosen) {
+                    1 -> {
+                        this@FloatingControls.appSettings?.setIntProperty(GlobalProperties.PropertiesInt.MICROPHONE_VOLUME, this@FloatingControls.micVolumeScale)
+                    }
+                    2 -> {
+                        this@FloatingControls.appSettings?.setIntProperty(GlobalProperties.PropertiesInt.MICROPHONE_VOLUME_SLOT2, this@FloatingControls.micVolumeScale)
+                    }
+                    3 -> {
+                        this@FloatingControls.appSettings?.setIntProperty(GlobalProperties.PropertiesInt.MICROPHONE_VOLUME_SLOT3, this@FloatingControls.micVolumeScale)
+                    }
+                    4 -> {
+                        this@FloatingControls.appSettings?.setIntProperty(GlobalProperties.PropertiesInt.MICROPHONE_VOLUME_SLOT4, this@FloatingControls.micVolumeScale)
+                    }
+                }
             }
         })
 
@@ -670,8 +772,21 @@ class FloatingControls : Service() {
 
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 this@FloatingControls.shizukuPhoneCallVolumeScale = progress
-                micVolume!!.text = this@FloatingControls.shizukuPhoneCallVolumeScale.toString()
-                this@FloatingControls.appSettings?.setIntProperty(GlobalProperties.PropertiesInt.SHIZUKU_PHONE_CALL_VOLUME, this@FloatingControls.shizukuPhoneCallVolumeScale)
+                shizukuPhoneCallVolume!!.text = this@FloatingControls.shizukuPhoneCallVolumeScale.toString()
+                when (volumeSlotChosen) {
+                    1 -> {
+                        this@FloatingControls.appSettings?.setIntProperty(GlobalProperties.PropertiesInt.SHIZUKU_PHONE_CALL_VOLUME, this@FloatingControls.shizukuPhoneCallVolumeScale)
+                    }
+                    2 -> {
+                        this@FloatingControls.appSettings?.setIntProperty(GlobalProperties.PropertiesInt.SHIZUKU_PHONE_CALL_VOLUME_SLOT2, this@FloatingControls.shizukuPhoneCallVolumeScale)
+                    }
+                    3 -> {
+                        this@FloatingControls.appSettings?.setIntProperty(GlobalProperties.PropertiesInt.SHIZUKU_PHONE_CALL_VOLUME_SLOT3, this@FloatingControls.shizukuPhoneCallVolumeScale)
+                    }
+                    4 -> {
+                        this@FloatingControls.appSettings?.setIntProperty(GlobalProperties.PropertiesInt.SHIZUKU_PHONE_CALL_VOLUME_SLOT4, this@FloatingControls.shizukuPhoneCallVolumeScale)
+                    }
+                }
             }
         })
 
