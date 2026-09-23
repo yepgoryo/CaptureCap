@@ -1,5 +1,5 @@
 Aufnahme der Audiowiedergabe benötigt Android 10 oder neuer. Kein Root nötig.
 
-(ACHTUNG: Einige Gerätehersteller erlauben das Aufnehmen bestimmter oder aller Audiowiedergabequellen nicht)
-
 KI-Hinweis: Dieses Programm enthält Code, der von der KI unterstützt oder geschrieben wird. Weitere Informationen sind entweder in der App oder im Repository.
+
+(ACHTUNG: Einige Gerätehersteller erlauben das Aufnehmen bestimmter oder aller Audiowiedergabequellen nicht)
