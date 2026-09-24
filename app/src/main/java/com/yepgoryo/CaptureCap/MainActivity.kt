@@ -833,6 +833,7 @@ class MainActivity : AppCompatActivity() {
         val darkTheme: GlobalProperties.DarkThemeProperty = globalProperties.getDarkTheme(false)
         if (this.appSettings!!.getDarkTheme(true) != this.appSettings!!.getDarkTheme(false)) {
             this.appSettings!!.setDarkTheme(true, darkTheme)
+            System.exit(0)
         }
         when (darkTheme) {
             GlobalProperties.DarkThemeProperty.DARK -> {
