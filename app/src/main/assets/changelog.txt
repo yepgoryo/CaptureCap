@@ -1,3 +1,12 @@
+Version 3.9.8.3 code 44
+---
+ * Fixed phone call higher Android API function call.
+
+ * Fixed phone call mute button displaying when Shizuku's not enabled.
+
+ * Fixed phone call audio buffer not draining when muted.
+
+
 Version 3.9.8 code 43
 ---
  * Added new 3d video-based animations.

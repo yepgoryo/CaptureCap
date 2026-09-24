@@ -1,0 +1,5 @@
+ * Fixed phone call higher Android API function call.
+
+ * Fixed phone call mute button displaying when Shizuku's not enabled.
+
+ * Fixed phone call audio buffer not draining when muted.
