@@ -1757,7 +1757,7 @@ class MainActivity : AppCompatActivity() {
 
             val drawOverlay: Boolean = this.appSettings!!.getBooleanProperty(GlobalProperties.PropertiesBoolean.DRAW_OVERLAY, false)
 
-            if (shizukuRecordPhoneCall && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            if (enableShizuku && shizukuRecordPhoneCall && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                 if (ShizukuConnectionHelper.shizukuAvailable()) {
                     if (!ShizukuConnectionHelper.hasShizukuPermission(this)) {
                         Shizuku.addRequestPermissionResultListener(shizukuPermissionListener)

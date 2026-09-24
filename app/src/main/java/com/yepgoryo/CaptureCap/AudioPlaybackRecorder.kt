@@ -93,14 +93,14 @@ class AudioPlaybackRecorder(
             if (list.size >= 12200) {
                 list.clear()
             }
-            list.addLast(buf)
+            list.add(0, buf)
         }
 
         fun getBuffer(): ByteArray = lock.withLock {
             if (list.isEmpty()) {
                 return ByteArray(0)
             } else {
-                return list.removeFirst()
+                return list.removeAt(list.size-1)
             }
         }
     }
@@ -168,9 +168,9 @@ class AudioPlaybackRecorder(
         this.mForceStop.set(true)
         val recordHandler: RecordHandler? = this.mRecordHandler
         recordHandler?.sendEmptyMessage(RecordMessage.MSG_STOP.ordinal)
-        stopScrcpyAudioBufferStream()
-        scrcpyReadScope.cancel()
         if (shizukuRecordPhoneCall) {
+            stopScrcpyAudioBufferStream()
+            scrcpyReadScope.cancel()
             releaseScrcpyRecord()
         }
     }
@@ -392,6 +392,12 @@ class AudioPlaybackRecorder(
         val bufSizeBytes = bufSizeShorts*2
 
         if (!eos) {
+            var gotShizukuPhoneCallBuffer: ByteArray? = null
+
+            if (shizukuRecordPhoneCall) {
+                gotShizukuPhoneCallBuffer = getScrcpyAudioBuffer()
+            }
+
             if ((recordMicrophone || recordAudio || shizukuRecordPhoneCall) && ((!recordAudio || audioMuted) && (!recordMicrophone || micMuted) && (!shizukuRecordPhoneCall || shizukuPhoneCallMuted))) {
                 val framePlayback = ByteArray(bufSizeBytes)
                 var noneRead: Int = 0
@@ -402,8 +408,8 @@ class AudioPlaybackRecorder(
                     noneRead = mMic!!.read(framePlayback, 0, bufSizeBytes)
                 }
 
-                if (shizukuRecordPhoneCall) {
-                    val readPhoneCall = getScrcpyAudioBuffer().size
+                if (shizukuRecordPhoneCall && gotShizukuPhoneCallBuffer != null) {
+                    val readPhoneCall = gotShizukuPhoneCallBuffer!!.size
                     if (readPhoneCall > noneRead) noneRead = readPhoneCall
                 }
 
@@ -466,7 +472,7 @@ class AudioPlaybackRecorder(
                     micRead = playbackRead
                 }
 
-                val shizukuPhoneCallBuffer = getScrcpyAudioBuffer().toPCMShortArray()
+                val shizukuPhoneCallBuffer = gotShizukuPhoneCallBuffer!!.toPCMShortArray()
                 val packetRead = shizukuPhoneCallBuffer.size
 
                 if (micRead < packetRead) {
@@ -538,7 +544,7 @@ class AudioPlaybackRecorder(
                     read = 0
                 }
             } else if ((!recordMicrophone || micMuted) && (!recordAudio || audioMuted) && (shizukuRecordPhoneCall && !shizukuPhoneCallMuted)) {
-                val shizukuPhoneCallBuffer = getScrcpyAudioBuffer().toPCMShortArray()
+                val shizukuPhoneCallBuffer = gotShizukuPhoneCallBuffer!!.toPCMShortArray()
                 val packetRead = shizukuPhoneCallBuffer.size
                 val framePacket = ByteArray(bufSizeBytes)
 
@@ -560,7 +566,7 @@ class AudioPlaybackRecorder(
                 val framePlayback = ShortArray(bufSizeShorts)
                 val playbackRead = mPlayback!!.read(framePlayback, 0, bufSizeShorts)
 
-                val shizukuPhoneCallBuffer = getScrcpyAudioBuffer().toPCMShortArray()
+                val shizukuPhoneCallBuffer = gotShizukuPhoneCallBuffer!!.toPCMShortArray()
                 var packetRead = shizukuPhoneCallBuffer.size
 
                 if (packetRead < playbackRead) {
@@ -595,7 +601,7 @@ class AudioPlaybackRecorder(
                 val frameMic = ShortArray(bufSizeShorts)
                 val micRead = mMic!!.read(frameMic, 0, bufSizeShorts)
 
-                val shizukuPhoneCallBuffer = getScrcpyAudioBuffer().toPCMShortArray()
+                val shizukuPhoneCallBuffer = gotShizukuPhoneCallBuffer!!.toPCMShortArray()
                 var packetRead = shizukuPhoneCallBuffer.size
 
                 if (packetRead < micRead) {

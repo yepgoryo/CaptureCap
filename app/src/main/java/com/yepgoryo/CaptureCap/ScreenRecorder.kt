@@ -457,7 +457,7 @@ class ScreenRecorder : Service() {
         }
 
         fun recordShizukuPhoneCall(): Boolean {
-            return this@ScreenRecorder.useShizukuPhoneCallRecording
+            return (this@ScreenRecorder.useShizuku && this@ScreenRecorder.useShizukuPhoneCallRecording)
         }
 
         fun getTimeStart(): Long {
