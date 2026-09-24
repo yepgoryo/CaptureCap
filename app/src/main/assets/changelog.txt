@@ -1,3 +1,22 @@
+Version 3.9.8 code 43
+---
+ * Added new 3d video-based animations.
+
+ * Added option to disable in-app animations.
+
+ * Added audio volume preset slots.
+
+ * Fixed audio crashing after pause.
+
+ * Fixed audio background noise.
+
+ * Fixed mono audio recording not working.
+
+ * Fixed phone call recording audio stutter.
+
+ * Fixed Shizuku connection. Again.
+
+
 Version 3.9.7.4 code 42
 ---
  * Added option to set video keyframe frequency.
