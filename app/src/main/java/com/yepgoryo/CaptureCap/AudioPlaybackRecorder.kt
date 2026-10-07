@@ -83,6 +83,9 @@ class AudioPlaybackRecorder(
     private var scrcpyInputStream: DataInputStream? = null
     private var scrcpyInputPfd: ParcelFileDescriptor? = null
     private val scrcpyReadScope = CoroutineScope(Dispatchers.IO)
+    private val playbackReadScope = CoroutineScope(Dispatchers.IO)
+    private val microphoneReadScope = CoroutineScope(Dispatchers.IO)
+    private val startedAudio = AtomicBoolean(false)
 
     class PhoneCallBufferQueue {
         private val lock = ReentrantLock()
@@ -103,11 +106,70 @@ class AudioPlaybackRecorder(
                 return list.removeAt(list.size-1)
             }
         }
+
+        fun waitForBuffer(): ByteArray {
+            var lastItem: ByteArray? = null
+            while (lastItem == null) {
+                if (!list.isEmpty()) {
+                    lastItem = getBuffer()
+                    if (lastItem.isEmpty()) {
+                        lastItem = null
+                    }
+                }
+                if (lastItem == null) {
+                    Thread.sleep(2)
+                }
+            }
+
+            return lastItem
+        }
+    }
+
+    class AudioBufferQueue {
+        private val lock = ReentrantLock()
+        private val list: ArrayList<ShortArray> = arrayListOf()
+
+        fun queueBuffer(buf: ShortArray) = lock.withLock {
+            /* 1MB ~= 122 AAC stereo buffers (shorts), 6100 ~= 50MB */
+            if (list.size >= 6100) {
+                list.clear()
+            }
+            list.add(0, buf)
+        }
+
+        fun getBuffer(): ShortArray = lock.withLock {
+            if (list.isEmpty()) {
+                return ShortArray(0)
+            } else {
+                return list.removeAt(list.size-1)
+            }
+        }
+
+        fun waitForBuffer(): ShortArray {
+            var lastItem: ShortArray? = null
+            while (lastItem == null) {
+                if (!list.isEmpty()) {
+                    lastItem = getBuffer()
+                    if (lastItem.isEmpty()) {
+                        lastItem = null
+                    }
+                }
+                if (lastItem == null) {
+                    Thread.sleep(2)
+                }
+            }
+
+            return lastItem
+        }
     }
 
     private var scrcpyAudioBufferQueue: PhoneCallBufferQueue = PhoneCallBufferQueue()
+    private var audioPlaybackBufferQueue: AudioBufferQueue = AudioBufferQueue()
+    private var audioMicrophoneBufferQueue: AudioBufferQueue = AudioBufferQueue()
 
     private var scrcpyStreamRunning: AtomicBoolean = AtomicBoolean(false)
+    private var audioPlaybackStreamRunning: AtomicBoolean = AtomicBoolean(false)
+    private var audioMicrophoneStreamRunning: AtomicBoolean = AtomicBoolean(false)
 
     companion object {
         const val AUDIO_BUFFER_SHORTS_MONO_SIZE = 1024
@@ -157,6 +219,16 @@ class AudioPlaybackRecorder(
                 runScrcpyAudioBufferStream()
             }
         }
+        if (recordAudio) {
+            playbackReadScope.launch {
+                runAudioPlaybackBufferStream()
+            }
+        }
+        if (recordMicrophone) {
+            microphoneReadScope.launch {
+                runAudioMicrophoneBufferStream()
+            }
+        }
         this.mRecordThread.start()
         this.mRecordHandler = RecordHandler(this.mRecordThread.getLooper())
         this.mRecordHandler?.sendEmptyMessage(RecordMessage.MSG_PREPARE.ordinal)
@@ -168,6 +240,14 @@ class AudioPlaybackRecorder(
         this.mForceStop.set(true)
         val recordHandler: RecordHandler? = this.mRecordHandler
         recordHandler?.sendEmptyMessage(RecordMessage.MSG_STOP.ordinal)
+        if (recordAudio) {
+            stopAudioPlaybackBufferStream()
+            playbackReadScope.cancel()
+        }
+        if (recordMicrophone) {
+            stopAudioMicrophoneStream()
+            microphoneReadScope.cancel()
+        }
         if (shizukuRecordPhoneCall) {
             stopScrcpyAudioBufferStream()
             scrcpyReadScope.cancel()
@@ -346,7 +426,11 @@ class AudioPlaybackRecorder(
         }
     }
 
+    fun getBufSizeShorts(): Int = if (mChannelConfig == AudioFormat.CHANNEL_IN_STEREO) AUDIO_BUFFER_SHORTS_STEREO_SIZE else AUDIO_BUFFER_SHORTS_MONO_SIZE
+
     fun feedAudioEncoder(index: Int) {
+        if (!startedAudio.get()) startedAudio.set(true)
+
         if (index < 0 || mForceStop.get()) return
 
         var eos: Boolean = false
@@ -357,7 +441,6 @@ class AudioPlaybackRecorder(
             eos = (mMic!!.getRecordingState() == AudioRecord.RECORDSTATE_STOPPED)
         }
 
-        val offset: Int = mEncoder.getInputBuffer(index)!!.position()
         var read = 0
 
         val audioVolumeSlot = this.appSettings!!.getIntProperty(GlobalProperties.PropertiesInt.VOLUME_SLOT_CHOSEN, 1)
@@ -388,8 +471,7 @@ class AudioPlaybackRecorder(
             }
         }
 
-        val bufSizeShorts = if (mChannelConfig == AudioFormat.CHANNEL_IN_STEREO) AUDIO_BUFFER_SHORTS_STEREO_SIZE else AUDIO_BUFFER_SHORTS_MONO_SIZE
-        val bufSizeBytes = bufSizeShorts*2
+        val bufSizeBytes = getBufSizeShorts() * Short.SIZE_BYTES
 
         if (!eos) {
             var gotShizukuPhoneCallBuffer: ByteArray? = null
@@ -398,41 +480,53 @@ class AudioPlaybackRecorder(
                 gotShizukuPhoneCallBuffer = getScrcpyAudioBuffer()
             }
 
+            var gotAudioBuffer: ShortArray? = null
+
+            if (recordAudio) {
+                gotAudioBuffer = getAudioPlaybackBuffer()
+            }
+
+            var gotMicrophoneBuffer: ShortArray? = null
+
+            if (recordMicrophone) {
+                gotMicrophoneBuffer = getAudioMicrophoneBuffer()
+            }
+
             if ((recordMicrophone || recordAudio || shizukuRecordPhoneCall) && ((!recordAudio || audioMuted) && (!recordMicrophone || micMuted) && (!shizukuRecordPhoneCall || shizukuPhoneCallMuted))) {
-                val framePlayback = ByteArray(bufSizeBytes)
-                var noneRead: Int = 0
+                var readMore = 0
+
+                if (shizukuRecordPhoneCall) {
+                    if (readMore < gotShizukuPhoneCallBuffer!!.size) {
+                        readMore = gotShizukuPhoneCallBuffer.size
+                    }
+                }
 
                 if (recordAudio) {
-                    noneRead = mPlayback!!.read(framePlayback, 0, bufSizeBytes)
-                } else if (recordMicrophone) {
-                    noneRead = mMic!!.read(framePlayback, 0, bufSizeBytes)
+                    if (readMore < gotAudioBuffer!!.size) {
+                        readMore = gotAudioBuffer.size * Short.SIZE_BYTES
+                    }
                 }
 
-                if (shizukuRecordPhoneCall && gotShizukuPhoneCallBuffer != null) {
-                    val readPhoneCall = gotShizukuPhoneCallBuffer!!.size
-                    if (readPhoneCall > noneRead) noneRead = readPhoneCall
+                if (recordMicrophone) {
+                    if (readMore < gotMicrophoneBuffer!!.size) {
+                        readMore = gotMicrophoneBuffer.size * Short.SIZE_BYTES
+                    }
                 }
 
-                var i = 0
-                while (i < noneRead) {
-                    framePlayback[i] = 0
-                    i += 1
-                }
+                val frameZero = ByteArray(bufSizeBytes)
+                frameZero.fill(0)
 
-                mEncoder.getInputBuffer(index)?.put(framePlayback)
+                mEncoder.getInputBuffer(index)?.put(frameZero)
 
-                if (noneRead >= 0) {
-                    read = noneRead
-                } else {
-                    read = 0
-                }
+                read = readMore
             } else if ((recordMicrophone && !micMuted) && (recordAudio && !audioMuted) && (!shizukuRecordPhoneCall || shizukuPhoneCallMuted)) {
-                val framePlayback = ShortArray(bufSizeShorts)
-                val playbackRead: Int = mPlayback!!.read(framePlayback, 0, bufSizeShorts)
-                val frameMic = ShortArray(bufSizeShorts)
-                var micRead: Int = mMic!!.read(frameMic, 0, bufSizeShorts)
+                val framePlayback = gotAudioBuffer!!
+                val frameMic = gotMicrophoneBuffer!!
 
-                if (playbackRead < micRead) {
+                val playbackRead = framePlayback.size
+                var micRead = frameMic.size
+
+                if (micRead < playbackRead) {
                     micRead = playbackRead
                 }
 
@@ -463,12 +557,13 @@ class AudioPlaybackRecorder(
                     read = 0
                 }
             } else if ((recordMicrophone && !micMuted) && (recordAudio && !audioMuted) && (shizukuRecordPhoneCall && !shizukuPhoneCallMuted)) {
-                val framePlayback = ShortArray(bufSizeShorts)
-                val playbackRead: Int = mPlayback!!.read(framePlayback, 0, bufSizeShorts)
-                val frameMic = ShortArray(bufSizeShorts)
-                var micRead: Int = mMic!!.read(frameMic, 0, bufSizeShorts)
+                val framePlayback = gotAudioBuffer!!
+                val frameMic = gotMicrophoneBuffer!!
 
-                if (playbackRead < micRead) {
+                val playbackRead = framePlayback.size
+                var micRead = frameMic.size
+
+                if (micRead < playbackRead) {
                     micRead = playbackRead
                 }
 
@@ -508,8 +603,8 @@ class AudioPlaybackRecorder(
                     read = 0
                 }
             } else if ((recordMicrophone && !micMuted) && (!recordAudio || audioMuted) && (!shizukuRecordPhoneCall || shizukuPhoneCallMuted)) {
-                val frameMic = ShortArray(bufSizeShorts)
-                val micRead = mMic!!.read(frameMic, 0, bufSizeShorts)
+                val frameMic = gotMicrophoneBuffer!!
+                val micRead = frameMic.size
 
                 var i = 0
                 while (i < micRead) {
@@ -526,8 +621,8 @@ class AudioPlaybackRecorder(
                     read = 0
                 }
             } else if ((!recordMicrophone || micMuted) && (recordAudio && !audioMuted) && (!shizukuRecordPhoneCall || shizukuPhoneCallMuted)) {
-                val framePlayback = ShortArray(bufSizeShorts)
-                val playbackRead = mPlayback!!.read(framePlayback, 0, bufSizeShorts)
+                val framePlayback = gotAudioBuffer!!
+                val playbackRead = framePlayback.size
 
                 var i = 0
                 while (i < playbackRead) {
@@ -563,8 +658,8 @@ class AudioPlaybackRecorder(
                     read = 0
                 }
             } else if ((!recordMicrophone || micMuted) && (recordAudio && !audioMuted) && (shizukuRecordPhoneCall && !shizukuPhoneCallMuted)) {
-                val framePlayback = ShortArray(bufSizeShorts)
-                val playbackRead = mPlayback!!.read(framePlayback, 0, bufSizeShorts)
+                val framePlayback = gotAudioBuffer!!
+                val playbackRead = framePlayback.size
 
                 val shizukuPhoneCallBuffer = gotShizukuPhoneCallBuffer!!.toPCMShortArray()
                 var packetRead = shizukuPhoneCallBuffer.size
@@ -598,8 +693,8 @@ class AudioPlaybackRecorder(
                     read = 0
                 }
             } else if ((recordMicrophone && !micMuted) && (!recordAudio || audioMuted) && (shizukuRecordPhoneCall && !shizukuPhoneCallMuted)) {
-                val frameMic = ShortArray(bufSizeShorts)
-                val micRead = mMic!!.read(frameMic, 0, bufSizeShorts)
+                val frameMic = gotMicrophoneBuffer!!
+                val micRead = frameMic.size
 
                 val shizukuPhoneCallBuffer = gotShizukuPhoneCallBuffer!!.toPCMShortArray()
                 var packetRead = shizukuPhoneCallBuffer.size
@@ -638,12 +733,14 @@ class AudioPlaybackRecorder(
 
         }
 
-        val presentationTime: Long = this.calculateFrameTimestamp(read)
+        val presentationTime: Long = this.calculateFrameTimestamp()
         var flags: Int = MediaCodec.BUFFER_FLAG_KEY_FRAME
 
         if (eos) {
             flags = MediaCodec.BUFFER_FLAG_END_OF_STREAM
         }
+
+        val offset: Int = mEncoder.getInputBuffer(index)!!.position()
 
         mEncoder.queueInputBuffer(index, offset, read, presentationTime, flags)
     }
@@ -733,18 +830,17 @@ class AudioPlaybackRecorder(
         return shizukuPhoneCallMuted
     }
 
-    private fun calculateFrameTimestamp(total: Int): Long {
-        val totalSamples: Int = total / 2
-        var frameGap: Long = audioFrameGap
-        if (frameGap == -1L) {
-            frameGap = (totalSamples.toLong() * 1_000_000) / this.mChannelsSampleRate
+    private fun calculateFrameTimestamp(): Long {
+        if (audioFrameGap == -1L) {
+            val totalSamples: Int = getBufSizeShorts()
+            val frameGap: Long = (totalSamples.toLong() * 1_000_000) / this.mChannelsSampleRate
             audioFrameGap = frameGap
         }
         var lastFramePst: Long = lastAudioFramePst
         if (lastFramePst == 0L) {
-            lastFramePst = (SystemClock.elapsedRealtimeNanos() / 1000) - frameGap
+            lastFramePst = (SystemClock.elapsedRealtimeNanos() / 1000) - audioFrameGap
         }
-        lastAudioFramePst = lastFramePst+frameGap
+        lastAudioFramePst = lastFramePst+audioFrameGap
         return lastFramePst
     }
 
@@ -821,9 +917,47 @@ class AudioPlaybackRecorder(
         }
     }
 
-    private fun getScrcpyAudioBuffer(): ByteArray = scrcpyAudioBufferQueue.getBuffer()
-
+    private fun getScrcpyAudioBuffer(): ByteArray = scrcpyAudioBufferQueue.waitForBuffer()
     private fun stopScrcpyAudioBufferStream() = scrcpyStreamRunning.set(false)
+
+    private fun getAudioPlaybackBuffer(): ShortArray = audioPlaybackBufferQueue.waitForBuffer()
+    private fun stopAudioPlaybackBufferStream() = audioPlaybackStreamRunning.set(false)
+
+    private fun getAudioMicrophoneBuffer(): ShortArray = audioMicrophoneBufferQueue.waitForBuffer()
+    private fun stopAudioMicrophoneStream() = audioMicrophoneStreamRunning.set(false)
+
+    private suspend fun runAudioMicrophoneBufferStream() = withContext(Dispatchers.IO) {
+        audioMicrophoneStreamRunning.set(true)
+
+        while (audioMicrophoneStreamRunning.get()) {
+            if (mMic != null && startedAudio.get()) {
+                val bufSizeShorts = getBufSizeShorts()
+                val frameMic = ShortArray(bufSizeShorts)
+                val micRead = mMic!!.read(frameMic, 0, bufSizeShorts)
+                if (micRead > 0) {
+                    val frameMicRead = frameMic.copyOf(micRead)
+                    audioMicrophoneBufferQueue.queueBuffer(frameMicRead)
+                }
+            }
+        }
+    }
+
+    private suspend fun runAudioPlaybackBufferStream() = withContext(Dispatchers.IO) {
+        audioPlaybackStreamRunning.set(true)
+
+        while (audioPlaybackStreamRunning.get()) {
+            if (mPlayback != null && startedAudio.get()) {
+                val bufSizeShorts = getBufSizeShorts()
+
+                val framePlayback = ShortArray(bufSizeShorts)
+                val playbackRead = mPlayback!!.read(framePlayback, 0, bufSizeShorts)
+                if (playbackRead > 0) {
+                    val framePlaybackRead = framePlayback.copyOf(playbackRead)
+                    audioPlaybackBufferQueue.queueBuffer(framePlaybackRead)
+                }
+            }
+        }
+    }
 
     private suspend fun runScrcpyAudioBufferStream() = withContext(Dispatchers.IO) {
         scrcpyStreamRunning.set(true)
