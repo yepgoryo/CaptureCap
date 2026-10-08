@@ -7,9 +7,9 @@
 [<img src="https://github.com/ImranR98/Obtainium/blob/main/assets/graphics/badge_obtainium.png"
     alt="Get it on Obtainium"
     height="80">](https://apps.obtainium.imranr.dev/redirect.html?r=obtainium://add/https://github.com/yepgoryo/CaptureCap)
-[<img src="https://f-droid.org/badge/get-it-on.png"
-    alt="Get it on F-Droid"
-    height="80">](https://f-droid.org/packages/com.yepgoryo.CaptureCap)
+[<img src="https://raw.githubusercontent.com/rubenpgrady/get-it-on-github/refs/heads/main/get-it-on-github.png"
+    alt="Get it on GitHub"
+    height="80">](https://github.com/yepgoryo/CaptureCap/releases)
 
 | :robot: AI Notice                                                                                  |
 |:---------------------------------------------------------------------------------------------------|
