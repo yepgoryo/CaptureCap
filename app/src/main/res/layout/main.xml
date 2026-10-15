@@ -50,6 +50,14 @@
                     android:layout_centerVertical="true"
                     android:layout_centerHorizontal="true" />
 
+                <LinearLayout
+                    android:id="@+id/recordinganimationpixelborder"
+                    android:layout_width="250dp"
+                    android:layout_height="250dp"
+                    android:background="@drawable/recording_animation_border"
+                    android:layout_centerVertical="true"
+                    android:layout_centerHorizontal="true" />
+
             </FrameLayout>
 
             <LinearLayout
