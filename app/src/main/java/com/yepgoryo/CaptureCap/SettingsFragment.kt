@@ -43,7 +43,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
             val preferenceFindPreference21: Preference = findPreference("audiovolumeoption")!!
             val preferenceFindPreference22: Preference = findPreference("cropscreen")!!
             val preferenceFindPreference23: Preference = findPreference("cropscreencontents")!!
-            val preferenceFindPreference24: Preference = findPreference("cropscreensmoothcrop")!!
+            val preferenceFindPreference24: Preference = findPreference("smoothcrop")!!
             val preferenceFindPreference25: Preference = findPreference("customkeyframe")!!
             val preferenceFindPreference26: Preference = findPreference("keyframevalue")!!
 

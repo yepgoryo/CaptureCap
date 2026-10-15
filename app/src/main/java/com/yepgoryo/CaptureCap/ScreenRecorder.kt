@@ -674,7 +674,7 @@ class ScreenRecorder : Service() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && intent.action == RecordingCropScreen.ACTION_CONNECT_CROP) {
             return this.cropperBinder
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && intent.action == SettingsPanel.ACTION_SETTINGS_PANEL_CONNECT) {
+        if (intent.action == SettingsPanel.ACTION_SETTINGS_PANEL_CONNECT) {
             return this.settingsPanelBinder
         }
         return this.recordingBinder
