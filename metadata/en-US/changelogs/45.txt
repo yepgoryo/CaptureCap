@@ -1,0 +1,5 @@
+ * Fixed audio recording stuttering when on heavy load.
+
+ * Fixed recording with video overlay crashing when H.265 format is chosen.
+
+ * Fixed settings panel crashing on Android below 11.

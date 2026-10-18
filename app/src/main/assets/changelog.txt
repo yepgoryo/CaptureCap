@@ -1,3 +1,15 @@
+Version 3.9.8.6 code 45
+---
+ * Fixed audio recording stuttering when on heavy load.
+
+ * Fixed recording with video overlay crashing when H.265 format is chosen.
+
+ * Fixed settings panel crashing on Android below 11.
+
+
+[APP ENTERS MAINTENANCE-ONLY MODE]
+
+
 Version 3.9.8.3 code 44
 ---
  * Fixed phone call higher Android API function call.
@@ -148,9 +160,11 @@ Version 3.8 code 29
 
  * Remove recording restart function, cannot reuse intent.
 
+
 [NEW APP] - CaptureCap
 
 [PREVIOUS APP] - DroidRec
+
 
 Version code 28
 ---
