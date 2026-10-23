@@ -838,7 +838,7 @@ class AudioPlaybackRecorder(
         }
         var lastFramePst: Long = lastAudioFramePst
         if (lastFramePst == 0L) {
-            lastFramePst = (SystemClock.elapsedRealtimeNanos() / 1000) - audioFrameGap
+            lastFramePst = (System.nanoTime() / 1000L) - audioFrameGap
         }
         lastAudioFramePst = lastFramePst+audioFrameGap
         return lastFramePst
