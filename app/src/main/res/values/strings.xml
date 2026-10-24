@@ -84,6 +84,10 @@
     <string name="samplerate_indicator_custom_description">Ignore default sample rate</string>
     <string name="samplerate_indicator">Audio sample rate</string>
     <string name="samplerate_indicator_description">Set custom audio sample rate</string>
+    <string name="audio_millis_overhead">Audio overhead</string>
+    <string name="audio_millis_overhead_description">Specify the audio overhead value</string>
+    <string name="audio_millis_overhead_value">Set audio overhead</string>
+    <string name="audio_millis_overhead_value_description">Skip the amount of milliseconds of audio</string>
     <string name="audio_channels">Audio channels</string>
     <string name="audio_channels_description">Set audio channels</string>
     <array name="audio_channels_preferences">

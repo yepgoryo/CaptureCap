@@ -63,6 +63,7 @@ class PlaybackRecorder(
     chooseCustomAudioCodec: Boolean,
     audioCodecName: String,
     private var customSampleRate: Int,
+    private var audioOverheadMillis: Int,
     private var customChannelsCount: Int,
     private val useCropArea: Boolean,
     private val smoothCrop: Boolean,
@@ -354,7 +355,7 @@ class PlaybackRecorder(
         if (!recordMicrophone && !recordPlayback && !shizukuRecordPhoneCall) {
             this.mAudioEncoder = null
         } else {
-            this.mAudioEncoder = AudioPlaybackRecorder(recordMicrophone, recordPlayback, customSampleRate, customChannelsCount, mediaProjection, this.useCustomAudioCodec, this.customAudioCodec, this.useCustomAudioFormat, this.customAudioFormat, recordOnlyAudio, shizukuRecordPhoneCall, shizukuRecordService, shizukuAudioSource, context, mediaAudioSource, gameAudioSource, unknownAudioSource)
+            this.mAudioEncoder = AudioPlaybackRecorder(recordMicrophone, recordPlayback, customSampleRate, audioOverheadMillis, customChannelsCount, mediaProjection, this.useCustomAudioCodec, this.customAudioCodec, this.useCustomAudioFormat, this.customAudioFormat, recordOnlyAudio, shizukuRecordPhoneCall, shizukuRecordService, shizukuAudioSource, context, mediaAudioSource, gameAudioSource, unknownAudioSource)
         }
         if (this.mWorker != null && !this.doRestart) {
             throw IllegalStateException()

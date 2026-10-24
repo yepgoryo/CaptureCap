@@ -41,8 +41,9 @@ import kotlinx.coroutines.*
 class AudioPlaybackRecorder(
     private val recordMicrophone: Boolean,
     private val recordAudio: Boolean,
-    sampleRate: Int,
-    channels: Int,
+    private val sampleRate: Int,
+    private val audioMillisOverhead: Int,
+    private val channels: Int,
     mediaProjection: MediaProjection?,
     useCustomCodec: Boolean,
     codecName: String,
@@ -86,6 +87,8 @@ class AudioPlaybackRecorder(
     private val playbackReadScope = CoroutineScope(Dispatchers.IO)
     private val microphoneReadScope = CoroutineScope(Dispatchers.IO)
     private val startedAudio = AtomicBoolean(false)
+    private var skippingFramesTimestamp: Long = 0
+    private var skippingFramesLastTimestamp: Long = 0
 
     class PhoneCallBufferQueue {
         private val lock = ReentrantLock()
@@ -97,6 +100,10 @@ class AudioPlaybackRecorder(
                 list.clear()
             }
             list.add(0, buf)
+        }
+
+        fun clear() = lock.withLock {
+            list.clear()
         }
 
         fun getBuffer(): ByteArray = lock.withLock {
@@ -135,6 +142,10 @@ class AudioPlaybackRecorder(
                 list.clear()
             }
             list.add(0, buf)
+        }
+
+        fun clear() = lock.withLock {
+            list.clear()
         }
 
         fun getBuffer(): ShortArray = lock.withLock {
@@ -198,6 +209,8 @@ class AudioPlaybackRecorder(
         this.mainContext = context
         this.appSettings = GlobalProperties(context)
         this.audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+
+        this.skippingFramesTimestamp = (System.nanoTime() / 1000L) + (audioMillisOverhead.toLong() * 1000L)
     }
 
     fun setCallback(callback: Encoder.Callback) {
@@ -269,6 +282,20 @@ class AudioPlaybackRecorder(
         return this.mEncoder.getOutputBuffer(index)
     }
 
+    fun clearBuffers() {
+        if (shizukuRecordPhoneCall) {
+            clearScrcpyAudioBufferQueue()
+        }
+
+        if (recordAudio) {
+            clearAudioPlaybackBufferQueue()
+        }
+
+        if (recordMicrophone) {
+            clearAudioMicrophoneQueue()
+        }
+    }
+
     inner class CallbackDelegate(looper: Looper, callback: AudioEncoder.Callback?) : Handler(looper) {
         private val mCallback: AudioEncoder.Callback? = callback
 
@@ -298,6 +325,8 @@ class AudioPlaybackRecorder(
             }).sendToTarget()
         }
     }
+
+    private var firstFrame: Boolean = true
 
     inner class RecordHandler(looper: Looper) : Handler(looper) {
         private val mCachedInfos: LinkedList<MediaCodec.BufferInfo> = LinkedList<MediaCodec.BufferInfo>()
@@ -375,14 +404,31 @@ class AudioPlaybackRecorder(
             }
 
             if ((recordMessage == RecordMessage.MSG_PREPARE || recordMessage == RecordMessage.MSG_FEED_INPUT) && !this@AudioPlaybackRecorder.mForceStop.get()) {
-                val iPollInput: Int = pollInput()
-                if (iPollInput >= 0) {
-                    this@AudioPlaybackRecorder.feedAudioEncoder(iPollInput)
-                    if (!this@AudioPlaybackRecorder.mForceStop.get()) {
-                        sendEmptyMessage(RecordMessage.MSG_DRAIN_OUTPUT.ordinal)
-                    }
+                if (!startedAudio.get()) startedAudio.set(true)
+                if ((audioMillisOverhead > 0L && skippingFramesLastTimestamp <= skippingFramesTimestamp) && recordMessage != RecordMessage.MSG_PREPARE) {
+                    skippingFramesLastTimestamp = System.nanoTime() / 1000L
+
+                    sendEmptyMessageDelayed(
+                        RecordMessage.MSG_FEED_INPUT.ordinal,
+                        this.mPollRate.toLong()
+                    )
                 } else {
-                    sendEmptyMessageDelayed(RecordMessage.MSG_FEED_INPUT.ordinal,this.mPollRate.toLong())
+                    if (audioMillisOverhead > 0L && firstFrame && skippingFramesLastTimestamp > skippingFramesTimestamp) {
+                        clearBuffers()
+                        firstFrame = false
+                    }
+                    val iPollInput: Int = pollInput()
+                    if (iPollInput >= 0) {
+                        this@AudioPlaybackRecorder.feedAudioEncoder(iPollInput)
+                        if (!this@AudioPlaybackRecorder.mForceStop.get()) {
+                            sendEmptyMessage(RecordMessage.MSG_DRAIN_OUTPUT.ordinal)
+                        }
+                    } else {
+                        sendEmptyMessageDelayed(
+                            RecordMessage.MSG_FEED_INPUT.ordinal,
+                            this.mPollRate.toLong()
+                        )
+                    }
                 }
             }
         }
@@ -919,12 +965,15 @@ class AudioPlaybackRecorder(
 
     private fun getScrcpyAudioBuffer(): ByteArray = scrcpyAudioBufferQueue.waitForBuffer()
     private fun stopScrcpyAudioBufferStream() = scrcpyStreamRunning.set(false)
+    private fun clearScrcpyAudioBufferQueue() = scrcpyAudioBufferQueue.clear()
 
     private fun getAudioPlaybackBuffer(): ShortArray = audioPlaybackBufferQueue.waitForBuffer()
     private fun stopAudioPlaybackBufferStream() = audioPlaybackStreamRunning.set(false)
+    private fun clearAudioPlaybackBufferQueue() = audioPlaybackBufferQueue.clear()
 
     private fun getAudioMicrophoneBuffer(): ShortArray = audioMicrophoneBufferQueue.waitForBuffer()
     private fun stopAudioMicrophoneStream() = audioMicrophoneStreamRunning.set(false)
+    private fun clearAudioMicrophoneQueue() = audioMicrophoneBufferQueue.clear()
 
     private suspend fun runAudioMicrophoneBufferStream() = withContext(Dispatchers.IO) {
         audioMicrophoneStreamRunning.set(true)

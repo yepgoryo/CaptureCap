@@ -132,6 +132,21 @@
             android:inputType="number"
             android:defaultValue="44100" />
 
+        <SwitchPreferenceCompat
+            android:key="audiomillisoverhead"
+            android:summary="@string/audio_millis_overhead_description"
+            android:title="@string/audio_millis_overhead"
+            android:defaultValue="false" />
+
+        <com.yepgoryo.CaptureCap.NonNullText
+            android:key="audiomillisoverheadvalue"
+            android:dependency="audiomillisoverhead"
+            android:summary="@string/audio_millis_overhead_value_description"
+            android:title="@string/audio_millis_overhead_value"
+            android:gravity="center"
+            android:inputType="number"
+            android:defaultValue="0" />
+
         <ListPreference
             android:key="audiochannels"
             android:summary="@string/audio_channels_description"

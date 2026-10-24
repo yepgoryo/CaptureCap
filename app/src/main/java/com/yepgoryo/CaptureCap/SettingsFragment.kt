@@ -46,6 +46,8 @@ class SettingsFragment : PreferenceFragmentCompat() {
             val preferenceFindPreference24: Preference = findPreference("smoothcrop")!!
             val preferenceFindPreference25: Preference = findPreference("customkeyframe")!!
             val preferenceFindPreference26: Preference = findPreference("keyframevalue")!!
+            val preferenceFindPreference27: Preference = findPreference("audiomillisoverhead")!!
+            val preferenceFindPreference28: Preference = findPreference("audiomillisoverheadvalue")!!
 
             val preferenceCategory2: PreferenceCategory = findPreference("capturesettings")!!
             preferenceCategory2.removePreference(preferenceFindPreference5)
@@ -70,6 +72,8 @@ class SettingsFragment : PreferenceFragmentCompat() {
             preferenceCategory2.removePreference(preferenceFindPreference24)
             preferenceCategory2.removePreference(preferenceFindPreference25)
             preferenceCategory2.removePreference(preferenceFindPreference26)
+            preferenceCategory2.removePreference(preferenceFindPreference27)
+            preferenceCategory2.removePreference(preferenceFindPreference28)
         }
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
             val preferenceFindPreference21: PreferenceCategory = findPreference("shizukusettings")!!

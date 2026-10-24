@@ -91,6 +91,7 @@ class ScreenRecorder : Service() {
     private var appSettings: GlobalProperties? = null
     private var customChannelsCount: Int = 0
     private var customSampleRate: Int = 0
+    private var audioOverheadMillis: Int = 0
     private var intentData: Intent? = null
     private var intentResult: Int = 0
     private var display: Display? = null
@@ -993,6 +994,16 @@ class ScreenRecorder : Service() {
         } else {
             this.customChannelsCount = 2
         }
+        if (!this.appSettings!!.getBooleanProperty(GlobalProperties.PropertiesBoolean.AUDIO_MILLIS_OVERHEAD, false)) {
+            this.audioOverheadMillis = 0
+        } else {
+            this.audioOverheadMillis = Integer.parseInt(
+                this.appSettings!!.getStringProperty(
+                    GlobalProperties.PropertiesString.AUDIO_MILLIS_OVERHEAD_VALUE,
+                    "0"
+                )
+            )
+        }
         this.recordingNotificationManager = NotificationManagerCompat.from(this)
         if (this.recordingNotificationManager!!.getNotificationChannel(NOTIFICATIONS_RECORDING_CHANNEL) == null) {
             val vibrate = this.appSettings!!.getBooleanProperty(GlobalProperties.PropertiesBoolean.ENABLE_VIBRATION, false)
@@ -1660,6 +1671,7 @@ class ScreenRecorder : Service() {
                     useCustomAudioCodec,
                     audioCodec,
                     this.customSampleRate,
+                    this.audioOverheadMillis,
                     this.customChannelsCount,
                     useCropArea,
                     smoothCrop,
