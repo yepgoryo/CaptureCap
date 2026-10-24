@@ -404,8 +404,8 @@ class AudioPlaybackRecorder(
             }
 
             if ((recordMessage == RecordMessage.MSG_PREPARE || recordMessage == RecordMessage.MSG_FEED_INPUT) && !this@AudioPlaybackRecorder.mForceStop.get()) {
-                if (!startedAudio.get()) startedAudio.set(true)
                 if ((audioMillisOverhead > 0L && skippingFramesLastTimestamp <= skippingFramesTimestamp) && recordMessage != RecordMessage.MSG_PREPARE) {
+                    if (!startedAudio.get()) startedAudio.set(true)
                     skippingFramesLastTimestamp = System.nanoTime() / 1000L
 
                     sendEmptyMessageDelayed(
