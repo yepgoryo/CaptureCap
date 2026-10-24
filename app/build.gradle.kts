@@ -90,8 +90,8 @@ extensions.configure<ApplicationExtension> {
         applicationId = "com.yepgoryo.CaptureCap"
         minSdk = 24
         targetSdk = 37
-        versionCode = 45
-        versionName = "3.9.8.6"
+        versionCode = 46
+        versionName = "3.9.8.8"
 
         buildConfigField("String", "SCRCPY_SERVER_VERSION", "\"$scrcpyServerVersion\"")
         buildConfigField("String", "SCRCPY_SERVER_SHA256", "\"$scrcpyServerSha256\"")

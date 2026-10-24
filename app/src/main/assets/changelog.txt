@@ -1,3 +1,10 @@
+Version 3.9.8.8 code 46
+---
+ * Fixed audio and video timestamps having different base.
+
+ * Added an option to skip the amount of audio in milliseconds.
+
+
 Version 3.9.8.6 code 45
 ---
  * Fixed audio recording stuttering when on heavy load.

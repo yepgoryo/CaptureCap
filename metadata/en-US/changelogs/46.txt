@@ -1,0 +1,3 @@
+ * Fixed audio and video timestamps having different base.
+
+ * Added an option to skip the amount of audio in milliseconds.
