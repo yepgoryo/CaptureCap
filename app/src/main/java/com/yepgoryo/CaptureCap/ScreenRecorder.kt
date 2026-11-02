@@ -483,25 +483,25 @@ class ScreenRecorder : Service() {
         }
 
         fun setAudioVolume(vol: Int) {
-            if (this@ScreenRecorder.panelBinder != null) {
+            if (this@ScreenRecorder.panelBinder != null && this@ScreenRecorder.showFloatingControls) {
                 this@ScreenRecorder.panelBinder!!.setAudioVolume(vol)
             }
         }
 
         fun setMicVolume(vol: Int) {
-            if (this@ScreenRecorder.panelBinder != null) {
+            if (this@ScreenRecorder.panelBinder != null && this@ScreenRecorder.showFloatingControls) {
                 this@ScreenRecorder.panelBinder!!.setMicVolume(vol)
             }
         }
 
         fun setShizukuPhoneCallVolume(vol: Int) {
-            if (this@ScreenRecorder.panelBinder != null) {
+            if (this@ScreenRecorder.panelBinder != null && this@ScreenRecorder.showFloatingControls) {
                 this@ScreenRecorder.panelBinder!!.setShizukuPhoneCallVolume(vol)
             }
         }
 
         fun setChosenAudioSlot(index: Int) {
-            if (this@ScreenRecorder.panelBinder != null) {
+            if (this@ScreenRecorder.panelBinder != null && this@ScreenRecorder.showFloatingControls) {
                 this@ScreenRecorder.panelBinder!!.setChosenAudioSlot(index)
             }
         }
@@ -835,7 +835,7 @@ class ScreenRecorder : Service() {
 
     fun muteMic() {
         if (this.recorderPlayback != null) {
-            if (this.panelBinder != null) {
+            if (this.panelBinder != null && this.showFloatingControls) {
                 this.panelBinder!!.setMicMuted(true)
             }
             this.recorderPlayback?.setMicrophoneMuted(true)
@@ -847,7 +847,7 @@ class ScreenRecorder : Service() {
 
     fun unmuteMic() {
         if (this.recorderPlayback != null) {
-            if (this.panelBinder != null) {
+            if (this.panelBinder != null && this.showFloatingControls) {
                 this.panelBinder!!.setMicMuted(false)
             }
             this.recorderPlayback?.setMicrophoneMuted(false)
@@ -859,7 +859,7 @@ class ScreenRecorder : Service() {
 
     fun muteAudio() {
         if (this.recorderPlayback != null) {
-            if (this.panelBinder != null) {
+            if (this.panelBinder != null && this.showFloatingControls) {
                 this.panelBinder!!.setAudioMuted(true)
             }
             this.recorderPlayback?.setAudioMuted(true)
@@ -871,7 +871,7 @@ class ScreenRecorder : Service() {
 
     fun unmuteAudio() {
         if (this.recorderPlayback != null) {
-            if (this.panelBinder != null) {
+            if (this.panelBinder != null && this.showFloatingControls) {
                 this.panelBinder!!.setAudioMuted(false)
             }
             this.recorderPlayback?.setAudioMuted(false)
@@ -883,7 +883,7 @@ class ScreenRecorder : Service() {
 
     fun muteShizukuPhoneCall() {
         if (this.recorderPlayback != null) {
-            if (this.panelBinder != null) {
+            if (this.panelBinder != null && this.showFloatingControls) {
                 this.panelBinder!!.setShizukuPhoneCallMuted(true)
             }
             this.recorderPlayback?.setShizukuPhoneCallMuted(true)
@@ -895,7 +895,7 @@ class ScreenRecorder : Service() {
 
     fun unmuteShizukuPhoneCall() {
         if (this.recorderPlayback != null) {
-            if (this.panelBinder != null) {
+            if (this.panelBinder != null && this.showFloatingControls) {
                 this.panelBinder!!.setShizukuPhoneCallMuted(false)
             }
             this.recorderPlayback?.setShizukuPhoneCallMuted(false)
