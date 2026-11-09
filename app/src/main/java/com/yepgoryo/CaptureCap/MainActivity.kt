@@ -1880,55 +1880,101 @@ class MainActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (RecordingPermissionRequest.entries[requestCode]) {
             RecordingPermissionRequest.REQUEST_CAMERA -> {
-                if (grantResults[0] == 0) {
+                if (grantResults.isNotEmpty()) {
+                    if (grantResults[0] == 0) {
+                    } else {
+                        Toast.makeText(this, R.string.error_camera_required, Toast.LENGTH_SHORT)
+                            .show()
+                    }
                 } else {
                     Toast.makeText(this, R.string.error_camera_required, Toast.LENGTH_SHORT).show()
                 }
             }
             RecordingPermissionRequest.REQUEST_MICROPHONE -> {
-                if (grantResults[0] == 0) {
-                    this.appSettings!!.setBooleanProperty(GlobalProperties.PropertiesBoolean.CHECK_SOUND_MIC, true)
+                if (grantResults.isNotEmpty()) {
+                    if (grantResults[0] == 0) {
+                        this.appSettings!!.setBooleanProperty(
+                            GlobalProperties.PropertiesBoolean.CHECK_SOUND_MIC,
+                            true
+                        )
+                    } else {
+                        Toast.makeText(this, R.string.error_audio_required, Toast.LENGTH_SHORT).show()
+                    }
                 } else {
                     Toast.makeText(this, R.string.error_audio_required, Toast.LENGTH_SHORT).show()
                 }
             }
             RecordingPermissionRequest.REQUEST_MICROPHONE_PLAYBACK -> {
-                if (grantResults[0] == 0) {
-                    this.appSettings!!.setBooleanProperty(GlobalProperties.PropertiesBoolean.CHECK_SOUND_PLAYBACK, true)
+                if (grantResults.isNotEmpty()) {
+                    if (grantResults[0] == 0) {
+                        this.appSettings!!.setBooleanProperty(GlobalProperties.PropertiesBoolean.CHECK_SOUND_PLAYBACK, true)
+                    } else {
+                        Toast.makeText(this, R.string.error_audio_required, Toast.LENGTH_SHORT).show()
+                    }
                 } else {
                     Toast.makeText(this, R.string.error_audio_required, Toast.LENGTH_SHORT).show()
                 }
             }
             RecordingPermissionRequest.REQUEST_MICROPHONE_RECORD -> {
-                if (grantResults[0] == 0) {
-                    checkDirRecord(this.appSettings!!.getBooleanProperty(GlobalProperties.PropertiesBoolean.RECORD_MODE, false))
+                if (grantResults.isNotEmpty()) {
+                    if (grantResults[0] == 0) {
+                        checkDirRecord(
+                            this.appSettings!!.getBooleanProperty(
+                                GlobalProperties.PropertiesBoolean.RECORD_MODE,
+                                false
+                            )
+                        )
+                    } else {
+                        Toast.makeText(this, R.string.error_audio_required, Toast.LENGTH_SHORT)
+                            .show()
+                    }
                 } else {
                     Toast.makeText(this, R.string.error_audio_required, Toast.LENGTH_SHORT).show()
                 }
             }
             RecordingPermissionRequest.REQUEST_STORAGE -> {
-                if (grantResults[0] == 0) {
-                    checkDirRecord(false)
+                if (grantResults.isNotEmpty()) {
+                    if (grantResults[0] == 0) {
+                        checkDirRecord(false)
+                    } else {
+                        Toast.makeText(this, R.string.error_storage_required, Toast.LENGTH_SHORT)
+                            .show()
+                    }
                 } else {
-                    Toast.makeText(this, R.string.error_storage_required, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, R.string.error_storage_required, Toast.LENGTH_SHORT)
+                        .show()
                 }
             }
             RecordingPermissionRequest.REQUEST_STORAGE_AUDIO -> {
-                if (grantResults[0] == 0) {
-                    checkDirRecord(true)
+                if (grantResults.isNotEmpty()) {
+                    if (grantResults[0] == 0) {
+                        checkDirRecord(true)
+                    } else {
+                        Toast.makeText(this, R.string.error_storage_required, Toast.LENGTH_SHORT)
+                            .show()
+                    }
                 } else {
-                    Toast.makeText(this, R.string.error_storage_required, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, R.string.error_storage_required, Toast.LENGTH_SHORT)
+                        .show()
                 }
             }
             RecordingPermissionRequest.REQUEST_MODE_CHANGE -> {
-                if (grantResults[0] == 0) {
-                    setRecordMode(true)
+                if (grantResults.isNotEmpty()) {
+                    if (grantResults[0] == 0) {
+                        setRecordMode(true)
+                    } else {
+                        Toast.makeText(this, R.string.error_audio_required, Toast.LENGTH_SHORT).show()
+                    }
                 } else {
                     Toast.makeText(this, R.string.error_audio_required, Toast.LENGTH_SHORT).show()
                 }
             }
             RecordingPermissionRequest.REQUEST_POST_NOTIFICATIONS -> {
-                if (grantResults[0] == 0) {
+                if (grantResults.isNotEmpty()) {
+                    if (grantResults[0] == 0) {
+                    } else {
+                        Toast.makeText(this, R.string.error_notifications_required, Toast.LENGTH_SHORT).show()
+                    }
                 } else {
                     Toast.makeText(this, R.string.error_notifications_required, Toast.LENGTH_SHORT).show()
                 }
