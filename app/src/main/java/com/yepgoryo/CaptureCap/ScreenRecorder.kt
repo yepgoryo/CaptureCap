@@ -2105,6 +2105,7 @@ class ScreenRecorder : Service() {
         this.finishedFullFileDocument = this.recordFileFullPath
         this.finishedDocumentMime = this.recordFileMime
         this.finishedFileIntent = Intent(Intent.ACTION_VIEW)
+        this.finishedFileIntent!!.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         this.finishedFileIntent!!.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q && this.finishedFile != null) {
             this.finishedFileIntent!!.setDataAndType(FileProvider.getUriForFile(applicationContext, MainActivity.appName + ".DocProvider", this.finishedFile!!), this.finishedDocumentMime)
@@ -2135,6 +2136,7 @@ class ScreenRecorder : Service() {
         if (this.finishedFullFileDocument != null) {
             this.shareFinishedFileIntent!!.setType(this.finishedDocumentMime)
             this.shareFinishedFileIntent!!.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            this.shareFinishedFileIntent!!.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             this.shareFinishedFileIntent!!.putExtra(Intent.EXTRA_STREAM, this.recordFilePath)
         }
         val notificationShareBuilder: NotificationCompat.Action.Builder = NotificationCompat.Action.Builder(iconRecordShare, getString(R.string.notifications_share), PendingIntent.getActivity(this, 0, this.shareFinishedFileIntent, this.intentFlag))
