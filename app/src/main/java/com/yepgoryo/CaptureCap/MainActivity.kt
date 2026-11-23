@@ -1354,7 +1354,8 @@ class MainActivity : AppCompatActivity() {
             val display = (baseContext.getSystemService("display") as DisplayManager).getDisplay(0)
             if (display.rotation == Surface.ROTATION_270) {
                 optionslayoutparams.bottomMargin = 0
-                optionslayoutparams.rightMargin = statusBarHeight            } else if (display.rotation == Surface.ROTATION_90) {
+                optionslayoutparams.rightMargin = statusBarHeight
+            } else if (display.rotation == Surface.ROTATION_90) {
                 optionslayoutparams.bottomMargin = 0
                 optionslayoutparams.rightMargin = resources.getDimensionPixelSize(resourceId)
             } else {
