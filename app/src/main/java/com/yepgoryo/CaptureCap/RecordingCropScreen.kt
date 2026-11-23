@@ -39,6 +39,7 @@ import kotlin.math.*
 
 class RecordingCropScreen : AppCompatActivity() {
     private lateinit var cropBar: RecordingCropBar
+    private lateinit var logger: Logger
 
     private lateinit var playerView: PlayerView
     private lateinit var exoPlayer: ExoPlayer
@@ -110,6 +111,9 @@ class RecordingCropScreen : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        logger = Logger(this, baseContext)
+        logger.setExceptionHandler()
+
         if (savedInstanceState != null) {
             restoreSelection = savedInstanceState.getBoolean(KEY_RESTORE_SELECTION)
             currentStartMs = savedInstanceState.getLong(KEY_SELECTION_START)
@@ -236,6 +240,7 @@ class RecordingCropScreen : AppCompatActivity() {
                 try {
                     fullFilePathRenameDocument = DocumentsContract.renameDocument(contentResolver, fullFilePathCreateDocument!!, "$recordingFileName.m4a")
                 } catch (exc: Exception) {
+                    logger.logError(exc)
                     fullFilePathRenameDocument = null
                 }
                 if (fullFilePathRenameDocument == null) {

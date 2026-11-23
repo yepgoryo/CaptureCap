@@ -22,6 +22,7 @@ import java.nio.ByteBuffer
 
 @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
 class RecordingTrimmer(private val context: Context) {
+    private val logger = Logger(this, context)
 
     @RequiresApi(Build.VERSION_CODES.Q)
     suspend fun trimVideo(
@@ -116,6 +117,7 @@ class RecordingTrimmer(private val context: Context) {
             Result.success(destUri)
 
         } catch (e: Exception) {
+            logger.logError(e)
             Log.e("TrimVideo", "Trim failed", e)
             muxer?.stop()
             muxer?.release()
@@ -224,6 +226,7 @@ class RecordingTrimmer(private val context: Context) {
 
             Result.success(destUri)
         } catch (e: Exception) {
+            logger.logError(e)
             muxer.stop()
             muxer.release()
             srcPfd.close()

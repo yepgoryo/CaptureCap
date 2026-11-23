@@ -86,6 +86,7 @@ class ScreenRecorder : Service() {
         const val ACTION_DISCONNECT_SHIZUKU: String = MainActivity.appName + ".DISCONNECT_SHIZUKU"
     }
 
+    private lateinit var logger: Logger
     private val BPP: Float = 0.25f
     private var screenDensity: Float = 0.0f
     private var appSettings: GlobalProperties? = null
@@ -315,6 +316,7 @@ class ScreenRecorder : Service() {
                         Log.d(TAG, "RecordService was already killed by the Shizuku server")
                     }
                 } catch (e: Exception) {
+                    logger.logError(e)
                     Log.e(TAG, "Unexpected error occurred while trying to unbind RecordService", e)
                 }
 
@@ -330,7 +332,8 @@ class ScreenRecorder : Service() {
                 if (mShizukuRecordServiceConnection != null) {
                     Shizuku.bindUserService(shizukuServiceArgs(), mShizukuRecordServiceConnection!!)
                 }
-            } catch (_: Exception) {
+            } catch (e: Exception) {
+                logger.logError(e)
                 Log.e(TAG, "Failed to bind RecorderService")
             }
         } else {
@@ -349,6 +352,7 @@ class ScreenRecorder : Service() {
                     Log.d(TAG, "RecordService was already killed by the Shizuku Server")
                 }
             } catch (e: Exception) {
+                logger.logError(e)
                 Log.e(TAG, "Unexpected error occurred while trying to unbind RecordService", e)
             }
 
@@ -685,6 +689,8 @@ class ScreenRecorder : Service() {
     private val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
 
     override fun onCreate() {
+        logger = Logger(this, baseContext)
+        logger.setExceptionHandler()
         super.onCreate()
         this.display = (baseContext.getSystemService("display") as DisplayManager).getDisplay(0)
         val sensorManager: SensorManager = applicationContext.getSystemService("sensor") as SensorManager
@@ -1304,6 +1310,7 @@ class ScreenRecorder : Service() {
                                 "$recordingFileName$fileExtension"
                             )
                         } catch (exc: Exception) {
+                            logger.logError(exc)
                             fullFilePathRenameDocument = null
                         }
                         if (fullFilePathRenameDocument == null) {
@@ -1313,7 +1320,8 @@ class ScreenRecorder : Service() {
                         fullFilePathCreateDocument = fullFilePathRenameDocument
                     }
                     file = null
-                } catch (_: Exception) {
+                } catch (e: Exception) {
+                    logger.logError(e)
                     Log.e(TAG, "Invalid recording path: $documentParentPath")
                     if (activityBinder != null) {
                         this.errorDir = true
@@ -1329,7 +1337,8 @@ class ScreenRecorder : Service() {
                     file = File(fullFilePath.toString())
                     file.createNewFile()
                     fullFilePathCreateDocument = null
-                } catch (_: Exception) {
+                } catch (e: Exception) {
+                    logger.logError(e)
                     file = null
                     fullFilePathCreateDocument = null
                 }
@@ -1605,12 +1614,14 @@ class ScreenRecorder : Service() {
                         this.recordingMediaRecorder!!.setVideoFrameRate(refreshRate)
                     }
                     this.recordingMediaRecorder!!.prepare()
-                } catch (_: IOException) {
+                } catch (e: IOException) {
+                    logger.logError(e)
                     recordingError()
                 }
                 try {
                     this.recordingMediaRecorder!!.start()
-                } catch (_: IllegalStateException) {
+                } catch (e: IllegalStateException) {
+                    logger.logError(e)
                     recordingError()
                 }
                 if (!this.recordOnlyAudio) {
@@ -1624,7 +1635,8 @@ class ScreenRecorder : Service() {
                         this.recordingOpenFileDescriptor = parcelFileDescriptorOpenFileDescriptor
                         this.recordingFileDescriptor =
                             parcelFileDescriptorOpenFileDescriptor.fileDescriptor
-                    } catch (_: Exception) {
+                    } catch (e: Exception) {
+                        logger.logError(e)
                         recordingError()
                     }
                 }
@@ -2065,7 +2077,8 @@ class ScreenRecorder : Service() {
                     this.recordingMediaRecorder?.stop()
                     this.recordingMediaRecorder?.reset()
                     this.recordingMediaRecorder?.release()
-                } catch (_: RuntimeException) {
+                } catch (e: RuntimeException) {
+                    logger.logError(e)
                     Toast.makeText(this, R.string.error_recorder_failed, Toast.LENGTH_SHORT).show()
                 }
             }
@@ -2078,7 +2091,8 @@ class ScreenRecorder : Service() {
                 if (!enableStream || (enableStream && streamSave)) {
                     try {
                         this.recordingOpenFileDescriptor!!.close()
-                    } catch (_: IOException) {
+                    } catch (e: IOException) {
+                        logger.logError(e)
                         Toast.makeText(this, R.string.error_recorder_failed, Toast.LENGTH_SHORT)
                             .show()
                     }
@@ -2279,7 +2293,9 @@ class ScreenRecorder : Service() {
             } else {
                 DocumentsContract.deleteDocument(this.contentResolver, this.finishedFileDocument!!)
             }
-        } catch (exc: Exception) {}
+        } catch (exc: Exception) {
+            logger.logError(exc)
+        }
 
         if (this.recordingNotificationManager != null) {
             this.recordingNotificationManager!!.cancel(NotificationID.NOTIFICATION_RECORDING_FINISHED_ID.ordinal)

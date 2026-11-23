@@ -24,7 +24,7 @@ class FrontCameraManager(
 ) {
 
     private val THREAD_TAG = "CameraBackground"
-
+    private val logger = Logger(this, context)
     private lateinit var cameraDevice: CameraDevice
     private lateinit var cameraCaptureSession: CameraCaptureSession
     private lateinit var surfaceTexture: SurfaceTexture
@@ -84,6 +84,7 @@ class FrontCameraManager(
                 }
             }, cameraHandler)
         } catch (e: Exception) {
+            logger.logError(e)
             release()
             throw e
         }
@@ -110,6 +111,7 @@ class FrontCameraManager(
                                 cameraHandler ?: threadHandler
                             )
                         } catch (e: CameraAccessException) {
+                            logger.logError(e)
                             e.printStackTrace()
                         }
                     }
@@ -122,6 +124,7 @@ class FrontCameraManager(
                 cameraHandler
             )
         } catch (e: Exception) {
+            logger.logError(e)
             e.printStackTrace()
             release()
         }
@@ -134,6 +137,7 @@ class FrontCameraManager(
             cameraDevice.close()
             cameraHandler?.looper?.quitSafely()
         } catch (e: Exception) {
+            logger.logError(e)
             throw e
         }
 
@@ -145,7 +149,8 @@ class FrontCameraManager(
             try {
                 manager.getCameraCharacteristics(id)
                     .get(CameraCharacteristics.LENS_FACING) == CameraCharacteristics.LENS_FACING_FRONT
-            } catch (_: Exception) {
+            } catch (e: Exception) {
+                logger.logError(e)
                 false
             }
         }

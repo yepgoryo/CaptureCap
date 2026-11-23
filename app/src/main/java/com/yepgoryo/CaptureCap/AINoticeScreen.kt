@@ -10,9 +10,12 @@ import androidx.core.view.updatePadding
 import java.io.InputStream
 
 class AINoticeScreen : AppCompatActivity() {
+    private lateinit var logger: Logger
     private var appSettings: GlobalProperties? = null
 
     public override fun onCreate(bundle: Bundle?) {
+        logger = Logger(this, baseContext)
+        logger.setExceptionHandler()
         val globalProperties = GlobalProperties(baseContext)
         this.appSettings = globalProperties
 

@@ -195,6 +195,9 @@
         <item name="dark_theme_option_light">Light</item>
         <item name="dark_theme_option_auto_item">Automatic</item>
     </array>
+    <string name="logging_enable_option_title">Enable logging</string>
+    <string name="logging_enable_option_description">Log application\'s exceptions to a file</string>
+    <string name="logging_enable_folder_option_title">Choose the path for logs</string>
     <string name="on_shake_option_summary">Action on device shake</string>
     <string name="on_shake_option_title">On shake</string>
     <string name="on_shake_dialog">On shake dialog</string>
@@ -261,6 +264,7 @@
     <string name="error_phonecall_mono">Error: Phone call records only in stereo</string>
     <string name="error_storage_required">Error: Storage permission required</string>
     <string name="error_storage_select_folder">Error: Select recordings folder</string>
+    <string name="error_storage_select_log_folder">Error: Select logs folder</string>
     <string name="error_audio_required">Error: Allow recording audio</string>
     <string name="error_camera_required">Error: Camera overlay needs permissions</string>
     <string name="error_shizuku_required">Error: Shizuku permission required</string>

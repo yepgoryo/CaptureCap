@@ -58,6 +58,7 @@ class MainActivity : AppCompatActivity() {
         const val ACTION_ACTIVITY_START_RECORDING: String = "$appName.ACTIVITY_START_RECORDING"
     }
 
+    private lateinit var logger: Logger
     private var activityProjectionManager: MediaProjectionManager? = null
     private var appSettings: GlobalProperties? = null
     var audioPlaybackUnavailable: TextView? = null
@@ -821,6 +822,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreate(bundle: Bundle?) {
+        logger = Logger(this, baseContext)
+        logger.setExceptionHandler()
         installSplashScreen()
         val display: Display =
             (baseContext.getSystemService("display") as DisplayManager).getDisplay(Display.DEFAULT_DISPLAY)

@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 class AppInfo : AppCompatActivity() {
+    private lateinit var logger: Logger
     private var appSettings: GlobalProperties? = null
     private var contributorsAdapter: ContributorsAdapter? = null
     private var contributorsView: RecyclerView? = null
@@ -27,6 +28,8 @@ class AppInfo : AppCompatActivity() {
     private var licenseScroll: NestedScrollView? = null
 
     public override fun onCreate(bundle: Bundle?) {
+        logger = Logger(this, baseContext)
+        logger.setExceptionHandler()
         this.appSettings = GlobalProperties(baseContext)
 
         super.onCreate(bundle)

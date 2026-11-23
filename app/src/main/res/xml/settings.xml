@@ -397,6 +397,17 @@
             android:entryValues="@array/on_shake_preferences_values"
             android:defaultValue="@string/on_shake_default"/>
 
+        <SwitchPreferenceCompat
+            android:key="enablelogging"
+            android:title="@string/logging_enable_option_title"
+            android:summary="@string/logging_enable_option_description"
+            android:defaultValue="false" />
+
+        <Preference
+            android:key="logpathpref"
+            android:dependency="enablelogging"
+            android:title="@string/logging_enable_folder_option_title"
+            android:defaultValue="" />
     </PreferenceCategory>
 
 </PreferenceScreen>

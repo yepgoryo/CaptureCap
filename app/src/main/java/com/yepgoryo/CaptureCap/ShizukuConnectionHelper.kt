@@ -30,6 +30,8 @@ class ShizukuConnectionHelper() {
         }
 
         fun hasShizukuPermission(context: Context): Boolean {
+            val logger = Logger(this, context)
+
             try {
                 if (Shizuku.isPreV11()) {
                     Toast.makeText(context, R.string.shizuku_unsupported, Toast.LENGTH_LONG).show()
@@ -42,6 +44,7 @@ class ShizukuConnectionHelper() {
                     return context.checkSelfPermission(ShizukuProvider.PERMISSION) == PackageManager.PERMISSION_GRANTED
                 }
             } catch (e: Exception) {
+                logger.logError(e)
                 Log.e(TAG, "Error while checking Shizuku permission")
                 throw e
             }
@@ -53,6 +56,7 @@ class ShizukuConnectionHelper() {
         }
 
         fun startShizuku(context: Context, authKey: String) {
+            val logger = Logger(this, context)
             try {
                 if (shizukuAvailable()) {
                     Log.d(TAG, "Shizuku is already running")
@@ -69,12 +73,14 @@ class ShizukuConnectionHelper() {
 
                 context.sendBroadcast(intent)
                 Log.d(TAG, "Sent broadcast to start Shizuku to $packageName")
-            } catch (_: Exception) {
+            } catch (e: Exception) {
+                logger.logError(e)
                 Log.e(TAG, "Failed to send broadcast to start Shizuku")
             }
         }
 
         fun stopShizuku(context: Context, authKey: String) {
+            val logger = Logger(this, context)
             try {
                 if (!shizukuAvailable()) {
                     Log.d(TAG, "Shizuku is already stopped")
@@ -91,7 +97,8 @@ class ShizukuConnectionHelper() {
 
                 context.sendBroadcast(intent)
                 Log.d(TAG, "Sent broadcast to stop Shizuku to $packageName")
-            } catch (_: Exception) {
+            } catch (e: Exception) {
+                logger.logError(e)
                 Log.e(TAG, "Failed to send broadcast to stop Shizuku")
             }
         }

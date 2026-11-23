@@ -20,6 +20,7 @@ import androidx.core.view.updatePadding
 
 class SelectScreenCropAreaActivity : AppCompatActivity() {
 
+    private lateinit var logger: Logger
     private var screenWidth: Int = 0
     private var screenHeight: Int = 0
     private lateinit var cropAreaWidget: SelectScreenCropAreaWidget
@@ -41,6 +42,8 @@ class SelectScreenCropAreaActivity : AppCompatActivity() {
     private var editYWatcher: TextWatcher? = null
 
     public override fun onCreate(bundle: Bundle?) {
+        logger = Logger(this, baseContext)
+        logger.setExceptionHandler()
         val globalProperties = GlobalProperties(baseContext)
         this.appSettings = globalProperties
 

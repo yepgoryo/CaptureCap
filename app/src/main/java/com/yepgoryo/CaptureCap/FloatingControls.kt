@@ -38,6 +38,7 @@ class FloatingControls : Service() {
         const val ACTION_POSITION_PANEL = MainActivity.appName + ".PANEL_POSITION"
     }
 
+    private lateinit var logger: Logger
     private var appSettings: GlobalProperties? = null
     private var densityNormal: Float = 0.0F
     private var display: Display? = null
@@ -134,6 +135,8 @@ class FloatingControls : Service() {
     }
 
     override fun onCreate() {
+        logger = Logger(this, baseContext)
+        logger.setExceptionHandler()
         super.onCreate()
         this.display = (this.baseContext.getSystemService("display") as DisplayManager).getDisplay(Display.DEFAULT_DISPLAY)
         this.windowManager = (this.getSystemService("window") as WindowManager)

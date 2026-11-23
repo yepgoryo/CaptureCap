@@ -67,7 +67,7 @@ class VideoOverlaySettings : AppCompatActivity() {
             }
         }
     }
-
+    private lateinit var logger: Logger
     private var overlayCallback = OverlayCallback()
     private lateinit var overlaySettingsEditor: FrameLayout
     private lateinit var optionsPanel: FrameLayout
@@ -315,6 +315,8 @@ class VideoOverlaySettings : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        logger = Logger(this, baseContext)
+        logger.setExceptionHandler()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.video_overlay_settings)
 
@@ -426,6 +428,7 @@ class VideoOverlaySettings : AppCompatActivity() {
                 try {
                     editedColor = Color.parseColor(textColor)
                 } catch (e: Exception) {
+                    logger.logError(e)
                     editedColor = colorPicker.getCurrentColor()
                 }
                 val opacityResult = (opacitySeekBar.getOpacityValue() * 255).toInt()

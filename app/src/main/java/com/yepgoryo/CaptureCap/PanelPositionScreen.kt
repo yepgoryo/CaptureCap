@@ -19,6 +19,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 
 class PanelPositionScreen : AppCompatActivity() {
+    private lateinit var logger: Logger
     private var appSettings: GlobalProperties? = null
     private var panelPositionBinder: FloatingControls.PanelPositionBinder? = null
 
@@ -36,6 +37,8 @@ class PanelPositionScreen : AppCompatActivity() {
     }
 
     public override fun onCreate(bundle: Bundle?) {
+        logger = Logger(this, baseContext)
+        logger.setExceptionHandler()
         val globalProperties = GlobalProperties(baseContext)
         this.appSettings = globalProperties
 

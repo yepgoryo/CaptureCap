@@ -32,12 +32,14 @@ import rikka.shizuku.Shizuku
 import java.io.File
 
 class SettingsPanel : AppCompatActivity(), PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
+    private lateinit var logger: Logger
     private var BPP: Float = 0.25f
     private var appSettings: GlobalProperties? = null
     private var audioFolderPreference: Preference? = null
     private var dialog: AlertDialog? = null
     private var settingsPanel: SettingsFragment? = null
     private var videoFolderPreference: Preference? = null
+    private var logsFolderPreference: Preference? = null
     private var codecPreference: Preference? = null
     private var audioCodecPreference: Preference? = null
     private var shizukuEnabledPreference: SwitchPreferenceCompat? = null
@@ -48,11 +50,14 @@ class SettingsPanel : AppCompatActivity(), PreferenceFragmentCompat.OnPreference
         const val ACTION_SETTINGS_PANEL_CONNECT: String = MainActivity.appName + ".SETTINGS_PANEL_CONNECT"
     }
 
+    private var requestLogsPermission: ActivityResultLauncher<Intent> = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        this@SettingsPanel.requestFolder(result.resultCode, result.data!!.data!!, false, true)
+    }
     private var requestFolderPermission: ActivityResultLauncher<Intent> = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        this@SettingsPanel.requestFolder(result.resultCode, result.data!!.data!!, false)
+        this@SettingsPanel.requestFolder(result.resultCode, result.data!!.data!!, false, false)
     }
     private var requestAudioFolderPermission: ActivityResultLauncher<Intent> = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        this@SettingsPanel.requestFolder(result.resultCode, result.data!!.data!!, true)
+        this@SettingsPanel.requestFolder(result.resultCode, result.data!!.data!!, true, false)
     }
 
     private val shizukuPermissionListener = object : Shizuku.OnRequestPermissionResultListener {
@@ -96,6 +101,8 @@ class SettingsPanel : AppCompatActivity(), PreferenceFragmentCompat.OnPreference
     }
 
     override fun onCreate(bundle: Bundle?) {
+        logger = Logger(this, baseContext)
+        logger.setExceptionHandler()
         val globalProperties = GlobalProperties(baseContext)
         this.appSettings = globalProperties
         super.onCreate(bundle)
@@ -143,16 +150,22 @@ class SettingsPanel : AppCompatActivity(), PreferenceFragmentCompat.OnPreference
     override fun onStart() {
         super.onStart()
         doBindService()
+        this.logsFolderPreference = this.settingsPanel!!.findPreference("logpathpref")
         this.videoFolderPreference = this.settingsPanel!!.findPreference("folderpathpref")
         this.audioFolderPreference = this.settingsPanel!!.findPreference("folderaudiopathpref")
+        this.logsFolderPreference?.setSummary(getRealPath(this.appSettings!!.getStringProperty(GlobalProperties.PropertiesString.FOLDER_LOGS_PATH, "None")))
         this.videoFolderPreference?.setSummary(getRealPath(this.appSettings!!.getStringProperty(GlobalProperties.PropertiesString.FOLDER_PATH, "None")))
         this.audioFolderPreference?.setSummary(getRealPath(this.appSettings!!.getStringProperty(GlobalProperties.PropertiesString.FOLDER_AUDIO_PATH, "None")))
+        this.logsFolderPreference?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            this@SettingsPanel.chooseDir(false, true)
+            true
+        }
         this.videoFolderPreference?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            this@SettingsPanel.chooseDir(false)
+            this@SettingsPanel.chooseDir(false, false)
             true
         }
         this.audioFolderPreference?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            this@SettingsPanel.chooseDir(true)
+            this@SettingsPanel.chooseDir(true, false)
             true
         }
 
@@ -432,39 +445,108 @@ class SettingsPanel : AppCompatActivity(), PreferenceFragmentCompat.OnPreference
         return "/storage/sdcard" + Uri.decode(Regex(".*\\%3A").replaceFirst(strReplaceFirst, "/")) + "/"
     }
 
-    fun chooseDir(audio: Boolean) {
+    fun chooseDir(audio: Boolean, log: Boolean) {
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
-        if (audio) {
-            this.requestAudioFolderPermission.launch(intent)
+        if (log) {
+            this.requestLogsPermission.launch(intent)
         } else {
-            this.requestFolderPermission.launch(intent)
+            if (audio) {
+                this.requestAudioFolderPermission.launch(intent)
+            } else {
+                this.requestFolderPermission.launch(intent)
+            }
         }
     }
 
-    fun requestFolder(result: Int, uri: Uri, audio: Boolean) {
+    fun requestFolder(result: Int, uri: Uri, audio: Boolean, log: Boolean) {
         if (result != -1) {
-            if (audio) {
-                if (this.appSettings?.getStringProperty(GlobalProperties.PropertiesString.FOLDER_AUDIO_PATH, "NULL").contentEquals("NULL")) {
-                    Toast.makeText(this, R.string.error_storage_select_folder, Toast.LENGTH_SHORT).show()
+            if (log) {
+                if (this.appSettings?.getStringProperty(
+                        GlobalProperties.PropertiesString.FOLDER_LOGS_PATH,
+                        "NULL"
+                    ).contentEquals("NULL")
+                ) {
+                    Toast.makeText(
+                        this,
+                        R.string.error_storage_select_log_folder,
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             } else {
-                if (this.appSettings?.getStringProperty(GlobalProperties.PropertiesString.FOLDER_PATH, "NULL").contentEquals("NULL")) {
-                    Toast.makeText(this, R.string.error_storage_select_folder, Toast.LENGTH_SHORT).show()
+                if (audio) {
+                    if (this.appSettings?.getStringProperty(
+                            GlobalProperties.PropertiesString.FOLDER_AUDIO_PATH,
+                            "NULL"
+                        ).contentEquals("NULL")
+                    ) {
+                        Toast.makeText(
+                            this,
+                            R.string.error_storage_select_folder,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                } else {
+                    if (this.appSettings?.getStringProperty(
+                            GlobalProperties.PropertiesString.FOLDER_PATH,
+                            "NULL"
+                        ).contentEquals("NULL")
+                    ) {
+                        Toast.makeText(
+                            this,
+                            R.string.error_storage_select_folder,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
             }
         } else {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
             }
-            if (audio) {
-                this.appSettings?.setStringProperty(GlobalProperties.PropertiesString.FOLDER_AUDIO_PATH, uri.toString())
+            if (log) {
+                this.appSettings?.setStringProperty(
+                    GlobalProperties.PropertiesString.FOLDER_LOGS_PATH,
+                    uri.toString()
+                )
+                this.logsFolderPreference?.setSummary(
+                    getRealPath(
+                        this.appSettings!!.getStringProperty(
+                            GlobalProperties.PropertiesString.FOLDER_LOGS_PATH,
+                            "None"
+                        )
+                    )
+                )
             } else {
-                this.appSettings?.setStringProperty(GlobalProperties.PropertiesString.FOLDER_PATH, uri.toString())
-            }
-            if (audio) {
-                this.audioFolderPreference?.setSummary(getRealPath(this.appSettings!!.getStringProperty(GlobalProperties.PropertiesString.FOLDER_AUDIO_PATH, "None")))
-            } else {
-                this.videoFolderPreference?.setSummary(getRealPath(this.appSettings!!.getStringProperty(GlobalProperties.PropertiesString.FOLDER_PATH, "None")))
+                if (audio) {
+                    this.appSettings?.setStringProperty(
+                        GlobalProperties.PropertiesString.FOLDER_AUDIO_PATH,
+                        uri.toString()
+                    )
+                } else {
+                    this.appSettings?.setStringProperty(
+                        GlobalProperties.PropertiesString.FOLDER_PATH,
+                        uri.toString()
+                    )
+                }
+                if (audio) {
+                    this.audioFolderPreference?.setSummary(
+                        getRealPath(
+                            this.appSettings!!.getStringProperty(
+                                GlobalProperties.PropertiesString.FOLDER_AUDIO_PATH,
+                                "None"
+                            )
+                        )
+                    )
+                } else {
+                    this.videoFolderPreference?.setSummary(
+                        getRealPath(
+                            this.appSettings!!.getStringProperty(
+                                GlobalProperties.PropertiesString.FOLDER_PATH,
+                                "None"
+                            )
+                        )
+                    )
+                }
             }
         }
     }

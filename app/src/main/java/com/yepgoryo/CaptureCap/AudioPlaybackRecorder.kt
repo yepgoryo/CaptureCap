@@ -59,6 +59,7 @@ class AudioPlaybackRecorder(
     private var sourceUnknown: Boolean,
 ) : Encoder {
     private val TAG: String = "AudioPlaybackRecorder"
+    private val logger = Logger(this, context)
     private var mCallback: Callback? = null
     private var mCallbackDelegate: CallbackDelegate? = null
     private var mChannelConfig: Int
@@ -364,6 +365,7 @@ class AudioPlaybackRecorder(
                     try {
                         this@AudioPlaybackRecorder.mEncoder.prepare()
                     } catch (e: Exception) {
+                        logger.logError(e)
                         this@AudioPlaybackRecorder.mCallbackDelegate?.onError(this@AudioPlaybackRecorder, e)
                     }
                 }
@@ -915,7 +917,8 @@ class AudioPlaybackRecorder(
                 return null
             }
             return audioRecordBuild
-        } catch (unused: Exception) {
+        } catch (e: Exception) {
+            logger.logError(e)
             Toast.makeText(this.mainContext, R.string.error_playback_not_allowed, Toast.LENGTH_SHORT).show()
             return null
         }
@@ -958,7 +961,8 @@ class AudioPlaybackRecorder(
                 return null
             }
             return audioRecord
-        } catch (_: Exception) {
+        } catch (e: Exception) {
+            logger.logError(e)
             return null
         }
     }
@@ -1025,9 +1029,11 @@ class AudioPlaybackRecorder(
                 scrcpyInputStream!!.readFully(array)
                 scrcpyAudioBufferQueue.queueBuffer(array)
 
-            } catch (_: EOFException) {
+            } catch (e: EOFException) {
+                logger.logError(e)
                 Log.d(TAG, "Stream ended: EOF")
             } catch (e: Exception) {
+                logger.logError(e)
                 Log.e(TAG, "Stream ended with error: ${e.message}", e)
             }
         }
@@ -1065,6 +1071,7 @@ class AudioPlaybackRecorder(
                 scrcpyPath,
             )
         } catch (e: Exception) {
+            logger.logError(e)
             Log.e(TAG, "Failed to start the recording: ${e.message}")
             throw e
         }
@@ -1080,9 +1087,11 @@ class AudioPlaybackRecorder(
             scrcpyInputStream!!.skipBytes(4)
 
             Log.d(TAG, "Initialized scrcpy server")
-        } catch (_: EOFException) {
+        } catch (e: EOFException) {
+            logger.logError(e)
             Log.d(TAG, "Stream ended: EOF")
         } catch (e: Exception) {
+            logger.logError(e)
             Log.e(TAG, "Stream ended with error: ${e.message}", e)
             throw e
         }

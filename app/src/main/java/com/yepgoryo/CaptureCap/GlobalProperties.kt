@@ -82,6 +82,7 @@ class GlobalProperties(context: Context) {
         CROP_SCREEN,
         SMOOTH_CROP,
         DISABLE_ANIMATIONS,
+        ENABLE_LOGGING,
     }
 
     enum class PropertiesInt {
@@ -162,6 +163,7 @@ class GlobalProperties(context: Context) {
         AAC_CODEC,
         SELECTED_MICROPHONE,
         SHIZUKU_AUTH_KEY,
+        FOLDER_LOGS_PATH,
     }
 
     enum class ResolutionProperty {

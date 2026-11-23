@@ -78,6 +78,7 @@ class PlaybackRecorder(
     private var INVALID_INDEX: Int = -1
     private var STOP_WITH_EOS: Int = 1
     private var TAG: String = "PlaybackRecorder"
+    private val logger = Logger(this, context)
     private var currentProfileLevel: MediaCodecInfo.CodecProfileLevel? = null
     private var customAudioCodec: String = ""
     private var customCodec: String = ""
@@ -416,6 +417,7 @@ class PlaybackRecorder(
                         this@PlaybackRecorder.mCallback!!.onStart()
                     }
                 } catch (error: Exception) {
+                    logger.logError(error)
                     message.obj = error
                 }
             } else if (messageCommand == MessageCommand.MSG_STOP || messageCommand == MessageCommand.MSG_ERROR) {
@@ -480,6 +482,7 @@ class PlaybackRecorder(
             }
             prepareAudioEncoder()
         } catch (e: Exception) {
+            logger.logError(e)
             throw RuntimeException(e)
         }
     }
@@ -586,6 +589,7 @@ class PlaybackRecorder(
                     this.mMuxer!!.writeSampleData(trackIndex, byteBufferWrite, bufferInfo)
                 }
             } catch (exc: Exception) {
+                logger.logError(exc)
                 recordingCallback?.onError(exc)
             }
         }
@@ -668,6 +672,7 @@ class PlaybackRecorder(
                     this.mMuxer!!.start()
                 }
             } catch (exc: Exception) {
+                logger.logError(exc)
                 recordingCallback?.onError(exc)
             }
         } else {
@@ -715,6 +720,7 @@ class PlaybackRecorder(
                 try {
                     this@PlaybackRecorder.muxVideo(index, bufferInfo)
                 } catch (e: Exception) {
+                    logger.logError(e)
                     Message.obtain(this@PlaybackRecorder.mHandler, MessageCommand.MSG_ERROR.ordinal, e).sendToTarget()
                 }
             }
@@ -912,6 +918,7 @@ class PlaybackRecorder(
                 try {
                     this@PlaybackRecorder.muxAudio(index, bufferInfo)
                 } catch (e: Exception) {
+                    logger.logError(e)
                     Message.obtain(this@PlaybackRecorder.mHandler, MessageCommand.MSG_ERROR.ordinal, e).sendToTarget()
                 }
             }
@@ -956,6 +963,7 @@ class PlaybackRecorder(
                 this.mVideoEncoder?.stop()
             }
         } catch (exc: Exception) {
+            logger.logError(exc)
             throw exc
         }
         try {
@@ -963,6 +971,7 @@ class PlaybackRecorder(
                 this.mAudioEncoder?.stop()
             }
         } catch (exc: Exception) {
+            logger.logError(exc)
             throw exc
         }
     }
@@ -991,6 +1000,7 @@ class PlaybackRecorder(
                     this.sMuxer!!.stop()
                     this.sMuxer!!.release()
                 } catch (exc: Exception) {
+                    logger.logError(exc)
                     throw exc
                 }
                 this.sMuxer = null
@@ -1002,6 +1012,7 @@ class PlaybackRecorder(
                         this.mMuxer?.release()
                     }
                 } catch (exc: Exception) {
+                    logger.logError(exc)
                     throw exc
                 }
                 this.mMuxer = null
@@ -1014,6 +1025,7 @@ class PlaybackRecorder(
                         this.mMuxer?.release()
                     }
                 } catch (exc: Exception) {
+                    logger.logError(exc)
                     throw exc
                 }
                 this.mMuxer = null

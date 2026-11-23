@@ -17,6 +17,7 @@ import android.view.Surface
 import java.nio.ByteBuffer
 
 class VideoEncoder(private val context: Context, customWidth: Int, customHeight: Int, scaleRatio: Float, private val rotation: Int, nativeFramerate: Int, recordQualityScale: Float, private val drawOverlay: Boolean, customBitrate: Boolean, recordCustomBitrate: Int, private val customKeyFrame: Boolean, private val recordCustomKeyframe: Int, codec: String, codecProfileLevel: MediaCodecInfo.CodecProfileLevel, val bitmapBeforeCamera: Bitmap?, val bitmapAfterCamera: Bitmap?, var camera: VideoOverlay.CameraItem?, val vDisplay: VirtualDisplay, val useCustomFormat: Boolean, val customFormat: String, val useCropArea: Boolean, val smoothCrop: Boolean, val cropAreaWidth: Int, val cropAreaHeight: Int, val cropAreaX: Int, val cropAreaY: Int) : Encoder {
+    private val logger = Logger(this, context)
     private val BPP: Float = 0.25f
     private var height: Int = 1920
     private var scaleRatio: Float = 1.0f
@@ -70,6 +71,7 @@ class VideoEncoder(private val context: Context, customWidth: Int, customHeight:
                 codec.queueInputBuffer(index, 0, info.size, info.presentationTimeUs, info.flags)
             }
         } catch (e: Exception) {
+            logger.logError(e)
             Log.e("Decoder", "feedInput failed", e)
         }
     }
@@ -352,6 +354,7 @@ class VideoEncoder(private val context: Context, customWidth: Int, customHeight:
                 vDisplay.surface = finalInputSurface
             }
         } catch (e: Exception) {
+            logger.logError(e)
             Log.e("VideoEncoder", e.message!!)
             throw e
         }

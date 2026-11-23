@@ -36,6 +36,8 @@ class HardwareOrientationSensor(
 
     private val scope = CoroutineScope(Dispatchers.Default + SupervisorJob())
 
+    private val logger = Logger(this, context)
+
     private val sensorManager = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
 
     private val gravitySensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
@@ -96,6 +98,7 @@ class HardwareOrientationSensor(
             )
 
         } catch (e: Exception) {
+            logger.logError(e)
             close(e)
             return@callbackFlow
         }
