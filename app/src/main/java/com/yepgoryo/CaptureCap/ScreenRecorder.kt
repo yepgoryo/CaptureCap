@@ -584,7 +584,7 @@ class ScreenRecorder : Service() {
             if (this@ScreenRecorder.recorderPlayback == null) {
                 return false
             }
-            return this@ScreenRecorder.useShizukuPhoneCallRecording
+            return (this@ScreenRecorder.useShizuku && this@ScreenRecorder.useShizukuPhoneCallRecording)
         }
 
         fun muteMic() {
@@ -1887,7 +1887,7 @@ class ScreenRecorder : Service() {
             recordingSoundControlBuilder = recordingSoundControlBuilder.addAction(switchAudioAction.build())
         }
 
-        if (useShizukuPhoneCallRecording) {
+        if (useShizuku && useShizukuPhoneCallRecording) {
             recordingSoundControlBuilder = recordingSoundControlBuilder.addAction(switchShizukuPhoneCallAction.build())
         }
 
