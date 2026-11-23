@@ -1,0 +1,7 @@
+ * Added an option to save crash logs to a file.
+
+ * Fixed occasional crashing when pressing on the recording buttons with disabled floating controls.
+
+ * Fixed buttons' width to fit for small screens.
+
+ * Fixed phone call volume controls showing in floating panel when Shizuku is not enabled.
