@@ -2133,11 +2133,15 @@ class ScreenRecorder : Service() {
             iconRecordShare = IconCompat.createWithBitmap(getBitmapDescriptor(R.drawable.icon_record_share_color_action_dark))
         }
         this.shareFinishedFileIntent = Intent(Intent.ACTION_SEND)
-        if (this.finishedFullFileDocument != null) {
+        if (this.finishedFileDocument != null || this.finishedFile != null) {
             this.shareFinishedFileIntent!!.setType(this.finishedDocumentMime)
             this.shareFinishedFileIntent!!.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
             this.shareFinishedFileIntent!!.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            this.shareFinishedFileIntent!!.putExtra(Intent.EXTRA_STREAM, this.recordFilePath)
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q && this.finishedFile != null) {
+                this.shareFinishedFileIntent!!.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(applicationContext, MainActivity.appName + ".DocProvider", this.finishedFile!!))
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && this.finishedFileDocument != null) {
+                this.shareFinishedFileIntent!!.putExtra(Intent.EXTRA_STREAM, this.finishedFileDocument!!)
+            }
         }
         val notificationShareBuilder: NotificationCompat.Action.Builder = NotificationCompat.Action.Builder(iconRecordShare, getString(R.string.notifications_share), PendingIntent.getActivity(this, 0, this.shareFinishedFileIntent, this.intentFlag))
         if (this.recordFileFullPath != null) {
